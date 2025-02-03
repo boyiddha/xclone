@@ -1,0 +1,99 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: black;
+  color: white;
+}
+
+.firstRow {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 95vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.secondRow {
+  flex: 1 1 5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.column {
+  display: flex;
+  flex: 1;
+  justify-content: center; /* center horizontally */
+  align-items: center; /* center vertically */
+}
+
+.logo {
+  position: relative;
+  margin-left: 9%;
+}
+
+/* Right Side Design */
+
+.rightContainer {
+  display: flex;
+  flex-direction: column;
+  height: auto; /* The height will adjust based on content */
+  max-width: 760px;
+  min-width: 437px;
+  padding: 20px;
+}
+.row1 {
+  font-size: 70px;
+  font-weight: 900;
+  margin-bottom: 30px;
+}
+
+.row2 {
+  height: 80px;
+  font-size: 35px;
+  font-weight: 900;
+}
+
+.or {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.or hr {
+  width: 100px;
+  height: 1px;
+  background-color: #3b3939;
+  border: none;
+}
+
+.or p {
+  margin: 0;
+}
+
+/* Design Google/ Github */
+.signupForm {
+  background-color: white;
+  color: black;
+  width: 300px;
+  border-radius: 27px;
+  cursor: pointer;
+}
+
+.signupFlex {
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+.signupButton {
+  border: none;
+  font-size: 30px;
+  background-color: white;
+  margin-top: 10px;
+  margin-right: 5px;
+}
