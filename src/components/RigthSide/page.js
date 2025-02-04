@@ -1,9 +1,23 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import styles from "@/modules/home.module.css";
 import SocialSignupForm from "../SocialSignupForm/page";
+import CreateAccountOverlay from "../CreateAccountOverlay";
+import { useEffect } from "react";
 
-export default function RightSidePage() {
+export default function RightSidePage({ setOverlayState }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const step = searchParams.get("step"); // Get current step from URL
+  const isOverlayOpened = step === "createAccount" || step === "password";
+
+  useEffect(() => {
+    setOverlayState(isOverlayOpened); // Send value to Parent when it changes
+  }, [isOverlayOpened, setOverlayState]);
+
   return (
     <div className={styles.rightContainer}>
       <div className={styles.row1space}>
@@ -29,20 +43,45 @@ export default function RightSidePage() {
               <p>or</p>
               <hr />
             </div>
-          </div>{" "}
-          <div>
-            <span>Create Account</span>
           </div>
-          <div>
-            <span>
-              By signing up, you agree to the Terms of Service and Privacy
-              Policy, including Cookie Use.
-            </span>
+          <div className={styles.createAccount}>
+            <div className={styles.createAccountFlex}>
+              <button
+                onClick={() =>
+                  router.push("?step=createAccount", { scroll: false })
+                }
+                className={styles.createButton}
+              >
+                Create account
+              </button>
+
+              {/* Show overlay if the URL matches */}
+              {isOverlayOpened && <CreateAccountOverlay step={step} />}
+            </div>
+          </div>
+          <div className={styles.servicePolicy}>
+            {"By signing up, you agree to the"}
+            <Link className={styles.link} href="https://x.com/en/tos">
+              Terms of Service{" "}
+            </Link>
+            and{" "}
+            <Link className={styles.link} href="https://x.com/en/privacy">
+              Privacy Policy
+            </Link>
+            {", including"}
+            <Link
+              className={styles.link}
+              href="https://help.x.com/en/rules-and-policies/x-cookies"
+            >
+              Cookie Use.
+            </Link>
           </div>
         </div>
         <div>
-          <div>Already have an account?</div>
-          <span>Sign in</span>
+          <div className={styles.firstR}> Already have an account?</div>
+          <div className={styles.secondR}>
+            <span className={styles.signinButton}>Sign in</span>
+          </div>
         </div>
       </div>
     </div>

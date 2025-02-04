@@ -1,0 +1,15 @@
+.flexContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.item {
+  min-width: 0px;
+  font-size: 13px;
+  padding-right: 16px;
+  color: #808080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -6,31 +6,44 @@
   color: white;
 }
 
+.overlayColor {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #232b33;
+  color: white;
+}
 .firstRow {
   display: flex;
   flex-direction: row;
-  flex: 1 1 95vh;
+  flex: 1 1 93vh;
   justify-content: center;
   align-items: center;
 }
 
 .secondRow {
-  flex: 1 1 5vh;
+  flex: 1 1 7vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 0px;
 }
 
-.column {
+.column1 {
   display: flex;
   flex: 1;
   justify-content: center; /* center horizontally */
   align-items: center; /* center vertically */
 }
 
+.column2 {
+  display: flex;
+  flex: 1;
+  align-items: center; /* center vertically */
+}
+
 .logo {
   position: relative;
-  margin-left: 9%;
 }
 
 /* Right Side Design */
@@ -39,9 +52,6 @@
   display: flex;
   flex-direction: column;
   height: auto; /* The height will adjust based on content */
-  max-width: 760px;
-  min-width: 437px;
-  padding: 20px;
 }
 .row1 {
   font-size: 70px;
@@ -62,7 +72,7 @@
 }
 
 .or hr {
-  width: 100px;
+  width: 137px;
   height: 1px;
   background-color: #3b3939;
   border: none;
@@ -72,19 +82,27 @@
   margin: 0;
 }
 
-/* Design Google/ Github */
-.signupForm {
-  background-color: white;
+/* Design Google/ Github signup */
+.signupFormGoogle {
+  background-color: #ffffff;
   color: black;
   width: 300px;
   border-radius: 27px;
   cursor: pointer;
 }
 
+.signupFormGithub {
+  margin-top: 10px;
+  background-color: #ffffff;
+  color: black;
+  width: 300px;
+  border-radius: 27px;
+  cursor: pointer;
+}
 .signupFlex {
   display: flex;
   flex-direction: row;
-  height: 40px;
+  height: 42px;
   justify-content: center;
   align-items: center;
   border: none;
@@ -94,6 +112,128 @@
   border: none;
   font-size: 30px;
   background-color: white;
-  margin-top: 10px;
+  border-radius: 22px;
+  margin-top: 4px;
   margin-right: 5px;
+}
+
+.signupFormGoogle:hover {
+  background-color: #f2f2f2;
+}
+.signupFormGithub:hover {
+  background-color: #e6e6e6;
+}
+/* Design create account button    */
+
+.createAccount {
+  margin-top: 10px;
+  background-color: #20a0f5;
+  color: black;
+  width: 300px;
+  border-radius: 27px;
+  cursor: pointer;
+}
+.createAccountFlex {
+  display: flex;
+  flex-direction: row;
+  height: 42px;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+.createButton {
+  color: white;
+  font-weight: bold;
+  font-size: 17px;
+}
+.createAccount:hover {
+  background-color: #2d93d6;
+}
+
+.servicePolicy {
+  margin-top: 5px;
+  width: 300px;
+  color: #808080;
+  font-size: 11.5px;
+}
+
+.link {
+  color: #4d94ff;
+}
+
+/* sign-in Div design  */
+
+.firstR {
+  padding-top: 50px;
+  padding-bottom: 20px;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.secondR {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  width: 300px;
+  border: 1px solid #cce5ff;
+  border-radius: 27px;
+  cursor: pointer;
+}
+
+.signinButton {
+  color: #4da6ff;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.secondR:hover {
+  opacity: 0.8;
+}
+
+/* media query for Tablet*/
+@media (max-width: 780px) {
+  .container {
+    height: auto; /* Allows container to expand when needed */
+    min-height: 100vh; /* Ensures it still covers full screen if content is less */
+  }
+  .firstRow {
+    flex-direction: column; /*  change it's direction */
+  }
+
+  /* Override first column styles */
+  .column1 {
+    margin-top: 8%;
+    flex: unset;
+    width: 60%;
+    justify-content: flex-start; /* Left align content */
+    align-items: flex-start; /* Align items to the top-left */
+    text-align: left; /* Ensure text is left aligned */
+  }
+  .column2 {
+    width: 60%;
+  }
+  .logo img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* media query for Mobile*/
+@media (max-width: 480px) {
+  .column1,
+  .column2 {
+    width: 85%;
+  }
+
+  .row1 {
+    font-size: 50px;
+    font-weight: 700;
+    margin-bottom: 35px;
+  }
+
+  .row2 {
+    font-size: 25px;
+    font-weight: 700;
+  }
 }

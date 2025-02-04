@@ -10,7 +10,7 @@ import styles from "@/modules/home.module.css";
 const SocialSignupForm = () => {
   return (
     <form>
-      <div className={styles.signupForm}>
+      <div className={styles.signupFormGoogle}>
         <div className={styles.signupFlex}>
           <button
             className={styles.signupButton}
@@ -21,13 +21,16 @@ const SocialSignupForm = () => {
           <p> Sign up with Google</p>
         </div>
       </div>
-      <div>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <button onClick={(e) => handleProvider(e, "github")}>
+      <div className={styles.signupFormGithub}>
+        <div className={styles.signupFlex}>
+          <button
+            className={styles.signupButton}
+            onClick={(e) => handleProvider(e, "github")}
+          >
             {" "}
-            <FaGithub style={{}} />
-            {"Sign up with Github "}
+            <FaGithub />
           </button>
+          <p>Sign up with Github</p>
         </div>
       </div>
     </form>
