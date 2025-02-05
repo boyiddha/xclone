@@ -1,8 +1,8 @@
 "use client";
 
-import FooterPage from "@/components/Footer/page";
-import LeftSidePage from "@/components/LeftSide/page";
-import RightSidePage from "@/components/RigthSide/page";
+import FooterPage from "@/components/Footer/Footer";
+import LeftSidePage from "@/components/LeftSide/LeftSide";
+import RightSidePage from "@/components/RigthSide/RigthSide";
 import styles from "@/modules/home.module.css";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,9 +15,16 @@ export default function Home() {
     setIsOverlayOpen(step === "createAccount" || step === "password");
   }, [searchParams]); // Update state when URL changes
 
+  useEffect(() => {
+    if (isOverlayOpen) {
+      document.body.classList.add("overlayActive"); // Add class when open
+    } else {
+      document.body.classList.remove("overlayActive"); // Remove class when closed
+    }
+  }, [isOverlayOpen]);
   return (
     <>
-      <div className={isOverlayOpen ? styles.overlayColor : styles.container}>
+      <div className={styles.container}>
         <div className={styles.firstRow}>
           <div className={styles.column1}>
             <LeftSidePage />

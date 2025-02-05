@@ -2,17 +2,10 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: black;
+  width: 100%;
   color: white;
 }
 
-.overlayColor {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: #232b33;
-  color: white;
-}
 .firstRow {
   display: flex;
   flex-direction: row;
@@ -32,18 +25,20 @@
 .column1 {
   display: flex;
   flex: 1;
-  justify-content: center; /* center horizontally */
   align-items: center; /* center vertically */
+  justify-content: center; /* center horizontally */
 }
 
 .column2 {
   display: flex;
   flex: 1;
   align-items: center; /* center vertically */
+  margin-left: 11%;
 }
 
 .logo {
   position: relative;
+  margin-left: 20%;
 }
 
 /* Right Side Design */
@@ -127,26 +122,26 @@
 
 .createAccount {
   margin-top: 10px;
-  background-color: #20a0f5;
-  color: black;
-  width: 300px;
-  border-radius: 27px;
-  cursor: pointer;
 }
 .createAccountFlex {
   display: flex;
   flex-direction: row;
+  width: 300px;
   height: 42px;
-  justify-content: center;
   align-items: center;
-  border: none;
+  justify-content: center;
 }
 .createButton {
   color: white;
+  width: 300px;
+  height: 42px;
+  background-color: #20a0f5;
   font-weight: bold;
   font-size: 17px;
+  border-radius: 27px;
+  cursor: pointer;
 }
-.createAccount:hover {
+.createButton:hover {
   background-color: #2d93d6;
 }
 
@@ -212,6 +207,10 @@
   }
   .column2 {
     width: 60%;
+    margin: 0;
+  }
+  .logo {
+    margin: 0;
   }
   .logo img {
     width: 40px;

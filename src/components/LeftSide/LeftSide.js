@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import styles from "@/modules/home.module.css";
-import xLogo from "../../../public/x_profile.png";
+import xLogo from "../../../public/images/x_profile.png";
 
 export default function LeftSidePage() {
   return (

@@ -4,16 +4,15 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import styles from "@/modules/home.module.css";
-import SocialSignupForm from "../SocialSignupForm/page";
-import CreateAccountOverlay from "../CreateAccountOverlay";
+import SocialSignupForm from "../SocialSignupForm/SocialSignupForm";
+import CreateAccountOverlay from "../CreateAccount/CreateAccountOverlay";
 import { useEffect } from "react";
 
 export default function RightSidePage({ setOverlayState }) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const step = searchParams.get("step"); // Get current step from URL
   const isOverlayOpened = step === "createAccount" || step === "password";
-
+  const router = useRouter();
   useEffect(() => {
     setOverlayState(isOverlayOpened); // Send value to Parent when it changes
   }, [isOverlayOpened, setOverlayState]);
@@ -47,14 +46,11 @@ export default function RightSidePage({ setOverlayState }) {
           <div className={styles.createAccount}>
             <div className={styles.createAccountFlex}>
               <button
-                onClick={() =>
-                  router.push("?step=createAccount", { scroll: false })
-                }
+                onClick={() => router.push("?step=createAccount")}
                 className={styles.createButton}
               >
                 Create account
               </button>
-
               {/* Show overlay if the URL matches */}
               {isOverlayOpened && <CreateAccountOverlay step={step} />}
             </div>

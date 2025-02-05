@@ -1,5 +1,167 @@
-.container {
-  background-color: red;
-  height: 300px;
-  width: 300px;
+.overlayContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overlayContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 590px;
+  height: 645px;
+  background: black;
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.row1Container {
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+  margin-bottom: 17px;
+}
+.space {
+  width: 260px;
+}
+.closeButton {
+  background-color: black;
+  font-size: 20px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.closeButton:hover {
+  background-color: rgba(88, 88, 88, 0.8);
+  border-radius: 50%;
+}
+
+/* Tooltip styling */
+.closeButton::after {
+  content: "Close";
+  position: absolute;
+  top: 19%;
+  transform: translateX(-50%);
+  background: rgba(88, 88, 88, 0.8);
+  color: white;
+  padding: 5px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s;
+  white-space: nowrap;
+}
+/* Show tooltip when hovered */
+.closeButton:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.row2Container {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputTitle {
+  font-size: 33px;
+  font-weight: bold;
+  padding-top: 5px;
+  padding-bottom: 8px;
+}
+.inputName input,
+.inputEmail input {
+  background-color: black;
+  color: white;
+  border: 1px solid gray;
+  padding: 20px;
+  margin-top: 24px;
+  font-size: 16px;
+  width: 450px;
+  border-radius: 8px;
+  outline: none;
+}
+
+.inputName input:focus,
+.inputEmail input:focus {
+  border: 2px solid rgb(47, 115, 241);
+}
+
+.dateOfBirth {
+  width: 450px;
+}
+.dobTitle {
+  font-size: 17px;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.dobDeclaration {
+  font-size: 16px;
+  color: rgb(148, 146, 146);
+  margin-bottom: 15px;
+}
+
+.calendarContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.monthContainer {
+  width: 210px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  color: white;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.dayContainer {
+  width: 95px;
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  color: white;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.yearContainer {
+  width: 125px;
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  color: white;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.month,
+.day,
+.year {
+  padding-left: 5px;
+  padding-top: 5px;
+  color: rgb(143, 141, 141);
+}
+
+.monthSelector {
+  width: 208px;
+  height: 34px;
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  font-size: 16px;
+  border: 1 px solid red;
+  border-radius: 10px;
 }
