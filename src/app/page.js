@@ -12,7 +12,9 @@ export default function Home() {
 
   useEffect(() => {
     const step = searchParams.get("step");
-    setIsOverlayOpen(step === "createAccount" || step === "password");
+    setIsOverlayOpen(
+      step === "createAccount" || step === "verification" || step === "login"
+    );
   }, [searchParams]); // Update state when URL changes
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export default function Home() {
           </div>
 
           <div className={styles.column2}>
-            <RightSidePage setOverlayState={setIsOverlayOpen} />
+            <RightSidePage setIsOverlayOpen={setIsOverlayOpen} />
           </div>
         </div>
 

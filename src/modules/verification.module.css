@@ -1,0 +1,167 @@
+.overlayContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overlayContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 590px;
+  height: 645px;
+  background: black;
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.row1ContainerDiv {
+  width: 100%;
+}
+.row1ContainerFlex {
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+  margin-bottom: 40px;
+}
+.space {
+  width: 33%;
+}
+.prevButton {
+  background-color: black;
+  width: 55%;
+  height: 80%;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.prevButton:hover {
+  background-color: rgba(88, 88, 88, 0.8);
+  border-radius: 50%;
+}
+
+/* Tooltip styling */
+.prevButton::after {
+  content: "Go Back";
+  position: relative;
+  top: 10px;
+  left: -3px;
+  transform: translateX(-50%);
+  background: rgba(88, 88, 88, 0.8);
+  color: white;
+  padding: 5px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s;
+  white-space: nowrap;
+}
+/* Show tooltip when hovered */
+.prevButton:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.row2ContainerDiv {
+  width: 80%;
+}
+.row2ContainerFlex {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 70px;
+  justify-content: center;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.row3ContainerDiv {
+  width: 80%;
+}
+.row3ContainerFlex {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-size: 20px;
+  color: rgb(109, 107, 107);
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+
+.row4ContainerDiv {
+  width: 80%;
+}
+.row4ContainerFlex {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.inputVerification input {
+  background-color: black;
+  color: white;
+  border: 1px solid gray;
+  padding: 20px;
+  margin-top: 24px;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 8px;
+  outline: none;
+}
+
+.inputVerification input:focus {
+  border: 2px solid rgb(47, 115, 241);
+}
+
+.row5ContainerDiv {
+  width: 80%;
+  height: 40%;
+}
+.row5ContainerFlex {
+  width: 100%;
+}
+.row6ContainerDiv {
+  width: 80%;
+}
+.row6ContainerFlex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 100%;
+  background-color: gray;
+  border-radius: 27px;
+}
+
+.nextButton {
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.active {
+  background-color: rgb(255, 252, 252);
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .overlayContent {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (max-width: 350px) {
+  .row2ContainerFlex {
+    font-size: 27px;
+  }
+}

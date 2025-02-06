@@ -6,16 +6,28 @@ import { useRouter, useSearchParams } from "next/navigation";
 import styles from "@/modules/home.module.css";
 import SocialSignupForm from "../SocialSignupForm/SocialSignupForm";
 import CreateAccountOverlay from "../CreateAccount/CreateAccountOverlay";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import VerificationOverlay from "../CreateAccount/VerificationOverlay";
+import LoginOverlay from "../LoginOverlay/LoginOverlay";
 
-export default function RightSidePage({ setOverlayState }) {
+export default function RightSidePage({ setIsOverlayOpen }) {
+  const [email, isSetEmail] = useState("");
   const searchParams = useSearchParams();
   const step = searchParams.get("step"); // Get current step from URL
-  const isOverlayOpened = step === "createAccount" || step === "password";
+  const isOverlayOpened =
+    step === "createAccount" || step === "verification" || "login";
   const router = useRouter();
+
   useEffect(() => {
-    setOverlayState(isOverlayOpened); // Send value to Parent when it changes
-  }, [isOverlayOpened, setOverlayState]);
+    setIsOverlayOpen(isOverlayOpened); // Send value to Parent when it changes
+  }, [isOverlayOpened, setIsOverlayOpen]);
+
+  useEffect(() => {
+    const step = searchParams.get("step");
+    setIsOverlayOpen(
+      step === "createAccount" || step === "password" || "login"
+    );
+  }, [searchParams]); // Update state when URL changes
 
   return (
     <div className={styles.rightContainer}>
@@ -52,7 +64,15 @@ export default function RightSidePage({ setOverlayState }) {
                 Create account
               </button>
               {/* Show overlay if the URL matches */}
-              {isOverlayOpened && <CreateAccountOverlay step={step} />}
+              {isOverlayOpened && step === "createAccount" && (
+                <CreateAccountOverlay step={step} isSetEmail={isSetEmail} />
+              )}
+              {isOverlayOpened && step === "verification" && (
+                <VerificationOverlay step={step} email={email} />
+              )}
+              {isOverlayOpened && step === "login" && (
+                <LoginOverlay step={step} />
+              )}
             </div>
           </div>
           <div className={styles.servicePolicy}>
@@ -76,7 +96,12 @@ export default function RightSidePage({ setOverlayState }) {
         <div>
           <div className={styles.firstR}> Already have an account?</div>
           <div className={styles.secondR}>
-            <span className={styles.signinButton}>Sign in</span>
+            <span
+              className={styles.signinButton}
+              onClick={() => router.push("?step=login")}
+            >
+              Sign in
+            </span>
           </div>
         </div>
       </div>

@@ -1,80 +1,3 @@
-// "use client";
-
-// import { useRouter, usePathname } from "next/navigation";
-// import { useEffect } from "react";
-
-// import styles from "@/modules/createAccount.module.css";
-
-// export default function createAccountOverlay({ step }) {
-//   const router = useRouter();
-//   const pathname = usePathname(); // Get current URL
-
-//   // Function to close the overlay
-//   const closeOverlay = () => {
-//     router.push("/", { scroll: false });
-//   };
-//   useEffect(() => {
-//     const handlePopState = () => {
-//       if (pathname.startsWith("/createAccount")) {
-//         router.push("/");
-//       }
-//     };
-
-//     window.addEventListener("popstate", handlePopState);
-//     return () => window.removeEventListener("popstate", handlePopState);
-//   }, [pathname]);
-
-//   return (
-//     <div className={styles.overlayContainer}>
-//       <div className={styles.overlayContent}>
-//         {/* Close Button */}
-//         <button
-//           onClick={closeOverlay}
-//           className="absolute top-3 left-3 text-xl"
-//         >
-//           ✖
-//         </button>
-
-//         {step === "createAccount" && (
-//           <div>
-//             <h2 className="text-xl font-bold">Create your account</h2>
-//             <input
-//               type="text"
-//               placeholder="Name"
-//               className="border p-2 w-full mt-2"
-//             />
-//             <input
-//               type="email"
-//               placeholder="Email"
-//               className="border p-2 w-full mt-2"
-//             />
-//             <button
-//               onClick={() => router.push("?step=password", { scroll: false })}
-//               className="bg-blue-500 text-white px-4 py-2 mt-4 w-full"
-//             >
-//               Next
-//             </button>
-//           </div>
-//         )}
-
-//         {step === "password" && (
-//           <div>
-//             <h2 className="text-xl font-bold">Set Your Password</h2>
-//             <input
-//               type="password"
-//               placeholder="Password"
-//               className="border p-2 w-full mt-2"
-//             />
-//             <button className="bg-green-500 text-white px-4 py-2 mt-4 w-full">
-//               Submit
-//             </button>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
@@ -83,16 +6,41 @@ import { useEffect, useState, useRef } from "react";
 import styles from "@/modules/createAccount.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
-import { FaCalendar } from "react-icons/fa";
-export default function createAccountOverlay({ step }) {
+import { GoChevronDown } from "react-icons/go";
+
+export default function createAccountOverlay({ step, isSetEmail }) {
   const router = useRouter();
   const pathname = usePathname(); // Get current URL
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [month, setMonth] = useState("");
+  const [day, setDay] = useState("");
+  const [year, setYear] = useState("");
 
-  const [isMonthClick, setMonthClicked] = useState(false);
+  const [isFocusedMonth, setIsFocusedMonth] = useState(false);
+  const [isFocusedDay, setIsFocusedDay] = useState(false);
+  const [isFocusedYear, setIsFocusedYear] = useState(false);
+  const monthRef = useRef(null);
+  const dayRef = useRef(null);
+  const yearRef = useRef(null);
 
-  const handleSelectFocus = () => setMonthClicked(true); // When select is clicked/focused
-  const handleSelectBlur = () => setMonthClicked(false); // When select loses focus
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, index) => currentYear - index);
+
+  // Check if all fields are filled
+  const isFormComplete = name.trim() && email.trim() && month && day && year;
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value); // Update email state
+
+    isSetEmail(value); // pass this email to it's parent component
+
+    // Example: Validate Email Format
+    // if (!value.includes("@")) {
+    //   console.log("Invalid email format");
+    // }
+  };
 
   // Function to close the overlay
   const closeOverlay = () => {
@@ -109,22 +57,22 @@ export default function createAccountOverlay({ step }) {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [pathname]);
 
-  const inputRef = useRef(null);
-
-  // Detect clicks outside the container
+  // Click outside handler
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (inputRef.current && !inputRef.current.contains(event.target)) {
-        setIsExpanded(false); // Collapse when clicking outside
+    function handleClickOutside(event) {
+      if (monthRef.current && !monthRef.current.contains(event.target)) {
+        setIsFocusedMonth(false);
       }
-    };
-
-    // Add event listener to detect clicks outside
-    document.addEventListener("click", handleClickOutside);
-
-    // Cleanup event listener on component unmount
+      if (dayRef.current && !dayRef.current.contains(event.target)) {
+        setIsFocusedDay(false);
+      }
+      if (yearRef.current && !yearRef.current.contains(event.target)) {
+        setIsFocusedYear(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -132,8 +80,8 @@ export default function createAccountOverlay({ step }) {
     <>
       <div className={styles.overlayContainer}>
         <div className={styles.overlayContent}>
-          <div>
-            <div className={styles.row1Container}>
+          <div className={styles.row1ContainerDiv}>
+            <div className={styles.row1ContainerFlex}>
               <div className={styles.close}>
                 <button className={styles.closeButton} onClick={closeOverlay}>
                   X
@@ -146,8 +94,8 @@ export default function createAccountOverlay({ step }) {
               <div className={styles.space}></div>
             </div>
           </div>
-          <div>
-            <div className={styles.row2Container}>
+          <div className={styles.row2ContainerDiv}>
+            <div className={styles.row2ContainerFlex}>
               <div className={styles.inputTitle}>
                 <span>Create your account</span>
               </div>
@@ -155,9 +103,9 @@ export default function createAccountOverlay({ step }) {
                 <div>
                   <input
                     type="text"
-                    placeholder="Name"
                     name="name"
-                    maxLength={50}
+                    id="name"
+                    placeholder="Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
@@ -165,7 +113,14 @@ export default function createAccountOverlay({ step }) {
               </div>
 
               <div className={styles.inputEmail}>
-                <input type="text" placeholder="Email" name="email" />
+                <input
+                  type="text"
+                  name="email"
+                  id="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={handleEmailChange}
+                />
               </div>
               <div className={styles.dateOfBirth}>
                 <div className={styles.dobTitle}>
@@ -178,20 +133,34 @@ export default function createAccountOverlay({ step }) {
                   </span>
                 </div>
                 <div className={styles.calendarContainer}>
-                  <div className={styles.monthContainer}>
-                    <div className={styles.month}>
+                  <div
+                    ref={monthRef}
+                    className={`${styles.monthContainer} ${
+                      isFocusedMonth ? styles.focusedBorder : ""
+                    }`}
+                  >
+                    <div
+                      className={`${styles.month} ${
+                        isFocusedMonth ? styles.focusedText : ""
+                      }`}
+                    >
                       <span>Month</span>
+                      <span className={styles.arrowSignMonth}>
+                        {" "}
+                        <GoChevronDown />
+                      </span>
                     </div>
                     <div>
                       <select
                         name="month"
                         id="month"
                         required
-                        onFocus={handleSelectFocus}
-                        onBlur={handleSelectBlur}
+                        onFocus={() => setIsFocusedMonth(true)}
+                        onBlur={() => setIsFocusedMonth(false)}
+                        onChange={(e) => setMonth(e.target.value)}
                         className={styles.monthSelector}
                       >
-                        <option disabled value></option>
+                        <option disabled value=""></option>
                         <option value="1">January</option>
                         <option value="2">February</option>
                         <option value="3">March</option>
@@ -207,75 +176,128 @@ export default function createAccountOverlay({ step }) {
                       </select>
                     </div>
                   </div>
-                  <div className={styles.dayContainer}>
-                    <div className={styles.day}>Day</div>
-                    <div className={styles.daySelector}>Select V</div>
+                  <div
+                    ref={dayRef}
+                    className={`${styles.dayContainer} ${
+                      isFocusedDay ? styles.focusedBorder : ""
+                    }`}
+                  >
+                    <div
+                      className={`${styles.day} ${
+                        isFocusedDay ? styles.focusedText : ""
+                      }`}
+                    >
+                      <span>Day</span>
+                      <span className={styles.arrowSignDay}>
+                        {" "}
+                        <GoChevronDown />
+                      </span>
+                    </div>
+                    <div>
+                      <select
+                        name="day"
+                        id="day"
+                        required
+                        onFocus={() => setIsFocusedDay(true)}
+                        onBlur={() => setIsFocusedDay(false)}
+                        onChange={(e) => setDay(e.target.value)}
+                        className={styles.daySelector}
+                      >
+                        <option disabled value></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                      </select>
+                    </div>
                   </div>
-                  <div className={styles.yearContainer}>
-                    <div className={styles.year}>Year</div>
-                    <div className={styles.yearSelector}>Select V</div>
+                  <div
+                    ref={yearRef}
+                    className={`${styles.yearContainer} ${
+                      isFocusedYear ? styles.focusedBorder : ""
+                    }`}
+                  >
+                    <div
+                      className={`${styles.year} ${
+                        isFocusedYear ? styles.focusedText : ""
+                      }`}
+                    >
+                      <span>Year</span>
+                      <span className={styles.arrowSignYear}>
+                        {" "}
+                        <GoChevronDown />
+                      </span>
+                    </div>
+                    <div>
+                      <select
+                        name="year"
+                        id="year"
+                        required
+                        onFocus={() => setIsFocusedYear(true)}
+                        onBlur={() => setIsFocusedYear(false)}
+                        onChange={(e) => setYear(e.target.value)}
+                        className={styles.yearSelector}
+                      >
+                        <option disabled value></option>
+                        {years.map((yr) => (
+                          <option key={yr} value={yr}>
+                            {yr}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div>
-            <div className={styles.row3Container}>Row3</div>
+          <div className={styles.row3ContainerDiv}>
+            <div className={styles.row3ContainerFlex}></div>
           </div>
-          <div>
-            <div className={styles.row4Container}>Row4</div>
+          <div className={styles.row4ContainerDiv}>
+            <div
+              className={`${styles.row4ContainerFlex} ${
+                isFormComplete ? styles.active : ""
+              }`}
+              onClick={() => {
+                if (isFormComplete) {
+                  router.push("?step=verification", { scroll: false });
+                }
+              }}
+            >
+              <span className={styles.nextButton}>Next</span>
+            </div>
           </div>
         </div>
       </div>
     </>
-
-    // <div className={styles.overlayContainer}>
-    //   <div className={styles.overlayContent}>
-    //     {/* Close Button */}
-    //     <button
-    //       onClick={closeOverlay}
-    //       className="absolute top-3 left-3 text-xl"
-    //     >
-    //       X
-    //     </button>
-
-    //     {step === "createAccount" && (
-    //       <div>
-    //         <h2 className="text-xl font-bold">Create your account</h2>
-    //         <input
-    //           type="text"
-    //           placeholder="Name"
-    //           className="border p-2 w-full mt-2"
-    //         />
-    //         <input
-    //           type="email"
-    //           placeholder="Email"
-    //           className="border p-2 w-full mt-2"
-    //         />
-    //         <button
-    //           onClick={() => router.push("?step=password", { scroll: false })}
-    //           className="bg-blue-500 text-white px-4 py-2 mt-4 w-full"
-    //         >
-    //           Next
-    //         </button>
-    //       </div>
-    //     )}
-
-    //     {step === "password" && (
-    //       <div>
-    //         <h2 className="text-xl font-bold">Set Your Password</h2>
-    //         <input
-    //           type="password"
-    //           placeholder="Password"
-    //           className="border p-2 w-full mt-2"
-    //         />
-    //         <button className="bg-green-500 text-white px-4 py-2 mt-4 w-full">
-    //           Submit
-    //         </button>
-    //       </div>
-    //     )}
-    //   </div>
-    // </div>
   );
 }
