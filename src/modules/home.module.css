@@ -156,6 +156,10 @@
   color: #4d94ff;
 }
 
+.link:hover {
+  text-decoration: underline;
+}
+
 /* sign-in Div design  */
 
 .firstR {

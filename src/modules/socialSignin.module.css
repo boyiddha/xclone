@@ -1,0 +1,49 @@
+/* Design Google/ Github signup */
+.signupFormGoogle {
+  background-color: #ffffff;
+  color: black;
+  width: 85%;
+  border-radius: 27px;
+  cursor: pointer;
+  margin-bottom: 25px;
+}
+
+.signupFormGithub {
+  margin-top: 25px;
+  background-color: #ffffff;
+  color: black;
+  width: 85%;
+  border-radius: 27px;
+  cursor: pointer;
+}
+.signupFlex {
+  display: flex;
+  flex-direction: row;
+  height: 42px;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+.signupButton {
+  border: none;
+  font-size: 30px;
+  background-color: white;
+  border-radius: 22px;
+  margin-top: 4px;
+  margin-right: 5px;
+}
+
+.signupFormGoogle:hover {
+  background-color: #f2f2f2;
+}
+.signupFormGithub:hover {
+  background-color: #e6e6e6;
+}
+
+@media (max-width: 450px) {
+  .signupFormGoogle,
+  .signupFormGithub {
+    width: 90%;
+  }
+}

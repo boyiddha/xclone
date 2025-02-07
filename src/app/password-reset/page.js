@@ -1,14 +1,12 @@
 "use client";
 
-import styles from "@/modules/login.module.css";
+import styles from "@/modules/passwordReset.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import SocialSigninForm from "@/components/SocialSignupSigninForm/SocialSigninForm";
 import { useState } from "react";
-import Link from "next/link";
 
-const LoginOverlay = () => {
+const PasswordReset = () => {
   const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -22,8 +20,8 @@ const LoginOverlay = () => {
 
   return (
     <>
-      <div className={styles.overlayContainer}>
-        <div className={styles.overlayContent}>
+      <div className={styles.containerDiv}>
+        <div className={styles.containerFlex}>
           <div className={styles.row1ContainerDiv}>
             <div className={styles.row1ContainerFlex}>
               <div className={styles.close}>
@@ -38,18 +36,17 @@ const LoginOverlay = () => {
               <div className={styles.space}></div>
             </div>
           </div>
+
           <div className={styles.row2ContainerDiv}>
             <div className={styles.row2ContainerFlex}>
               <div className={styles.titleRow}>
-                <span>Sign in to X</span>
+                <span>Find your X account</span>
               </div>
-              <div>
-                <SocialSigninForm />
-              </div>
-              <div className={styles.or}>
-                <hr />
-                <p>or</p>
-                <hr />
+              <div className={styles.titleRow2}>
+                <span>
+                  Enter the email or phone number associated with your account
+                  to change your password.
+                </span>
               </div>
               <div className={styles.inputPhoneEmail}>
                 <div>
@@ -79,19 +76,6 @@ const LoginOverlay = () => {
                   <span className={styles.nextButton}>Next</span>
                 </div>
               </div>
-              <div className={styles.forgotBtnDiv}>
-                <div className={styles.forgotBtnFlex}>
-                  <Link href="/password-reset">Forgot password?</Link>
-                </div>
-              </div>
-              <div className={styles.lastRow}>
-                <span className={styles.signupTitle}>
-                  Don't have and account?
-                </span>
-                <span className={styles.signup}>
-                  <Link href="/sign-up"> Sign up</Link>
-                </span>
-              </div>
             </div>
           </div>
         </div>
@@ -100,4 +84,4 @@ const LoginOverlay = () => {
   );
 };
 
-export default LoginOverlay;
+export default PasswordReset;

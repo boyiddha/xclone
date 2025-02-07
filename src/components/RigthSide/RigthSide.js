@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import styles from "@/modules/home.module.css";
-import SocialSignupForm from "../SocialSignupForm/SocialSignupForm";
+import SocialSignupForm from "../SocialSignupSigninForm/SocialSignupForm";
 import CreateAccountOverlay from "../CreateAccount/CreateAccountOverlay";
 import { useEffect, useState } from "react";
 import VerificationOverlay from "../CreateAccount/VerificationOverlay";
@@ -77,17 +77,26 @@ export default function RightSidePage({ setIsOverlayOpen }) {
           </div>
           <div className={styles.servicePolicy}>
             {"By signing up, you agree to the"}
-            <Link className={styles.link} href="https://x.com/en/tos">
+            <Link
+              className={styles.link}
+              href="https://x.com/en/tos"
+              target="_blank"
+            >
               Terms of Service{" "}
             </Link>
             and{" "}
-            <Link className={styles.link} href="https://x.com/en/privacy">
+            <Link
+              className={styles.link}
+              href="https://x.com/en/privacy"
+              target="_blank"
+            >
               Privacy Policy
             </Link>
             {", including"}
             <Link
               className={styles.link}
               href="https://help.x.com/en/rules-and-policies/x-cookies"
+              target="_blank"
             >
               Cookie Use.
             </Link>
@@ -95,13 +104,11 @@ export default function RightSidePage({ setIsOverlayOpen }) {
         </div>
         <div>
           <div className={styles.firstR}> Already have an account?</div>
-          <div className={styles.secondR}>
-            <span
-              className={styles.signinButton}
-              onClick={() => router.push("?step=login")}
-            >
-              Sign in
-            </span>
+          <div
+            className={styles.secondR}
+            onClick={() => router.push("?step=login")}
+          >
+            <span className={styles.signinButton}>Sign in</span>
           </div>
         </div>
       </div>

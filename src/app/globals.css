@@ -8,7 +8,7 @@ body {
   height: 100%;
 }
 body.overlayActive {
-  background-color: #232b33 !important;
+  background-color: #1d242b;
 }
 * {
   box-sizing: border-box;

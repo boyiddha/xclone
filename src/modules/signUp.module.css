@@ -1,4 +1,4 @@
-.overlayContainer {
+.containerDiv {
   position: fixed;
   top: 0;
   left: 0;
@@ -7,9 +7,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  background-color: #232b33;
 }
-.overlayContent {
+.containerFlex {
   display: flex;
   flex-direction: column;
   width: 590px;
@@ -70,31 +70,33 @@
   visibility: visible;
 }
 .row2ContainerDiv {
-  width: 100%;
   display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: center;
   justify-content: center;
 }
 .row2ContainerFlex {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 62%;
+  width: 55%;
 }
 
 .titleRow {
+  color: white;
   font-size: 37px;
   font-weight: bold;
-  padding-bottom: 30px;
+  margin-bottom: 27px;
 }
 
 .or {
   display: flex;
   align-items: center;
   gap: 5px;
+  color: white;
 }
 
 .or hr {
-  width: 38%;
+  width: 45%;
   margin-top: 20px;
   margin-bottom: 20px;
   height: 1px;
@@ -106,108 +108,119 @@
   margin: 0;
 }
 
-.inputPhoneEmail input {
-  background-color: black;
-  color: white;
-  border: 1px solid gray;
-  padding: 20px;
-  margin-top: 5px;
-  font-size: 16px;
-  width: 85%;
-  border-radius: 8px;
-  outline: none;
-}
-
-.inputPhoneEmail input:focus {
-  border: 2px solid rgb(47, 115, 241);
-}
-
-.nextBtnContainerDiv {
-  width: 85%;
-}
-.nextBtnContainerFlex {
-  margin-top: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 35px;
-  width: 100%;
-  background-color: gray;
-  border-radius: 27px;
-}
-
-.nextButton {
+/* Design Google/ Github signup */
+.signupFormGoogle {
+  background-color: #ffffff;
   color: black;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.active {
-  background-color: rgb(255, 252, 252);
-  cursor: pointer;
-}
-
-.forgotBtnDiv {
-  width: 85%;
-}
-.forgotBtnFlex {
-  margin-top: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 35px;
   width: 100%;
-  border: 1px solid rgb(92, 105, 110);
   border-radius: 27px;
-  color: white;
-  font-size: 18px;
   cursor: pointer;
 }
-.forgotBtnFlex:hover {
-  background-color: rgb(20, 20, 20);
+
+.signupFormGithub {
+  margin-top: 25px;
+  background-color: #ffffff;
+  color: black;
+  width: 100%;
+  border-radius: 27px;
+  cursor: pointer;
+}
+.signupFlex {
+  display: flex;
+  flex-direction: row;
+  height: 42px;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+.signupButton {
+  border: none;
+  font-size: 30px;
+  background-color: white;
+  border-radius: 22px;
+  margin-top: 4px;
+  margin-right: 5px;
+}
+
+.signupFormGoogle:hover {
+  background-color: #f2f2f2;
+}
+.signupFormGithub:hover {
+  background-color: #e6e6e6;
+}
+/* Design create account button    */
+
+.createAccount {
+  margin-top: 10px;
+}
+.createAccountFlex {
+  display: flex;
+  width: 100%;
+  height: 42px;
+}
+.createButton {
+  color: white;
+  width: 100%;
+  height: 42px;
+  background-color: #20a0f5;
+  font-weight: bold;
+  font-size: 17px;
+  border-radius: 27px;
+  cursor: pointer;
+}
+.createButton:hover {
+  background-color: #2d93d6;
+}
+
+.servicePolicy {
+  margin-top: 10px;
+  width: 100%;
+  color: #808080;
+  font-size: 15px;
+}
+
+.link {
+  color: #4d94ff;
+}
+.link:hover {
+  text-decoration: underline;
 }
 .lastRow {
-  width: 85%;
+  width: 100%;
   margin-top: 55px;
 }
-.signupTitle {
+.loginTitle {
   color: gray;
 }
-.signup {
+.login {
   color: rgb(32, 106, 202);
 }
-.signup:hover {
+.login:hover {
   text-decoration: underline;
 }
 
 @media (max-width: 700px) {
-  .overlayContent {
+  .containerFlex {
     width: 100%;
     height: 100%;
   }
-  .row2ContainerDiv {
-    margin-top: 100px;
+  .row2ContainerFlex {
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   .titleRow {
     font-size: 27px;
   }
-}
-
-@media (max-width: 450px) {
-  .row2ContainerFlex {
-    width: 90%;
-  }
-  .lastRow {
-    width: 100%;
-  }
-  .or hr {
-    width: 41%;
-  }
-  .nextBtnContainerDiv,
-  .forgotBtnDiv {
-    width: 90%;
-  }
-  .inputPhoneEmail {
-    width: 100%;
+  .signupFormGoogle,
+  .signupFormGithub,
+  .servicePolicy,
+  .createAccount,
+  .lastRow,
+  .or {
+    width: 80%;
   }
 }
