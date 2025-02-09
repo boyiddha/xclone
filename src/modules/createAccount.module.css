@@ -14,10 +14,11 @@
   justify-content: center;
   align-items: center;
   width: 590px;
-  height: 645px;
+  height: 93%;
   background: black;
   padding: 5px;
   border-radius: 15px;
+ 
 }
 .row1ContainerDiv {
   width: 100%;
@@ -70,11 +71,13 @@
 }
 .row2ContainerDiv {
   width: 80%;
+  overflow-y:auto;
 }
 .row2ContainerFlex {
   display: flex;
   flex-direction: column;
   width: 100%;
+ 
 }
 
 .inputTitle {
@@ -255,7 +258,7 @@
 }
 .row3ContainerDiv {
   width: 80%;
-  height: 17%;
+  height: 15%;
 }
 .row3ContainerFlex {
   width: 100%;
@@ -263,6 +266,7 @@
 }
 .row4ContainerDiv {
   width: 80%;
+  margin-bottom: 10px;
 }
 .row4ContainerFlex {
   display: flex;

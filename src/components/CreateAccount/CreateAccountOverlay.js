@@ -8,7 +8,7 @@ import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { GoChevronDown } from "react-icons/go";
 
-export default function createAccountOverlay({ step, isSetEmail }) {
+export default function CreateAccountOverlay({ step, isSetEmail }) {
   const router = useRouter();
   const pathname = usePathname(); // Get current URL
   const [name, setName] = useState("");
