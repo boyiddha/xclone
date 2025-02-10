@@ -9,13 +9,17 @@ import CreateAccountOverlay from "../CreateAccount/CreateAccountOverlay";
 import { useEffect, useState } from "react";
 import VerificationOverlay from "../CreateAccount/VerificationOverlay";
 import LoginOverlay from "../LoginOverlay/LoginOverlay";
+import PasswordOverlay from "../PasswordOverlay/PasswordOverlay";
+import UserNameOverlay from "../UserNameOverlay/UserNameOverlay";
 
 export default function RightSidePage({ setIsOverlayOpen }) {
   const [email, isSetEmail] = useState("");
+  const [name, isSetName] = useState("");
+  const [dob, isSetDob] = useState("");
   const searchParams = useSearchParams();
   const step = searchParams.get("step"); // Get current step from URL
   const isOverlayOpened =
-    step === "createAccount" || step === "verification" || "login";
+    step === "createAccount" || step === "verification" || step === "login";
   const router = useRouter();
 
   useEffect(() => {
@@ -25,7 +29,7 @@ export default function RightSidePage({ setIsOverlayOpen }) {
   useEffect(() => {
     const step = searchParams.get("step");
     setIsOverlayOpen(
-      step === "createAccount" || step === "password" || "login"
+      step === "createAccount" || step === "password" || step === "login"
     );
   }, [searchParams]); // Update state when URL changes
 
@@ -65,14 +69,27 @@ export default function RightSidePage({ setIsOverlayOpen }) {
               </button>
               {/* Show overlay if the URL matches */}
               {isOverlayOpened && step === "createAccount" && (
-                <CreateAccountOverlay step={step} isSetEmail={isSetEmail} />
+                <CreateAccountOverlay
+                  step={step}
+                  isSetEmail={isSetEmail}
+                  isSetName={isSetName}
+                  isSetDob={isSetDob}
+                />
               )}
+              {/* I pass the name, email, dob data to this overlay and after checking the OTP verification then allow to create a new user */}
               {isOverlayOpened && step === "verification" && (
-                <VerificationOverlay step={step} email={email} />
+                <VerificationOverlay
+                  step={step}
+                  email={email}
+                  name={name}
+                  dob={dob}
+                />
               )}
               {isOverlayOpened && step === "login" && (
                 <LoginOverlay step={step} />
               )}
+              {step === "setPassword" && <PasswordOverlay />}
+              {step === "setUserName" && <UserNameOverlay />}
             </div>
           </div>
           <div className={styles.servicePolicy}>

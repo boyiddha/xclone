@@ -7,8 +7,14 @@ import styles from "@/modules/createAccount.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { GoChevronDown } from "react-icons/go";
+import VerificationOverlay from "@/components/CreateAccount/VerificationOverlay";
 
-export default function CreateAccountOverlay({ step, isSetEmail }) {
+export default function CreateAccountOverlay({
+  step,
+  isSetEmail,
+  isSetName,
+  isSetDob,
+}) {
   const router = useRouter();
   const pathname = usePathname(); // Get current URL
   const [name, setName] = useState("");
@@ -40,6 +46,12 @@ export default function CreateAccountOverlay({ step, isSetEmail }) {
     // if (!value.includes("@")) {
     //   console.log("Invalid email format");
     // }
+  };
+
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    setName(value);
+    isSetName(value); // pass this name to it's parent component
   };
 
   // Function to close the overlay
@@ -107,7 +119,7 @@ export default function CreateAccountOverlay({ step, isSetEmail }) {
                     id="name"
                     placeholder="Name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={handleNameChange}
                   />
                 </div>
               </div>
@@ -289,6 +301,11 @@ export default function CreateAccountOverlay({ step, isSetEmail }) {
               }`}
               onClick={() => {
                 if (isFormComplete) {
+                  const formattedDate = `${year}-${month.padStart(
+                    2,
+                    "0"
+                  )}-${day.padStart(2, "0")}`;
+                  isSetDob(formattedDate);
                   router.push("?step=verification", { scroll: false });
                 }
               }}

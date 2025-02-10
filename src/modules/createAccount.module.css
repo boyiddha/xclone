@@ -18,7 +18,6 @@
   background: black;
   padding: 5px;
   border-radius: 15px;
- 
 }
 .row1ContainerDiv {
   width: 100%;
@@ -71,13 +70,12 @@
 }
 .row2ContainerDiv {
   width: 80%;
-  overflow-y:auto;
+  height: 100%;
 }
 .row2ContainerFlex {
   display: flex;
   flex-direction: column;
   width: 100%;
- 
 }
 
 .inputTitle {

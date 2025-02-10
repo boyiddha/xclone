@@ -8,6 +8,14 @@
   justify-content: center;
   align-items: center;
 }
+.loadingData {
+  color: rgb(18, 165, 18);
+}
+.alertmsg {
+  margin-top: 7%;
+  margin-left: 40%;
+  color: red;
+}
 .overlayContent {
   display: flex;
   flex-direction: column;
