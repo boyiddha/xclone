@@ -9,8 +9,8 @@ import CreateAccountOverlay from "../CreateAccount/CreateAccountOverlay";
 import { useEffect, useState } from "react";
 import VerificationOverlay from "../CreateAccount/VerificationOverlay";
 import LoginOverlay from "../LoginOverlay/LoginOverlay";
-import PasswordOverlay from "../PasswordOverlay/PasswordOverlay";
-import UserNameOverlay from "../UserNameOverlay/UserNameOverlay";
+import SetPasswordOverlay from "@/components/SetPasswordOverlay/SetPasswordOverlay";
+import SetUserNameOverlay from "@/components/SetUserNameOverlay/SetUserNameOverlay";
 
 export default function RightSidePage({ setIsOverlayOpen }) {
   const [email, isSetEmail] = useState("");
@@ -19,7 +19,11 @@ export default function RightSidePage({ setIsOverlayOpen }) {
   const searchParams = useSearchParams();
   const step = searchParams.get("step"); // Get current step from URL
   const isOverlayOpened =
-    step === "createAccount" || step === "verification" || step === "login";
+    step === "createAccount" ||
+    step === "verification" ||
+    step === "login" ||
+    step === "setPassword" ||
+    step === "setUserName";
   const router = useRouter();
 
   useEffect(() => {
@@ -29,7 +33,11 @@ export default function RightSidePage({ setIsOverlayOpen }) {
   useEffect(() => {
     const step = searchParams.get("step");
     setIsOverlayOpen(
-      step === "createAccount" || step === "password" || step === "login"
+      step === "createAccount" ||
+        step === "password" ||
+        step === "login" ||
+        step === "setPassword" ||
+        step === "setUserName"
     );
   }, [searchParams]); // Update state when URL changes
 
@@ -88,8 +96,15 @@ export default function RightSidePage({ setIsOverlayOpen }) {
               {isOverlayOpened && step === "login" && (
                 <LoginOverlay step={step} />
               )}
-              {step === "setPassword" && <PasswordOverlay />}
-              {step === "setUserName" && <UserNameOverlay />}
+              {isOverlayOpened && step === "setPassword" && (
+                <SetPasswordOverlay email={email} />
+              )}
+              {isOverlayOpened && step === "setUserName" && (
+                <SetUserNameOverlay
+                  email={email}
+                  setIsOverlayOpen={setIsOverlayOpen}
+                />
+              )}
             </div>
           </div>
           <div className={styles.servicePolicy}>

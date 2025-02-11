@@ -12,9 +12,17 @@ export default function Home() {
 
   useEffect(() => {
     const step = searchParams.get("step");
-    setIsOverlayOpen(
-      step === "createAccount" || step === "verification" || step === "login"
-    );
+    if (
+      step === "createAccount" ||
+      step === "verification" ||
+      step === "login" ||
+      step === "setPassword" ||
+      step === "setUserName"
+    ) {
+      setIsOverlayOpen(true);
+    } else {
+      setIsOverlayOpen(false);
+    }
   }, [searchParams]); // Update state when URL changes
 
   useEffect(() => {

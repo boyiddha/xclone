@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { GoArrowLeft } from "react-icons/go";
 import { useEffect, useState, useRef } from "react";
-import PasswordOverlay from "@/components/PasswordOverlay/PasswordOverlay";
 
 const VerificationOverlay = ({ step, email, name, dob }) => {
   const router = useRouter();
@@ -110,7 +109,7 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
       <div className={styles.overlayContainer}>
         <div className={styles.overlayContent}>
           {loading ? (
-            <h2 className={styles.loadingData}>Loading...</h2>
+            <h2 className={styles.loadingData}>Sending OTP...</h2>
           ) : (
             <>
               <div className={styles.row1ContainerDiv}>

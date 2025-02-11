@@ -11,7 +11,7 @@ export const POST = async (request) => {
 
   // 1. Create a DB Connection
   await connectDB();
-  // 2. Encrypt the password
+  // 2. Encrypt the password  //=> this password saving will worked on api/savePassword
   //const hashedPassword = await bcrypt.hash(password, 5);
   // 3. Form a DB payload
   const newUser = {

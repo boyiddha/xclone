@@ -1,4 +1,5 @@
 import { Lato } from "next/font/google";
+import AuthProvider from "@/components/SessionProvider"; // Import the client wrapper
 import "./globals.css";
 
 const lato = Lato({
@@ -15,7 +16,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={lato.variable}>{children}</body>
+      <body className={lato.variable}>
+        <AuthProvider>
+          {" "}
+          {/* Wrap in the Client Component */}
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   );
 }

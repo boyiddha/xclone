@@ -103,11 +103,13 @@
   border: none;
 }
 
-.signupButton {
+.googleIcon,
+.githubIcon {
   border: none;
   font-size: 30px;
   background-color: white;
   border-radius: 22px;
+  cursor: pointer;
   margin-top: 4px;
   margin-right: 5px;
 }
