@@ -17,7 +17,8 @@ export default function Home() {
       step === "verification" ||
       step === "login" ||
       step === "setPassword" ||
-      step === "setUserName"
+      step === "setUserName" ||
+      step === "inputPassword"
     ) {
       setIsOverlayOpen(true);
     } else {

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { doSocialLogin } from "@/app/actions";
 
 const SignUp = () => {
   const router = useRouter();
@@ -41,26 +42,23 @@ const SignUp = () => {
                 <span>Join X today</span>
               </div>
 
-              <div className={styles.signupFormGoogle}>
+              <div
+                className={styles.signupFormGoogle}
+                onClick={() => doSocialLogin("google")}
+              >
                 <div className={styles.signupFlex}>
-                  <button
-                    className={styles.signupButton}
-                    onClick={(e) => handleProvider(e, "google")}
-                  >
-                    <FcGoogle />
-                  </button>
+                  <FcGoogle className={styles.googleIcon} />
+
                   <p> Sign up with Google</p>
                 </div>
               </div>
-              <div className={styles.signupFormGithub}>
+              <div
+                className={styles.signupFormGithub}
+                onClick={() => doSocialLogin("github")}
+              >
                 <div className={styles.signupFlex}>
-                  <button
-                    className={styles.signupButton}
-                    onClick={(e) => handleProvider(e, "github")}
-                  >
-                    {" "}
-                    <FaGithub />
-                  </button>
+                  <FaGithub className={styles.githubIcon} />
+
                   <p>Sign up with Github</p>
                 </div>
               </div>

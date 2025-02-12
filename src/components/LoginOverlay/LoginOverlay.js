@@ -8,16 +8,28 @@ import SocialSigninForm from "@/components/SocialSignupSigninForm/SocialSigninFo
 import { useState } from "react";
 import Link from "next/link";
 
-const LoginOverlay = () => {
+const LoginOverlay = ({ isSetEmail }) => {
   const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  const isButtonActive = isFocused && inputValue.trim().length > 0;
+  const isButtonActive = inputValue.trim().length > 0;
 
   // Function to close the overlay
   const closeOverlay = () => {
     router.push("/", { scroll: false });
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value); // Update email state
+
+    isSetEmail(value); // pass this email to it's parent component
+
+    // Example: Validate Email Format
+    // if (!value.includes("@")) {
+    //   console.log("Invalid email format");
+    // }
   };
 
   return (
@@ -61,7 +73,7 @@ const LoginOverlay = () => {
                     value={inputValue}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
-                    onChange={(e) => setInputValue(e.target.value)}
+                    onChange={handleEmailChange}
                   />
                 </div>
               </div>
@@ -72,7 +84,7 @@ const LoginOverlay = () => {
                   }`}
                   onClick={() => {
                     if (isButtonActive) {
-                      router.push("?step=ok", { scroll: false });
+                      router.push("?step=inputPassword", { scroll: false });
                     }
                   }}
                 >

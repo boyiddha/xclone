@@ -1,32 +1,33 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { setCookie } from "cookies-next";
-import { User } from "@/model/user-model";
+import { User } from "@/models/userModel";
 import { NextResponse } from "next/server";
-import { dbConnect } from "@/lib/mongo";
+import connectDB from "@/utils/mongodb";
 
 // Generate JWT Tokens
 const generateTokens = (user) => {
   const accessToken = jwt.sign(
     { id: user.id, email: user.email },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "10s" }
+    { expiresIn: "20s" }
   );
 
   const refreshToken = jwt.sign(
     { id: user.id },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: "25s" }
+    { expiresIn: "50s" }
   );
 
   return { accessToken, refreshToken };
 };
 
 export async function POST(req, res) {
-  const conn = await dbConnect();
+  const conn = await connectDB();
   const body = await req.json();
   const { email, password } = body;
-  //console.log(email, password);
+  // console.log("email and password => api/login : ");
+  // console.log(email, password);
   if (!email || !password) {
     return NextResponse.json(
       { error: "Email and password required" },
@@ -48,7 +49,10 @@ export async function POST(req, res) {
 
   // Generate tokens
   const { accessToken, refreshToken } = generateTokens(user);
-
+  console.log("api/login=>🔹 Sending access & refresh token:", {
+    accessToken,
+    refreshToken,
+  });
   // Return a response with the refresh token in a cookie
   const response = NextResponse.json(
     {

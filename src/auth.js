@@ -2,7 +2,10 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { authConfig } from "@/auth.config";
+import { authConfig } from "./auth.config";
+import { User } from "./models/userModel";
+import connectDB from "./utils/mongodb";
+import bcrypt from "bcryptjs";
 
 import { jwtDecode } from "jwt-decode";
 
@@ -15,13 +18,21 @@ async function refreshAccessToken(token) {
   //console.log("Refreshing access token", token);
   try {
     //console.log("Beaarer token", `Bearer ${token.refreshToken}`);
-
+    console.log("📤 Sending refresh token:", token.refreshToken); // Debugging
+    // Debuggin: Ensure refreshToken is available before API Call
+    if (!token.refreshToken) {
+      console.error("❌ refreshToken is missing before making API call!");
+      return { ...token, error: "Missing refresh token" };
+    }
     const response = await fetch(
       `${process.env.API_SERVER_BASE_URL}/api/refresh`,
       {
+        method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token.refreshToken}`,
         },
+        body: JSON.stringify({ refreshToken: token.refreshToken }),
       }
     );
 
@@ -29,7 +40,7 @@ async function refreshAccessToken(token) {
     // Check if the response is not OK
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Error response:", errorText);
+      console.error("❌ Server Error response:", errorText);
       return {
         ...token,
         error: "Failed to refresh access token",
@@ -63,8 +74,7 @@ async function refreshAccessToken(token) {
       refreshToken: tokens.refreshToken ?? token.refreshToken, // Fall back to old refresh token
     };
   } catch (error) {
-    console.log(error);
-
+    console.error("❌ Refresh token error:", error);
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -140,6 +150,9 @@ export const authOptions = {
         },
       },
     }),
+    // Github provides email if this account's email is public otherwise it not provide private email
+    // so while sigin /sign up make sure that account's email is public otherwise it shows
+    // Error: /api/auth/error?error=users%20validation%20failed%3A%20email%3A%20Path%20%60email%60%20is%20required
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
@@ -148,59 +161,59 @@ export const authOptions = {
           prompt: "consent",
           access_type: "offline",
           response_type: "code",
+          scope: "read:user user:email", // Make sure to request the `user:email` scope
         },
       },
     }),
   ],
   callbacks: {
-    jwt: async ({ token, account, user }) => {
-      // user is only available the first time a user signs in authorized
-      //console.log(`In jwt callback - Token is ${JSON.stringify(token)}`);
+    async signIn({ user, account }) {
+      // Check if user exists in your database
+      // console.log("user ", user);
+      // console.log("account ", account);
 
-      if (token.accessToken) {
-        const decodedToken = jwtDecode(token.accessToken);
-        //console.log(decodedToken);
-        token.accessTokenExpires = decodedToken?.exp * 1000;
+      await connectDB();
+      const existingUser = await User.findOne({ email: user.email });
+      if (!existingUser) {
+        // Create new user
+        await User.create({
+          email: user.email,
+          fullName: user.name,
+        });
+        //console.log("Successfully Created new user..........");
       }
-
+      return true;
+    },
+    jwt: async ({ token, account, user }) => {
+      // If this is the first time the user is logging in
       if (account && user) {
-        //console.log(`In jwt callback - User is ${JSON.stringify(user)}`);
-        //console.log(`In jwt callback - account is ${JSON.stringify(account)}`);
-
+        // Store the access token, refresh token, and expiration time in the JWT
         return {
           ...token,
-          accessToken: user.accessToken,
-          refreshToken: user.refreshToken,
+          accessToken: account.access_token,
+          refreshToken: account.refresh_token,
+          accessTokenExpires: account.expires_at * 1000, // Convert seconds to milliseconds
           user,
         };
       }
 
-      // Return previous token if the access token has not expired yet
-      // console.log(
-      //   "**** Access token expires on *****",
-      //   token.accessTokenExpires,
-      //   new Date(token.accessTokenExpires)
-      // );
+      // Check if the access token is expired and refresh if necessary
       if (Date.now() < token.accessTokenExpires) {
-        //console.log("**** returning previous token ******");
-        return token;
+        return token; // If the token hasn't expired yet, return the current token
       }
 
-      // Access token has expired, try to update it
-      //console.log("**** Update Refresh token ******");
-      //return token;
+      // Refresh the token if it's expired (use refresh token for this)
       return refreshAccessToken(token);
     },
+
+    // Session callback
     session: async ({ session, token }) => {
-      console.log(`In session callback - Token is ${JSON.stringify(token)}`);
-      if (token) {
-        session.accessToken = token.accessToken;
-        session.user = token.user;
-      }
+      //console.log(`In session callback - Token is ${JSON.stringify(token)}`);
+      session.accessToken = token.accessToken; // Attach the access token to the session
+      session.user = token.user; // Attach the user object to the session
       return session;
     },
   },
 };
-
 // Export NextAuth handler with configuration
 export default NextAuth(authOptions);

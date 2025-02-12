@@ -17,17 +17,18 @@ export async function POST(req, res) {
   const refreshToken =
     body.refreshToken || getCookie("refreshToken", { req, res });
 
-  if (!refreshToken) {
+  if (!refreshToken || typeof refreshToken !== "string") {
+    console.error("❌ Refresh token missing! or not a string");
     return NextResponse.json(
       { error: "Refresh token missing" },
       { status: 401 }
     );
   }
-
+  console.log("Received refresh token:", refreshToken); // Debugging
   try {
     // Verify the refresh token
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-
+    console.log("Decoded refresh token:", decoded); // Debuggin
     // Generate a new access token
     const newAccessToken = generateAccessToken({
       id: decoded.id,
@@ -37,6 +38,7 @@ export async function POST(req, res) {
     // 15 min expiry
     return NextResponse.json({ accessToken: newAccessToken, expiresIn: 10 });
   } catch (error) {
+    console.error("❌ Error verifying refresh token:", error);
     return NextResponse.json(
       { error: "Invalid or expired refresh token" },
       { status: 403 }

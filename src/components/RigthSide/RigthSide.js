@@ -11,6 +11,7 @@ import VerificationOverlay from "../CreateAccount/VerificationOverlay";
 import LoginOverlay from "../LoginOverlay/LoginOverlay";
 import SetPasswordOverlay from "@/components/SetPasswordOverlay/SetPasswordOverlay";
 import SetUserNameOverlay from "@/components/SetUserNameOverlay/SetUserNameOverlay";
+import InputPasswordOverlay from "../LoginOverlay/InputPasswordOverlay";
 
 export default function RightSidePage({ setIsOverlayOpen }) {
   const [email, isSetEmail] = useState("");
@@ -23,7 +24,8 @@ export default function RightSidePage({ setIsOverlayOpen }) {
     step === "verification" ||
     step === "login" ||
     step === "setPassword" ||
-    step === "setUserName";
+    step === "setUserName" ||
+    step === "inputPassword";
   const router = useRouter();
 
   useEffect(() => {
@@ -37,7 +39,8 @@ export default function RightSidePage({ setIsOverlayOpen }) {
         step === "password" ||
         step === "login" ||
         step === "setPassword" ||
-        step === "setUserName"
+        step === "setUserName" ||
+        step === "inputPassword"
     );
   }, [searchParams]); // Update state when URL changes
 
@@ -93,9 +96,7 @@ export default function RightSidePage({ setIsOverlayOpen }) {
                   dob={dob}
                 />
               )}
-              {isOverlayOpened && step === "login" && (
-                <LoginOverlay step={step} />
-              )}
+
               {isOverlayOpened && step === "setPassword" && (
                 <SetPasswordOverlay email={email} />
               )}
@@ -104,6 +105,12 @@ export default function RightSidePage({ setIsOverlayOpen }) {
                   email={email}
                   setIsOverlayOpen={setIsOverlayOpen}
                 />
+              )}
+              {isOverlayOpened && step === "login" && (
+                <LoginOverlay isSetEmail={isSetEmail} />
+              )}
+              {isOverlayOpened && step === "inputPassword" && (
+                <InputPasswordOverlay loginEmail={email} />
               )}
             </div>
           </div>
