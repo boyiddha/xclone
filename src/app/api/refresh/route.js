@@ -7,7 +7,7 @@ const generateAccessToken = (user) => {
   return jwt.sign(
     { id: user.id, email: user.email },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "10s" } // Access token expires in 15 minutes
+    { expiresIn: "15m" } // Access token expires in 15 minutes
   );
 };
 export async function POST(req, res) {

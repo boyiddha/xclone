@@ -2,5 +2,6 @@
 
 import NextAuth from "@/auth"; // import NextAuth with config
 
-export const GET = NextAuth; // Export GET handler for this API route
-export const POST = NextAuth; // Export POST handler for this API route
+export const GET = NextAuth; // Use the NextAuth handler for GET requests
+export const POST = NextAuth; // Use the NextAuth handler for POST requests
+export const authOptions = NextAuth;

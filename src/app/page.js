@@ -33,6 +33,7 @@ export default function Home() {
       document.body.classList.remove("overlayActive"); // Remove class when closed
     }
   }, [isOverlayOpen]);
+
   return (
     <>
       <div className={styles.container}>

@@ -17,11 +17,10 @@ import { jwtDecode } from "jwt-decode";
 async function refreshAccessToken(token) {
   //console.log("Refreshing access token", token);
   try {
-    //console.log("Beaarer token", `Bearer ${token.refreshToken}`);
-    console.log("📤 Sending refresh token:", token.refreshToken); // Debugging
+    //console.log("📤 Sending refresh token:", token.refreshToken); // Debugging
     // Debuggin: Ensure refreshToken is available before API Call
     if (!token.refreshToken) {
-      console.error("❌ refreshToken is missing before making API call!");
+      //console.error("❌ refreshToken is missing before making API call!");
       return { ...token, error: "Missing refresh token" };
     }
     const response = await fetch(
@@ -182,35 +181,92 @@ export const authOptions = {
         });
         //console.log("Successfully Created new user..........");
       }
+      // set user.name while credential log in. it helps to set session.user.name property
+      // oauth=> google/github add this automatically without facing any issue
+      if (account.provider === "credentials") {
+        // For Credentials login, ensure `name` is fetched from the database
+        const dbUser = await User.findOne({ email: user.email });
+        if (dbUser) {
+          user.name = dbUser.fullName; // Set name if available in the database
+        }
+      }
       return true;
     },
     jwt: async ({ token, account, user }) => {
-      // If this is the first time the user is logging in
+      // user parameter exist is only the first time a user signs in via a provider like Google/OAuth
+      //console.log(`In jwt callback - Token is ${JSON.stringify(token)}`);
+
+      // If an accessToken already exists, decode it to set the expiration time
+      if (token.accessToken) {
+        const decodedToken = jwtDecode(token.accessToken);
+        //console.log(decodedToken);
+        token.accessTokenExpires = decodedToken?.exp * 1000;
+      }
+
       if (account && user) {
-        // Store the access token, refresh token, and expiration time in the JWT
+        //console.log(`In jwt callback - User is ${JSON.stringify(user)}`);
+        //console.log(`In jwt callback - account is ${JSON.stringify(account)}`);
+
+        // login / signup via oauth=> inside user we get name, email, id, image
+        // but for credential login => we get only email if we want to set name
+        // in the session so find the user and set it later
+
+        if (account.provider === "credentials") {
+          const dbUser = await User.findOne({ email: user.email });
+          // if user found then set it to session
+          if (dbUser) {
+            user.name = dbUser.fullName;
+            // user.image = dbUser.image // set image if the db has an image or like as profile pic
+          }
+        }
+
         return {
           ...token,
-          accessToken: account.access_token,
-          refreshToken: account.refresh_token,
-          accessTokenExpires: account.expires_at * 1000, // Convert seconds to milliseconds
-          user,
+          accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
+          user: {
+            ...user,
+            name: user.name, // Ensure `name` is set here from db
+          },
         };
       }
 
-      // Check if the access token is expired and refresh if necessary
+      // Return previous token if the access token has not expired yet
+      // console.log(
+      //   "**** Access token expires on *****",
+      //   token.accessTokenExpires,
+      //   new Date(token.accessTokenExpires)
+      // );
+
       if (Date.now() < token.accessTokenExpires) {
-        return token; // If the token hasn't expired yet, return the current token
+        //console.log("**** returning previous token ******");
+        return token;
       }
 
-      // Refresh the token if it's expired (use refresh token for this)
+      // Access token has expired, try to update it
+      //console.log("**** Update Refresh token ******");
+      //return token;
+      // console.log("❌ before calling refreshAccessToken the token is: ", token);
       return refreshAccessToken(token);
     },
-
     // Session callback
     session: async ({ session, token }) => {
-      //console.log(`In session callback - Token is ${JSON.stringify(token)}`);
-      session.accessToken = token.accessToken; // Attach the access token to the session
-      session.user = token.user; // Attach the user object to the session
+      //console.log(" ❌ session is: ", session);
+
+      // Ensure the session includes the user's name from the token
+      // if (token.user) {
+      //   session.user.name = token.user.name;
+      //   session.user.email = token.user.email;
+      //   session.user.image = token.user.image;
+      // }
+
+      session.user = {
+        name: token.user?.name ?? session.user.name,
+        email: token.user?.email ?? session.user.email,
+        image: token.user?.image ?? session.user.image,
+      };
+
+      //console.log(" ❌ after setting session is: ", session);
       return session;
     },
   },

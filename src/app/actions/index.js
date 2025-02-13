@@ -20,9 +20,10 @@ export async function doCredentialLogin(loginEmail, password) {
     const response = await signIn("credentials", {
       email: e,
       password: p,
-      redirect: false,
+
+      redirect: true, // This triggers the redirection after successful sign-in
+      callbackUrl: "/home", // This sets the desired redirection URL after login
     });
-    revalidatePath("/home");
 
     return response;
   } catch (err) {

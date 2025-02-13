@@ -10,13 +10,13 @@ const generateTokens = (user) => {
   const accessToken = jwt.sign(
     { id: user.id, email: user.email },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "20s" }
+    { expiresIn: "15m" }
   );
 
   const refreshToken = jwt.sign(
     { id: user.id },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: "50s" }
+    { expiresIn: "7d" }
   );
 
   return { accessToken, refreshToken };
@@ -37,7 +37,7 @@ export async function POST(req, res) {
 
   const user = await User.findOne({ email: email });
 
-  console.log(user);
+  //console.log(user);
   if (!user) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
@@ -49,10 +49,10 @@ export async function POST(req, res) {
 
   // Generate tokens
   const { accessToken, refreshToken } = generateTokens(user);
-  console.log("api/login=>🔹 Sending access & refresh token:", {
-    accessToken,
-    refreshToken,
-  });
+  // console.log("api/login=>🔹 Sending access & refresh token:", {
+  //   accessToken,
+  //   refreshToken,
+  // });
   // Return a response with the refresh token in a cookie
   const response = NextResponse.json(
     {

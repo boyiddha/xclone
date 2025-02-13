@@ -2,6 +2,10 @@ import { Lato } from "next/font/google";
 import AuthProvider from "@/components/SessionProvider"; // Import the client wrapper
 import "./globals.css";
 
+import connectDB from "@/utils/mongodb";
+
+import { SessionProvider } from "next-auth/react";
+
 const lato = Lato({
   variable: "--font-lato",
   subsets: ["latin"],
@@ -14,6 +18,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const conn = connectDB(); // Universally connect DB
   return (
     <html lang="en">
       <body className={lato.variable}>
