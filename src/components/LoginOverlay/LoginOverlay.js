@@ -92,8 +92,13 @@ const LoginOverlay = ({ isSetEmail }) => {
                 </div>
               </div>
               <div className={styles.forgotBtnDiv}>
-                <div className={styles.forgotBtnFlex}>
-                  <Link href="/password-reset">Forgot password?</Link>
+                <div
+                  className={styles.forgotBtnFlex}
+                  onClick={() =>
+                    router.push("/password-reset", { scroll: false })
+                  }
+                >
+                  Forgot password?
                 </div>
               </div>
               <div className={styles.lastRow}>
