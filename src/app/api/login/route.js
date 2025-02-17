@@ -23,6 +23,7 @@ const generateTokens = (user) => {
 };
 
 export async function POST(req, res) {
+  console.log("✅ api/login call");
   const conn = await connectDB();
   const body = await req.json();
   const { email, password } = body;
@@ -39,11 +40,13 @@ export async function POST(req, res) {
 
   //console.log(user);
   if (!user) {
+    // console.log("✔ user not found");
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
+    //console.log("✔ password not matched");
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
 

@@ -12,22 +12,23 @@ const HomePage = async () => {
   //console.log("✅  session data:  ", session);
 
   // If no session or user, redirect to login page
-  if (!session?.user) {
-    redirect("/");
-  }
+  // if (!session?.user) {
+  //   redirect("/");
+  // }
 
   return (
     <div style={{ color: "white" }}>
       <h1>
-        Welcome, {session.user.name} = {session.user.email}!
+        Welcome, {session?.user?.name} = {session?.user?.email}!
       </h1>
 
-      {session.user.image && (
+      {session?.user?.image && (
         <Image
-          src={session.user.image}
-          alt={session.user.name || "User"}
-          width={72}
-          height={72}
+          src={session?.user?.image}
+          alt={session?.user?.name || "User"}
+          width={100}
+          height={100}
+          style={{ borderRadius: "50%", marginRight: "50px" }}
         />
       )}
 

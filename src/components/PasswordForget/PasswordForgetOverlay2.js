@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import styles from "@/modules/passwordForget2.module.css";
 import PasswordForgetOverlay3 from "@/components/PasswordForget/passwordForgetOverlay3";
 
-const PasswordForgetOverlay2 = ({ email, setIsFinalOverlay }) => {
+const PasswordForgetOverlay2 = ({ email, setPassword, setIsFinalOverlay }) => {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [isOverlayOpen, setIsOverlayOpened] = useState(false);
@@ -96,6 +96,7 @@ const PasswordForgetOverlay2 = ({ email, setIsFinalOverlay }) => {
       {isOverlayOpen && (
         <PasswordForgetOverlay3
           email={email}
+          setPassword={setPassword}
           setIsFinalOverlay={setIsFinalOverlay}
         />
       )}

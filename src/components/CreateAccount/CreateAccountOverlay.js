@@ -22,6 +22,7 @@ export default function CreateAccountOverlay({
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
   const [year, setYear] = useState("");
+  const [error, setError] = useState("");
 
   const [isFocusedMonth, setIsFocusedMonth] = useState(false);
   const [isFocusedDay, setIsFocusedDay] = useState(false);
@@ -87,6 +88,36 @@ export default function CreateAccountOverlay({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleCreateAccount = async () => {
+    const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
+      2,
+      "0"
+    )}`;
+    isSetDob(formattedDate);
+
+    try {
+      const res = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }), // Send email in the body
+      });
+
+      const data = await res.json();
+
+      if (res.status === 200) {
+        //console.log("User found:", data);
+        //return data; // Return user data if needed
+        setError(" This Email already exist! Try with another");
+      } else {
+        router.push("?step=verification", { scroll: false });
+      }
+    } catch (err) {
+      setError("Error finding user: ", err);
+    }
+  };
 
   return (
     <>
@@ -292,7 +323,13 @@ export default function CreateAccountOverlay({
           </div>
 
           <div className={styles.row3ContainerDiv}>
-            <div className={styles.row3ContainerFlex}></div>
+            <div className={styles.row3ContainerFlex}>
+              {error && (
+                <p style={{ color: "red" }}>
+                  {email} {error}
+                </p>
+              )}
+            </div>
           </div>
           <div className={styles.row4ContainerDiv}>
             <div
@@ -301,12 +338,7 @@ export default function CreateAccountOverlay({
               }`}
               onClick={() => {
                 if (isFormComplete) {
-                  const formattedDate = `${year}-${month.padStart(
-                    2,
-                    "0"
-                  )}-${day.padStart(2, "0")}`;
-                  isSetDob(formattedDate);
-                  router.push("?step=verification", { scroll: false });
+                  handleCreateAccount();
                 }
               }}
             >

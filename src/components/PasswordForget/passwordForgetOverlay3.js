@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/modules/passwordForget3.module.css";
 
-const passwordForgetOverlay3 = ({ email, setIsFinalOverlay }) => {
+const passwordForgetOverlay3 = ({ email, setPassword, setIsFinalOverlay }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
@@ -28,7 +28,8 @@ const passwordForgetOverlay3 = ({ email, setIsFinalOverlay }) => {
 
       if (res.ok) {
         //setIsOverlayOpened(true);
-        console.log("final overlay call ****************");
+        //console.log("final overlay call ****************");
+        setPassword(newPassword);
         setIsFinalOverlay(true);
       } else {
         setError(data.message); // Show error message

@@ -3,9 +3,28 @@ import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import styles from "@/modules/passwordForget4.module.css";
 import { useRouter } from "next/navigation";
+import { doCredentialLogin } from "@/app/actions";
 
-const PasswordForgetOverlay4 = () => {
+const PasswordForgetOverlay4 = ({ email, password }) => {
   const router = useRouter();
+  // doCredentialLogin to save user session data
+  const handleContinue = async () => {
+    try {
+      const response = await doCredentialLogin(email, password);
+
+      if (!!response.error) {
+        console.error(response.error);
+        setError(response.error.message);
+      } else {
+        router.push("/home");
+        //router.push("products");
+      }
+    } catch (e) {
+      console.error(e);
+      setError("Check your Credentials");
+    }
+  };
+
   return (
     <>
       <div className={styles.containerDiv}>
@@ -42,7 +61,7 @@ const PasswordForgetOverlay4 = () => {
               <div className={styles.nextBtnContainerDiv}>
                 <div
                   className={styles.nextBtnContainerFlex}
-                  onClick={() => router.push("/home", { scroll: false })}
+                  onClick={handleContinue}
                 >
                   <span className={styles.nextButton}>continue to X</span>
                 </div>

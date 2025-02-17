@@ -26,6 +26,7 @@ export default function Home() {
     }
   }, [searchParams]); // Update state when URL changes
 
+  // add body background color class when isOverlayOpen is True
   useEffect(() => {
     if (isOverlayOpen) {
       document.body.classList.add("overlayActive"); // Add class when open

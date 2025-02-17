@@ -12,6 +12,7 @@ const PasswordReset = () => {
   const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [password, setPassword] = useState("");
 
   const isButtonActive = inputValue.trim().length > 0;
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
@@ -102,13 +103,16 @@ const PasswordReset = () => {
             {isOverlayVisible && (
               <PasswordForgetOverlay
                 email={inputValue}
+                setPassword={setPassword}
                 setIsFinalOverlay={setIsFinalOverlay}
               />
             )}
           </div>
         </>
       )}
-      {isFinalOverlay && <PasswordForgetOverlay4 />}
+      {isFinalOverlay && (
+        <PasswordForgetOverlay4 email={inputValue} password={password} />
+      )}
     </>
   );
 };

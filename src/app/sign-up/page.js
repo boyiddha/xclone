@@ -70,9 +70,14 @@ const SignUp = () => {
               </div>
 
               <div className={styles.createAccount}>
-                <div className={styles.createAccountFlex}>
+                <div
+                  className={styles.createAccountFlex}
+                  onClick={() =>
+                    router.push("/?step=createAccount", { scroll: false })
+                  }
+                >
                   <button className={styles.createButton}>
-                    <Link href="/?step=createAccount">Create account</Link>
+                    Create account
                   </button>
                 </div>
               </div>

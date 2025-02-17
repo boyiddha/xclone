@@ -108,6 +108,7 @@ export const authOptions = {
 
           if (!res.ok) {
             // credentials are invalid
+
             return null;
           }
 
@@ -174,12 +175,16 @@ export const authOptions = {
       await connectDB();
       const existingUser = await User.findOne({ email: user.email });
       if (!existingUser) {
+        // Detect new user
         // Create new user
         await User.create({
           email: user.email,
           fullName: user.name,
         });
         //console.log("Successfully Created new user..........");
+        if (account.provider === "google" || account.provider === "github") {
+          user.isNewUser = true; // It help to detect new user
+        }
       }
       // set user.name while credential log in. it helps to set session.user.name property
       // oauth=> google/github add this automatically without facing any issue
@@ -190,7 +195,7 @@ export const authOptions = {
           user.name = dbUser.fullName; // Set name if available in the database
         }
       }
-      return true;
+      return true; // Allow log in
     },
     jwt: async ({ token, account, user }) => {
       // user parameter exist is only the first time a user signs in via a provider like Google/OAuth
@@ -201,6 +206,11 @@ export const authOptions = {
         const decodedToken = jwtDecode(token.accessToken);
         //console.log(decodedToken);
         token.accessTokenExpires = decodedToken?.exp * 1000;
+      }
+
+      // If user object has isNewUser, add it to the token
+      if (user?.isNewUser) {
+        token.isNewUser = true;
       }
 
       if (account && user) {
@@ -260,6 +270,11 @@ export const authOptions = {
       //   session.user.image = token.user.image;
       // }
 
+      // Add isNewUser flag from token to session
+      if (token?.isNewUser) {
+        session.isNewUser = true;
+      }
+
       session.user = {
         name: token.user?.name ?? session.user.name,
         email: token.user?.email ?? session.user.email,
@@ -273,3 +288,27 @@ export const authOptions = {
 };
 // Export NextAuth handler with configuration
 export default NextAuth(authOptions);
+
+/*
+OAuth Login Flow in Detail
+
+✅  User clicks "Sign in with Google/GitHub"
+✅  NextAuth redirects to OAuth provider (Google/GitHub) for authentication
+✅  User grants permission and is redirected back to NextAuth
+✅  signIn() callback runs → Check if user exists in DB, insert new user if needed
+✅  jwt() callback runs → Store user details (e.g., id, email) in JWT
+✅  session() callback runs → Pass JWT data to session
+✅  Session is available in the frontend via useSession()
+
+
+
+Credentials Login Flow in Detail
+
+✅  User enters email & password and clicks "Sign In"
+✅  authorize() function in Credentials Provider runs → Validates user credentials
+✅  signIn() callback runs → Check if the login should proceed
+✅  jwt() callback runs → Store user details (e.g., id, role) in JWT
+✅  session() callback runs → Pass JWT data to session
+
+
+*/

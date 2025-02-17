@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PasswordForgetOverlay2 from "@/components/PasswordForget/PasswordForgetOverlay2";
 
-const PasswordForgetOverlay = ({ email, setIsFinalOverlay }) => {
+const PasswordForgetOverlay = ({ email, setPassword, setIsFinalOverlay }) => {
   const router = useRouter();
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [error, setError] = useState("");
@@ -127,6 +127,7 @@ const PasswordForgetOverlay = ({ email, setIsFinalOverlay }) => {
           {isOverlayVisible && (
             <PasswordForgetOverlay2
               email={email}
+              setPassword={setPassword}
               setIsFinalOverlay={setIsFinalOverlay}
             />
           )}
