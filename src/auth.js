@@ -209,7 +209,7 @@ export const authOptions = {
       }
 
       if (user?.isNewUser) {
-        console.log("❌  *********************user true ************ ==== ");
+        //console.log("❌  *********************user true ************ ==== ");
         token.isNewUser = true;
       } else {
         token.isNewUser = false;
