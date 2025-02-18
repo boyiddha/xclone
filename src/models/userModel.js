@@ -44,4 +44,4 @@ userSchema.pre("save", function (next) {
 });
 
 export const User =
-  mongoose.models.users ?? mongoose.model("users", userSchema);
+  mongoose?.models?.users ?? mongoose.model("users", userSchema);

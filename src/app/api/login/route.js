@@ -23,7 +23,7 @@ const generateTokens = (user) => {
 };
 
 export async function POST(req, res) {
-  console.log("✅ api/login call");
+  //console.log("✅ api/login call");
   const conn = await connectDB();
   const body = await req.json();
   const { email, password } = body;

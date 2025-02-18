@@ -5,13 +5,16 @@ import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { doCredentialLogin } from "@/app/actions";
 
-const SetUserNameOverlay = ({ email, setIsOverlayOpen }) => {
+const SetUserNameOverlay = ({ email, password, setIsOverlayOpen }) => {
   const [username, setUserName] = useState("");
   const [isNext, setIsNext] = useState(false);
   const router = useRouter();
 
   const handleNext = async () => {
+    console.log("Finally =======> ; ");
+    console.log(email, password);
     try {
       const saveResponse = await fetch("/api/saveUserName", {
         method: "POST",
@@ -24,7 +27,16 @@ const SetUserNameOverlay = ({ email, setIsOverlayOpen }) => {
         }),
       });
       setIsOverlayOpen(false);
-      saveResponse.status === 200 && router.push("/home");
+      //saveResponse.status === 200 && router.push("/home");
+
+      const response = await doCredentialLogin(email, password);
+
+      if (!!response.error) {
+        console.error(response.error);
+        setError(response.error.message);
+      } else {
+        router.push("/home");
+      }
     } catch (e) {
       console.error(e.message);
     }

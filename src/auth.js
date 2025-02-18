@@ -208,9 +208,11 @@ export const authOptions = {
         token.accessTokenExpires = decodedToken?.exp * 1000;
       }
 
-      // If user object has isNewUser, add it to the token
       if (user?.isNewUser) {
+        console.log("❌  *********************user true ************ ==== ");
         token.isNewUser = true;
+      } else {
+        token.isNewUser = false;
       }
 
       if (account && user) {
@@ -275,10 +277,13 @@ export const authOptions = {
         session.isNewUser = true;
       }
 
+      session.token = token; // Make sure to attach token to session
+
       session.user = {
         name: token.user?.name ?? session.user.name,
         email: token.user?.email ?? session.user.email,
         image: token.user?.image ?? session.user.image,
+        isNewUser: token?.isNewUser ?? session?.isNewUser,
       };
 
       //console.log(" ❌ after setting session is: ", session);

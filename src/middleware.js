@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt"; // Correct function to get session in middleware
-import { PUBLIC_ROUTES, LOGIN, ROOT } from "@/utils/route";
+import { PUBLIC_ROUTES, LOGIN, ROOT } from "@/utils/routes";
 
 export async function middleware(request) {
   try {
@@ -14,25 +14,14 @@ export async function middleware(request) {
     const isAuthenticated = !!token; // If token exists, user is authenticated
 
     // console.log(
-    //   "✅   Middleware: isAuthenticated = ",
+    //   "❌    Middleware: isAuthenticated = ",
     //   isAuthenticated,
-    //   "🎯   Path: ",
+    //   "🎯   Path: =============>>>>> : ",
     //   nextUrl.pathname
     // );
     // Case 1: If user is authenticated, prevent access to public routes and login
 
-    console.log("✅ token in middleware: ", token);
-
-    // Avoid redirect loop by checking if the user is already on /set-password
-    const isOnSetNewUserPage = request.url.includes("/newUser");
-
-    if (token?.isNewUser && !isOnSetNewUserPage) {
-      // Hard-code unset of isNewUser flag to false before redirecting
-      token.isNewUser = false;
-
-      // Redirect to set-password page if it's a new user
-      return NextResponse.redirect(new URL("/newUser", request.url));
-    }
+    //console.log("✅ token in middleware: ", token);
 
     if (
       isAuthenticated &&
@@ -62,6 +51,13 @@ export async function middleware(request) {
       return NextResponse.redirect(new URL(LOGIN, request.url));
     }
 
+    // Avoid redirect loop by checking if the user is already on /set-password
+    const isOnSetNewUserPage = request.url.includes("/newUser");
+
+    if (token?.isNewUser && !isOnSetNewUserPage) {
+      return NextResponse.redirect(new URL("/newUser", request.url));
+    }
+
     return NextResponse.next();
   } catch (error) {
     console.error("❌ Middleware Error:", error);
@@ -70,9 +66,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: [
-    "/(api|trpc)(.*)", // Match API and trpc routes first
-    "/((?!.+\\.[\\w]+$|_next).*)", // Then match other non-static routes
-    "/", // Match the root route
-  ],
+  matcher: ["/(api|trpc)(.*)", "/((?!.+\\.[\\w]+$|_next).*)", "/"],
 };

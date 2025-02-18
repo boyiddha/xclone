@@ -2,20 +2,16 @@ import Image from "next/image";
 import LogOut from "@/components/LogOut/LogOut";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-
+import { getToken } from "next-auth/jwt";
+import { cookies } from "next/headers";
+import { decode } from "jsonwebtoken";
 import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const HomePage = async () => {
-  // Get session using getServerSession() and your authOptions
+  //Get session using getServerSession() and your authOptions
   const session = await getServerSession(authOptions);
-
-  //console.log("✅  session data:  ", session);
-
-  // If no session or user, redirect to login page
-  // if (!session?.user) {
-  //   redirect("/");
-  // }
-
+  //console.log("✅  session home page : , ", session);
   return (
     <div style={{ color: "white" }}>
       <h1>

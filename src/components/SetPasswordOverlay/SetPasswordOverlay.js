@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 
-const SetPasswordOverlay = ({ email }) => {
+const SetPasswordOverlay = ({ email, isSetPassword }) => {
   const [password, setPassword] = useState("");
   const [isSignup, setIsSignup] = useState(false);
   const router = useRouter();
@@ -24,6 +24,7 @@ const SetPasswordOverlay = ({ email }) => {
           password,
         }),
       });
+      isSetPassword(password);
       saveResponse.status === 200 && router.push("/?step=setUserName");
     } catch (e) {
       console.error(e.message);

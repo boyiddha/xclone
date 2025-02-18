@@ -17,6 +17,7 @@ export default function RightSidePage({ setIsOverlayOpen }) {
   const [email, isSetEmail] = useState("");
   const [name, isSetName] = useState("");
   const [dob, isSetDob] = useState("");
+  const [password, isSetPassword] = useState("");
   const searchParams = useSearchParams();
   const step = searchParams.get("step"); // Get current step from URL
   const isOverlayOpened =
@@ -98,11 +99,15 @@ export default function RightSidePage({ setIsOverlayOpen }) {
               )}
 
               {isOverlayOpened && step === "setPassword" && (
-                <SetPasswordOverlay email={email} />
+                <SetPasswordOverlay
+                  email={email}
+                  isSetPassword={isSetPassword}
+                />
               )}
               {isOverlayOpened && step === "setUserName" && (
                 <SetUserNameOverlay
                   email={email}
+                  password={password}
                   setIsOverlayOpen={setIsOverlayOpen}
                 />
               )}
