@@ -6,11 +6,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { IoEye } from "react-icons/io5";
+import { IoEyeOff } from "react-icons/io5";
 
 const SetPasswordOverlay = ({ email, isSetPassword }) => {
   const [password, setPassword] = useState("");
   const [isSignup, setIsSignup] = useState(false);
   const router = useRouter();
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleSignup = async () => {
     try {
@@ -50,17 +53,33 @@ const SetPasswordOverlay = ({ email, isSetPassword }) => {
               <div className={styles.title}>
                 <p>Make sure it's 8 characters or more.</p>
               </div>
-              <div className={styles.inputPassContainerDiv}>
-                <div className={styles.inputVerification}>
+
+              <div className={styles.inputPassword}>
+                <div className={styles.passwordBtn}>
                   <input
-                    type="text"
-                    name="verification"
-                    id="verification"
+                    type={isVisible ? "text" : "password"}
+                    name="password"
+                    id="password"
                     placeholder="Password"
                     value={password}
+                    autoComplete="off"
                     onChange={(e) => setPassword(e.target.value)}
                     onClick={() => setIsSignup(true)}
                   />
+                </div>
+                <div className={styles.eyeDiv}>
+                  {!isVisible && (
+                    <IoEye
+                      className={styles.eyeBtn}
+                      onClick={() => setIsVisible(!isVisible)}
+                    />
+                  )}
+                  {isVisible && (
+                    <IoEyeOff
+                      className={styles.eyeBtn}
+                      onClick={() => setIsVisible(!isVisible)}
+                    />
+                  )}
                 </div>
               </div>
 

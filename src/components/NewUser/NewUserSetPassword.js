@@ -34,6 +34,7 @@ const NewUserSetPassword = ({
           id="newPassword"
           placeholder="Enter password"
           value={newPassword}
+          autoComplete="off"
           onChange={(e) => setNewPassword(e.target.value)}
         />
       </div>

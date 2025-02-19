@@ -153,6 +153,7 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
                       id="verification"
                       placeholder="Verification Code...."
                       value={verificationCode}
+                      autoComplete="off"
                       onChange={(e) => setVerificationCode(e.target.value)}
                       onClick={() => setIsClicked(true)}
                     />

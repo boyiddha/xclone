@@ -150,6 +150,7 @@ export default function CreateAccountOverlay({
                     id="name"
                     placeholder="Name"
                     value={name}
+                    autoComplete="off"
                     onChange={handleNameChange}
                   />
                 </div>
@@ -162,6 +163,7 @@ export default function CreateAccountOverlay({
                   id="email"
                   placeholder="Email"
                   value={email}
+                  autoComplete="off"
                   onChange={handleEmailChange}
                 />
               </div>
@@ -203,7 +205,7 @@ export default function CreateAccountOverlay({
                         onChange={(e) => setMonth(e.target.value)}
                         className={styles.monthSelector}
                       >
-                        <option disabled value=""></option>
+                        <option value=""></option>
                         <option value="1">January</option>
                         <option value="2">February</option>
                         <option value="3">March</option>
@@ -246,7 +248,7 @@ export default function CreateAccountOverlay({
                         onChange={(e) => setDay(e.target.value)}
                         className={styles.daySelector}
                       >
-                        <option disabled value></option>
+                        <option value></option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -308,7 +310,7 @@ export default function CreateAccountOverlay({
                         onChange={(e) => setYear(e.target.value)}
                         className={styles.yearSelector}
                       >
-                        <option disabled value></option>
+                        <option value></option>
                         {years.map((yr) => (
                           <option key={yr} value={yr}>
                             {yr}

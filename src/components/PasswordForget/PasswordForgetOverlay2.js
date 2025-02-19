@@ -70,6 +70,7 @@ const PasswordForgetOverlay2 = ({ email, setPassword, setIsFinalOverlay }) => {
               id="code"
               placeholder="Enter your code"
               value={code}
+              autoComplete="off"
               onChange={(e) => setCode(e.target.value)}
             />
           </div>

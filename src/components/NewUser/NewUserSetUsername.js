@@ -41,6 +41,7 @@ const NewUserSetUsername = ({ dob, password }) => {
           id="username"
           placeholder="Enter your username"
           value={username}
+          autoComplete="off"
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>

@@ -69,6 +69,7 @@ const SetUserNameOverlay = ({ email, password, setIsOverlayOpen }) => {
                     id="verification"
                     placeholder="@Username"
                     value={username}
+                    autoComplete="off"
                     onChange={(e) => setUserName(e.target.value)}
                     onClick={() => setIsNext(true)}
                   />
