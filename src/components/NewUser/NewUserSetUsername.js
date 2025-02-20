@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import styles from "@/modules/newUserSetUsername.module.css";
+import styles from "./newUserSetUsername.module.css";
 import { useRouter } from "next/navigation";
 
 const NewUserSetUsername = ({ dob, password }) => {

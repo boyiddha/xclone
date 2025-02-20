@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 
-import styles from "@/modules/newUserDateOfBirth.module.css";
+import styles from "./newUser.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { GoChevronDown } from "react-icons/go";

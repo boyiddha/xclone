@@ -1,5 +1,5 @@
 import connectDB from "@/utils/mongodb";
-import { OTP } from "@/models/otp";
+import { OTP } from "@/models/otpModel";
 import { NextResponse } from "next/server"; // Import NextResponse
 
 export async function POST(req) {

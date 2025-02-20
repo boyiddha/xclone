@@ -2,9 +2,7 @@ import { Lato } from "next/font/google";
 import AuthProvider from "@/components/SessionProvider"; // Import the client wrapper
 import "./globals.css";
 
-import connectDB from "@/utils/mongodb";
-
-import { SessionProvider } from "next-auth/react";
+import connectDB from "@/lib/mongodb";
 
 const lato = Lato({
   variable: "--font-lato",

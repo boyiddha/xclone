@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from "@/modules/passwordForget3.module.css";
+import styles from "./passwordForgetOverlay3.module.css";
 import { IoEye } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
 
@@ -58,7 +58,7 @@ const passwordForgetOverlay3 = ({ email, setPassword, setIsFinalOverlay }) => {
         <br />
       </div>
 
-      <div className={styles.inputPassword}>
+      <div className={styles.inputPassword1}>
         <div className={styles.passwordBtn}>
           <input
             type={isVisible1 ? "text" : "password"}
@@ -86,7 +86,7 @@ const passwordForgetOverlay3 = ({ email, setPassword, setIsFinalOverlay }) => {
         </div>
       </div>
 
-      <div className={styles.inputPassword}>
+      <div className={styles.inputPassword2}>
         <div className={styles.passwordBtn}>
           <input
             type={isVisible2 ? "text" : "password"}

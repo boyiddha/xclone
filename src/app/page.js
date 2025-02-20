@@ -2,8 +2,8 @@
 
 import FooterPage from "@/components/Footer/Footer";
 import LeftSidePage from "@/components/LeftSide/LeftSide";
-import RightSidePage from "@/components/RigthSide/RigthSide";
-import styles from "@/modules/home.module.css";
+import RightSidePage from "@/components/RigthSide/RightSide";
+import styles from "@/modules/layout.module.css";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 export default function Home() {

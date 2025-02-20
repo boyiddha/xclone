@@ -254,6 +254,10 @@
   box-shadow: none;
   border: none;
 }
+.err {
+  color: rgb(206, 34, 34);
+  font-size: 18px;
+}
 .row3ContainerDiv {
   width: 80%;
   height: 15%;

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import styles from "@/modules/passwordForget2.module.css";
+import styles from "./passwordForgetOverlay2.module.css";
 import PasswordForgetOverlay3 from "@/components/PasswordForget/passwordForgetOverlay3";
 
 const PasswordForgetOverlay2 = ({ email, setPassword, setIsFinalOverlay }) => {
@@ -8,32 +8,6 @@ const PasswordForgetOverlay2 = ({ email, setPassword, setIsFinalOverlay }) => {
   const [isOverlayOpen, setIsOverlayOpened] = useState(false);
 
   const isTakeCode = code.trim().length > 0;
-
-  // useEffect(() => {
-  //   if (!email) return;
-
-  //   const sendResetCode = async () => {
-  //     try {
-  //       setError("");
-
-  //       const response = await fetch("/api/forgot-password/request", {
-  //         method: "POST",
-  //         body: JSON.stringify({ email }),
-  //         headers: { "Content-Type": "application/json" },
-  //       });
-
-  //       const data = await response.json();
-  //       if (!response.ok) {
-  //         throw new Error(data.message || "Failed to send reset code");
-  //       }
-  //     } catch (error) {
-  //       setError(error.message);
-  //     }
-  //   };
-
-  //   sendResetCode();
-  // }, [email]); // Only depend on `email`, not `emailSent`
-
   const verifyCode = async () => {
     const res = await fetch("/api/forgot-password/verify", {
       method: "POST",

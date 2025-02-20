@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/modules/setPassword.module.css";
+import styles from "./setPasswordOverlay.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

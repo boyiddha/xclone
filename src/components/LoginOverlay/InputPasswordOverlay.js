@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/modules/inputPassword.module.css";
+import styles from "./inputPasswordOverlay.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { useState } from "react";
@@ -16,7 +16,7 @@ const InputPasswordOverlay = ({ loginEmail }) => {
   const router = useRouter();
   const [error, setError] = useState("");
   const [isVisible, setIsVisible] = useState(false);
-  // Function to close the overlay
+
   const closeOverlay = () => {
     router.push("/", { scroll: false });
   };

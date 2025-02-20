@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import styles from "@/modules/home.module.css";
+import styles from "./leftSide.module.css";
 import xLogo from "../../../public/images/x_profile.png";
 
 export default function LeftSidePage() {

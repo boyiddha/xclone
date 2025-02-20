@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/modules/login.module.css";
+import styles from "./loginOverlay.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

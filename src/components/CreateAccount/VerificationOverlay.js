@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/modules/verification.module.css";
+import styles from "./verificationOverlay.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -25,7 +25,7 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
     hasSent.current = true; // Mark as sent
     const sendEmail = async () => {
       try {
-        const otpResponse = await fetch("/api/createOTP", {
+        const otpResponse = await fetch("/api/auth/createOTP", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }), // Pass the user email
@@ -52,7 +52,7 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
           <h4>X</h4>
         `,
         };
-        const emailResponse = await fetch("/api/nodemailer", {
+        const emailResponse = await fetch("/api/auth/nodemailer", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(emailData),
@@ -61,7 +61,7 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
         const data = await emailResponse.json();
         setMessage(data.message);
       } catch (error) {
-        console.error("Error:", error);
+        console.error("✅  Error:", error);
         setMessage("Failed to send email");
       } finally {
         setLoading(false);
@@ -79,7 +79,7 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
       });
 
       const data = await response.json();
-      setMessage(data.message);
+
       if (response.status === 200) {
         // Verified User, Now complete registration
         try {
@@ -96,10 +96,14 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
           });
           registerResponse.status === 201 && router.push("/?step=setPassword");
         } catch (e) {
+          setMessage(e.message);
           console.error(e.message);
         }
+      } else {
+        setMessage(data.message);
       }
     } catch (error) {
+      setMessage("Error verifying OTP: " + error);
       console.error("Error verifying OTP:", error);
     }
   };
