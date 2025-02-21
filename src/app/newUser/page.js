@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 
-import styles from "@/modules/newUserDateOfBirth.module.css";
+import styles from "./newUser.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { GoChevronDown } from "react-icons/go";
@@ -114,7 +114,7 @@ const NewUser = () => {
                           onChange={(e) => setMonth(e.target.value)}
                           className={styles.monthSelector}
                         >
-                          <option disabled value=""></option>
+                          <option value=""></option>
                           <option value="1">January</option>
                           <option value="2">February</option>
                           <option value="3">March</option>
@@ -157,7 +157,7 @@ const NewUser = () => {
                           onChange={(e) => setDay(e.target.value)}
                           className={styles.daySelector}
                         >
-                          <option disabled value></option>
+                          <option value=""></option>
                           <option value="1">1</option>
                           <option value="2">2</option>
                           <option value="3">3</option>
@@ -219,7 +219,7 @@ const NewUser = () => {
                           onChange={(e) => setYear(e.target.value)}
                           className={styles.yearSelector}
                         >
-                          <option disabled value></option>
+                          <option value=""></option>
                           {years.map((yr) => (
                             <option key={yr} value={yr}>
                               {yr}

@@ -1,16 +1,19 @@
 import { useState } from "react";
 
-import styles from "@/modules/newUserSetPassword.module.css";
+import styles from "./newUserSetPassword.module.css";
+import { IoEye } from "react-icons/io5";
+import { IoEyeOff } from "react-icons/io5";
 
 const NewUserSetPassword = ({
   setPassword,
   setUserNameOverlay,
   setPasswordOverlay,
 }) => {
-  const [newPassword, setNewPassword] = useState("");
+  const [password, setNewPassword] = useState("");
 
+  const [isVisible, setIsVisible] = useState(false);
   const handleClick = () => {
-    setPassword(newPassword);
+    setPassword(password);
     setPasswordOverlay(false);
     setUserNameOverlay(true);
   };
@@ -27,21 +30,39 @@ const NewUserSetPassword = ({
         </p>
         <br />
       </div>
+
       <div className={styles.inputPassword}>
-        <input
-          type="text"
-          name="newPassword"
-          id="newPassword"
-          placeholder="Enter password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
+        <div className={styles.passwordBtn}>
+          <input
+            type={isVisible ? "text" : "password"}
+            name="password"
+            id="password"
+            placeholder="Set your Password"
+            value={password}
+            autoComplete="off"
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+        </div>
+        <div className={styles.eyeDiv}>
+          {!isVisible && (
+            <IoEye
+              className={styles.eyeBtn}
+              onClick={() => setIsVisible(!isVisible)}
+            />
+          )}
+          {isVisible && (
+            <IoEyeOff
+              className={styles.eyeBtn}
+              onClick={() => setIsVisible(!isVisible)}
+            />
+          )}
+        </div>
       </div>
 
       <div className={styles.nextBtnContainerDiv}>
         <div
           className={`${styles.nextBtnContainerFlex} ${
-            newPassword ? styles.active : ""
+            password ? styles.active : ""
           }`}
           onClick={handleClick}
         >

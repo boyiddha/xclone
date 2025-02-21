@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/modules/passwordForget.module.css";
+import styles from "./passwordForget.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

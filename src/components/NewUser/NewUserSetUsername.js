@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import styles from "@/modules/newUserSetUsername.module.css";
+import styles from "./newUserSetUsername.module.css";
 import { useRouter } from "next/navigation";
 
 const NewUserSetUsername = ({ dob, password }) => {
@@ -41,6 +41,7 @@ const NewUserSetUsername = ({ dob, password }) => {
           id="username"
           placeholder="Enter your username"
           value={username}
+          autoComplete="off"
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>

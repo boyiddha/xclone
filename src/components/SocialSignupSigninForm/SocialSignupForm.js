@@ -4,7 +4,7 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { doSocialLogin } from "@/app/actions";
 
-import styles from "@/modules/home.module.css";
+import styles from "./socialSignup.module.css";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

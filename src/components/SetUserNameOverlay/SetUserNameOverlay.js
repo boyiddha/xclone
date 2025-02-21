@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/modules/setUserName.module.css";
+import styles from "./setUserNameOverlay.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -13,8 +13,8 @@ const SetUserNameOverlay = ({ email, password, setIsOverlayOpen }) => {
   const router = useRouter();
 
   const handleNext = async () => {
-    console.log("Finally =======> ; ");
-    console.log(email, password);
+    //console.log("Finally =======> ; ");
+    //console.log(email, password);
     try {
       const saveResponse = await fetch("/api/saveUserName", {
         method: "POST",
@@ -26,7 +26,7 @@ const SetUserNameOverlay = ({ email, password, setIsOverlayOpen }) => {
           username,
         }),
       });
-      setIsOverlayOpen(false);
+
       //saveResponse.status === 200 && router.push("/home");
 
       const response = await doCredentialLogin(email, password);
@@ -35,6 +35,7 @@ const SetUserNameOverlay = ({ email, password, setIsOverlayOpen }) => {
         console.error(response.error);
         setError(response.error.message);
       } else {
+        setIsOverlayOpen(false);
         router.push("/home");
       }
     } catch (e) {
@@ -69,6 +70,7 @@ const SetUserNameOverlay = ({ email, password, setIsOverlayOpen }) => {
                     id="verification"
                     placeholder="@Username"
                     value={username}
+                    autoComplete="off"
                     onChange={(e) => setUserName(e.target.value)}
                     onClick={() => setIsNext(true)}
                   />

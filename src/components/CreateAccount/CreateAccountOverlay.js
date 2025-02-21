@@ -3,11 +3,15 @@
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 
-import styles from "@/modules/createAccount.module.css";
+import styles from "./createAccountOverlay.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { GoChevronDown } from "react-icons/go";
-import VerificationOverlay from "@/components/CreateAccount/VerificationOverlay";
+import {
+  formatDate,
+  getCurrentYear,
+  getYearArray,
+} from "@/utils/calendarUtils";
 
 export default function CreateAccountOverlay({
   step,
@@ -31,8 +35,8 @@ export default function CreateAccountOverlay({
   const dayRef = useRef(null);
   const yearRef = useRef(null);
 
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 100 }, (_, index) => currentYear - index);
+  const currentYear = getCurrentYear();
+  const years = getYearArray(currentYear);
 
   // Check if all fields are filled
   const isFormComplete = name.trim() && email.trim() && month && day && year;
@@ -40,7 +44,6 @@ export default function CreateAccountOverlay({
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value); // Update email state
-
     isSetEmail(value); // pass this email to it's parent component
 
     // Example: Validate Email Format
@@ -59,16 +62,6 @@ export default function CreateAccountOverlay({
   const closeOverlay = () => {
     router.push("/", { scroll: false });
   };
-  useEffect(() => {
-    const handlePopState = () => {
-      if (pathname.startsWith("/createAccount")) {
-        router.push("/");
-      }
-    };
-
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, [pathname]);
 
   // Click outside handler
   useEffect(() => {
@@ -90,26 +83,19 @@ export default function CreateAccountOverlay({
   }, []);
 
   const handleCreateAccount = async () => {
-    const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
-      2,
-      "0"
-    )}`;
+    const formattedDate = formatDate(year, month, day);
     isSetDob(formattedDate);
 
     try {
-      const res = await fetch("/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }), // Send email in the body
-      });
+      const res = await fetch(
+        `/api/auth/users?email=${encodeURIComponent(email)}`
+      );
+      //When using fetch() with a GET request, you don't need to specify method: "GET" because GET is the default method for fetch()
+      // However, for GET requests, the body is not used, so the "Content-Type" header is unnecessary for GET requests.
 
       const data = await res.json();
 
       if (res.status === 200) {
-        //console.log("User found:", data);
-        //return data; // Return user data if needed
         setError(" This Email already exist! Try with another");
       } else {
         router.push("?step=verification", { scroll: false });
@@ -150,6 +136,7 @@ export default function CreateAccountOverlay({
                     id="name"
                     placeholder="Name"
                     value={name}
+                    autoComplete="off"
                     onChange={handleNameChange}
                   />
                 </div>
@@ -162,6 +149,7 @@ export default function CreateAccountOverlay({
                   id="email"
                   placeholder="Email"
                   value={email}
+                  autoComplete="off"
                   onChange={handleEmailChange}
                 />
               </div>
@@ -203,7 +191,7 @@ export default function CreateAccountOverlay({
                         onChange={(e) => setMonth(e.target.value)}
                         className={styles.monthSelector}
                       >
-                        <option disabled value=""></option>
+                        <option value=""></option>
                         <option value="1">January</option>
                         <option value="2">February</option>
                         <option value="3">March</option>
@@ -246,7 +234,7 @@ export default function CreateAccountOverlay({
                         onChange={(e) => setDay(e.target.value)}
                         className={styles.daySelector}
                       >
-                        <option disabled value></option>
+                        <option value></option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -308,7 +296,7 @@ export default function CreateAccountOverlay({
                         onChange={(e) => setYear(e.target.value)}
                         className={styles.yearSelector}
                       >
-                        <option disabled value></option>
+                        <option value></option>
                         {years.map((yr) => (
                           <option key={yr} value={yr}>
                             {yr}
@@ -325,7 +313,7 @@ export default function CreateAccountOverlay({
           <div className={styles.row3ContainerDiv}>
             <div className={styles.row3ContainerFlex}>
               {error && (
-                <p style={{ color: "red" }}>
+                <p className={styles.err}>
                   {email} {error}
                 </p>
               )}

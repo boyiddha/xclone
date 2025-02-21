@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import styles from "@/modules/footer.module.css";
+import styles from "./footer.module.css";
 
 export default function FooterPage() {
   return (

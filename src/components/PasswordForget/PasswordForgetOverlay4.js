@@ -1,7 +1,7 @@
 import Link from "next/link";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
-import styles from "@/modules/passwordForget4.module.css";
+import styles from "./passwordForgetOverlay4.module.css";
 import { useRouter } from "next/navigation";
 import { doCredentialLogin } from "@/app/actions";
 

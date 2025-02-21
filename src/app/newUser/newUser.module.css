@@ -69,7 +69,7 @@
   text-decoration: underline;
 }
 .nextBtnContainerDiv {
-  margin-top: 20%;
+  margin-top: 19%;
   width: 100%;
 }
 .nextBtnContainerFlex {
@@ -238,8 +238,5 @@
   }
   .titleRow {
     font-size: 27px;
-  }
-  .nextBtnContainerDiv {
-    margin-top: 455px;
   }
 }

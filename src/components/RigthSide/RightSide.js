@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import styles from "@/modules/home.module.css";
+import styles from "./rightSide.module.css";
 import SocialSignupForm from "../SocialSignupSigninForm/SocialSignupForm";
 import CreateAccountOverlay from "../CreateAccount/CreateAccountOverlay";
 import { useEffect, useState } from "react";

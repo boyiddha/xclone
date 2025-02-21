@@ -1,10 +1,12 @@
 "use client";
 
-import styles from "@/modules/inputPassword.module.css";
+import styles from "./inputPasswordOverlay.module.css";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { IoEye } from "react-icons/io5";
+import { IoEyeOff } from "react-icons/io5";
 
 import { doCredentialLogin } from "@/app/actions";
 
@@ -13,7 +15,8 @@ const InputPasswordOverlay = ({ loginEmail }) => {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
   const [error, setError] = useState("");
-  // Function to close the overlay
+  const [isVisible, setIsVisible] = useState(false);
+
   const closeOverlay = () => {
     router.push("/", { scroll: false });
   };
@@ -66,16 +69,34 @@ const InputPasswordOverlay = ({ loginEmail }) => {
                 </div>
               </div>
               <div className={styles.err}>{error}</div>
+
               <div className={styles.inputPassword}>
-                <input
-                  type="text"
-                  name="password"
-                  id="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onClick={() => setIsClicked(true)}
-                />
+                <div className={styles.passwordBtn}>
+                  <input
+                    type={isVisible ? "text" : "password"}
+                    name="password"
+                    id="password"
+                    placeholder="Password"
+                    value={password}
+                    autoComplete="off"
+                    onChange={(e) => setPassword(e.target.value)}
+                    onClick={() => setIsClicked(true)}
+                  />
+                </div>
+                <div className={styles.eyeDiv}>
+                  {!isVisible && (
+                    <IoEye
+                      className={styles.eyeBtn}
+                      onClick={() => setIsVisible(!isVisible)}
+                    />
+                  )}
+                  {isVisible && (
+                    <IoEyeOff
+                      className={styles.eyeBtn}
+                      onClick={() => setIsVisible(!isVisible)}
+                    />
+                  )}
+                </div>
               </div>
               <div className={styles.loginContainerDiv}>
                 <div
