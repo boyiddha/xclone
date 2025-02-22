@@ -1,4 +1,4 @@
-//✅ Reusable Small Functions=> across mutiple part
+//✅ Reusable Small Functions=> across mutiple part / whole application
 // When to Use utils/:
 // When you need a reusable helper function that could be used
 // across multiple parts of the application.

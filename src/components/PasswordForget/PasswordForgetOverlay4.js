@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Link from "next/link";
 import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";

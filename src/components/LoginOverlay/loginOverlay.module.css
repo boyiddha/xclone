@@ -122,6 +122,14 @@
   border: 2px solid rgb(47, 115, 241);
 }
 
+.err {
+padding: 10px;
+  color: rgb(247, 64, 64);
+  font-size: 20px;
+  margin-left:25%;
+  background-color: rgb(166, 166, 166);
+}
+
 .nextBtnContainerDiv {
   width: 85%;
 }

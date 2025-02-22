@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import styles from "./newUserSetUsername.module.css";
 import { useRouter } from "next/navigation";
+import { saveNewOauthUser } from "@/app/actions/updateUser";
 
 const NewUserSetUsername = ({ dob, password }) => {
   const [username, setUsername] = useState("");
@@ -9,17 +10,7 @@ const NewUserSetUsername = ({ dob, password }) => {
 
   const handleClick = async () => {
     try {
-      const saveResponse = await fetch("/api/saveOauthNewUser", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          dob,
-          password,
-          username,
-        }),
-      });
+      const saveResponse = await saveNewOauthUser({ dob,password,username,});
       saveResponse.status === 200 && router.push("/home");
     } catch (e) {
       console.error(e.message);

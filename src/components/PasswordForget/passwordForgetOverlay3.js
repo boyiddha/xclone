@@ -4,7 +4,7 @@ import styles from "./passwordForgetOverlay3.module.css";
 import { IoEye } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
 
-const passwordForgetOverlay3 = ({ email, setPassword, setIsFinalOverlay }) => {
+const PasswordForgetOverlay3 = ({ email, setPassword, setIsFinalOverlay }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
@@ -134,4 +134,4 @@ const passwordForgetOverlay3 = ({ email, setPassword, setIsFinalOverlay }) => {
   );
 };
 
-export default passwordForgetOverlay3;
+export default PasswordForgetOverlay3;

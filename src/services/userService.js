@@ -12,15 +12,47 @@
 
 //   return await createUser(userData);
 // }
-
-import { getUserByEmail } from "@/repository/userRepository";
+import bcrypt from "bcryptjs";
+import { getUserByEmail, createUser,updateUser } from "@/repositories/userRepository";
+import { BCRYPT_SALT_ROUNDS } from "@/constants/auth";
 
 export const findUserByEmail = async (email) => {
   try {
-    // Call the repository to fetch the user data by email
     const user = await getUserByEmail(email);
-    return user;
+    if (!user) {
+      return { success: false };
+    }
+    return { success: true, user };
   } catch (error) {
-    throw new Error("Error in service layer: " + error.message);
+        throw new Error(error); // Let the controller handle errors
   }
 };
+
+export async function createUserService(name, email, dob) {
+  try {
+    // Call the repository function to save user
+    await createUser({ fullName: name, email, dob });
+    return { success: true };
+  } catch (error) {
+    return { success: false, message:error };
+  }
+}
+
+export const updateUserService = async (email, dob, password, username) => {
+  try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
+    // Call repository function to update the user
+    const updatedUser = await updateUser(email, dob, hashedPassword, username);
+
+    if (!updatedUser) {
+      return { success: false, message: "User not found" };
+    }
+
+    return { success: true, message: "User updated successfully", user: updatedUser };
+  } catch (error) {
+    return { success: false, message: `Failed to update user ${error.message}`  };
+  }
+};
+
+

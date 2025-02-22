@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { GoArrowLeft } from "react-icons/go";
 import { useEffect, useState, useRef } from "react";
+import { generateEmailData } from "@/utils/emailTemplates";
+import { sendEmail } from "@/utils/emailSender";
 
 const VerificationOverlay = ({ step, email, name, dob }) => {
   const router = useRouter();
@@ -23,8 +25,9 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
   useEffect(() => {
     if (!email || hasSent.current) return; // Prevent duplicate calls
     hasSent.current = true; // Mark as sent
-    const sendEmail = async () => {
+    const handleEmailSend = async () => {
       try {
+        //Step 1: Generate OTP
         const otpResponse = await fetch("/api/auth/createOTP", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -33,46 +36,37 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
         if (!otpResponse.ok) throw new Error("Failed to generate OTP");
         const { otp } = await otpResponse.json(); // Extract OTP from response
 
-        const emailData = {
-          to: email,
-          subject: ` ${otp} is your X verification code`,
-          html: `
-          <h1> 	Confirm your email address</h1>
-          <br/
-          <h3>There’s one quick step you need to complete before creating your X account. 
-          Let’s make sure this is the right email address for you — please confirm this 
-          is the right address to use for your new account. 
-          </h3>
-          <br/>
-          <h3>Please enter this verification code to get started on X: </h3>
-          <h1> ${otp} <h1></br>
-          <h3>Verification codes expire after 3 minutes.</h3>
-          <br/>
-          <h4>Thanks,</h4>
-          <h4>X</h4>
-        `,
-        };
-        const emailResponse = await fetch("/api/auth/nodemailer", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(emailData),
-        });
+      //Step 2: Send the OTP via email
+        
+      const emailResponse = await fetch("/api/auth/nodemailer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email, 
+          type: "emailVerification", 
+          data: { otp } 
+        }),
+      });
 
-        const data = await emailResponse.json();
-        setMessage(data.message);
+      if (!emailResponse.ok) throw new Error("Failed to send email");
+      const { message } = await emailResponse.json(); // Extract success message
+
+      // Step 3: Set response message (success or failure)
+      setMessage(message);
+        
       } catch (error) {
-        console.error("✅  Error:", error);
+        console.error("✅ Error:", error);
         setMessage("Failed to send email");
       } finally {
         setLoading(false);
       }
     };
-    sendEmail();
+    handleEmailSend();
   }, [email]); // run when email props change
 
   const handleVerification = async () => {
     try {
-      const response = await fetch("/api/verifyOTP", {
+      const response = await fetch("/api/auth/verifyOTP", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, verificationCode }),
@@ -83,7 +77,7 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
       if (response.status === 200) {
         // Verified User, Now complete registration
         try {
-          const registerResponse = await fetch("/api/register", {
+          const registerResponse = await fetch("/api/auth/register", {
             method: "POST",
             headers: {
               "content-type": "application/json",

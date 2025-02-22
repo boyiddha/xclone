@@ -8,10 +8,13 @@ import SocialSigninForm from "@/components/SocialSignupSigninForm/SocialSigninFo
 import { useState } from "react";
 import Link from "next/link";
 
+import { isValidEmail } from "@/helpers/emailHelper";
+
 const LoginOverlay = ({ isSetEmail }) => {
   const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [err, setError] = useState("");
 
   const isButtonActive = inputValue.trim().length > 0;
 
@@ -25,12 +28,16 @@ const LoginOverlay = ({ isSetEmail }) => {
     setInputValue(value); // Update email state
 
     isSetEmail(value); // pass this email to it's parent component
-
-    // Example: Validate Email Format
-    // if (!value.includes("@")) {
-    //   console.log("Invalid email format");
-    // }
   };
+
+  const handleNext = () => {
+    if(isValidEmail(inputValue)){
+    router.push("?step=inputPassword", { scroll: false });
+    }
+    else{
+      setError("Invalid Email!");
+    }
+  }
 
   return (
     <>
@@ -76,6 +83,10 @@ const LoginOverlay = ({ isSetEmail }) => {
                     onChange={handleEmailChange}
                   />
                 </div>
+                <div>
+                {err && <span className={styles.err}>{err}</span>}
+
+                </div>
               </div>
               <div className={styles.nextBtnContainerDiv}>
                 <div
@@ -84,7 +95,7 @@ const LoginOverlay = ({ isSetEmail }) => {
                   }`}
                   onClick={() => {
                     if (isButtonActive) {
-                      router.push("?step=inputPassword", { scroll: false });
+                      handleNext();
                     }
                   }}
                 >

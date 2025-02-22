@@ -14,8 +14,12 @@
 //   }
 // }
 
+// ✅ Handles HTTP response (returns NextResponse.json()).
+
 import { NextResponse } from "next/server";
-import { findUserByEmail } from "@/services/userService";
+import { findUserByEmail, createUserService, updateUserService } from "@/services/userService";
+import { getAuthToken } from "@/utils/auth";
+
 
 export const getUser = async (req) => {
   try {
@@ -29,13 +33,13 @@ export const getUser = async (req) => {
       );
     }
 
-    const user = await findUserByEmail(email);
+    const result = await findUserByEmail(email);
 
-    if (!user) {
+    if (!result.success) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json(user, { status: 200 });
+    return NextResponse.json(result.user, { status: 200 });
   } catch (error) {
     console.error("Error fetching user:", error);
     return NextResponse.json(
@@ -44,6 +48,65 @@ export const getUser = async (req) => {
     );
   }
 };
+
+export async function registerUser(req) {
+  try {
+    const body = await req.json();
+    const { name, email, dob } = body;
+
+    if (!name || !email || !dob) {
+      return NextResponse.json(
+        { message: "All fields are required" },
+        { status: 400 }
+      );
+    }
+
+    const result = await createUserService(name, email, dob);
+
+    if (!result.success) {
+      return NextResponse.json({ message: result.message }, { status: 400 });
+    }
+
+    return NextResponse.json(
+      { message: "User has been created successfully" },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Error registering user:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
+export const updateUser = async (request) => {
+  try {
+    const { dob, password, username } = await request.json();
+
+    // Get token from request
+    const token = await getAuthToken(request);
+
+    if (!token) {
+      return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+    }
+
+    const email = token.email;
+
+    // Delegate user update logic to the service layer
+    const result = await updateUserService(email, dob, password, username);
+
+    if (!result.success) {
+      return NextResponse.json({ message: result.message }, { status: 400 });
+    }
+
+    return NextResponse.json({ message: result.message, user: result.user }, { status: 200 });
+  } catch (error) {
+    console.error("Error in updateUser controller:", error);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
+  }
+};
+
 
 //✅  Repositories = Only fetch/store data.
 //✅  Services = Apply business logic.

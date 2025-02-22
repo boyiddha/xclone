@@ -1,33 +1,24 @@
-import nodemailer from "nodemailer";
-import { randomInt } from "crypto"; // To generate a secure OTP
+
+"use server";
+
+import { NextResponse } from "next/server";
+import { sendEmail } from "@/utils/emailSender";
+import { generateEmailData } from "@/utils/emailTemplates";
 
 export async function POST(req) {
   try {
-    const { to, subject, html } = await req.json();
+    const { type, email, data } = await req.json();
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER, // Your Gmail address
-        pass: process.env.EMAIL_APP_PASS, // App password (not your actual password)
-      },
-    });
+    // Generate email data based on type (e.g., emailVerification, resetPassword)
+    const emailData = generateEmailData(type, email, data);
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to,
-      subject,
-      html,
-    };
+    // Send the email
+    await sendEmail(emailData.to, emailData.subject, emailData.html);
 
-    await transporter.sendMail(mailOptions);
-
-    return Response.json(
-      { message: "Email sent successfully!" },
-      { status: 200 }
-    );
+    return NextResponse.json({ message: "Email sent successfully" }, { status: 200 });
   } catch (error) {
     console.error("Error sending email:", error);
-    return Response.json({ message: "Failed to send email" }, { status: 500 });
+    return NextResponse.json({ message: "Failed to send email" }, { status: 500 });
   }
 }
+

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import styles from "./passwordForgetOverlay.module.css";
@@ -32,9 +33,7 @@ const PasswordForgetOverlay = ({ email, setPassword, setIsFinalOverlay }) => {
       if (!response.ok) {
         throw new Error(data.message || "Failed to send reset code");
       }
-
       // If API call is successful, show the overlay
-
       setIsOverlayVisible(true);
       setLoading(false);
     } catch (error) {

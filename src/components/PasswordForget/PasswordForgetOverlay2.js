@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./passwordForgetOverlay2.module.css";
-import PasswordForgetOverlay3 from "@/components/PasswordForget/passwordForgetOverlay3";
+import PasswordForgetOverlay3 from "./passwordForgetOverlay3";
 
 const PasswordForgetOverlay2 = ({ email, setPassword, setIsFinalOverlay }) => {
   const [code, setCode] = useState("");

@@ -10,6 +10,7 @@ import { GoChevronDown } from "react-icons/go";
 import NewUserSetPassword from "@/components/NewUser/NewUserSetPassword";
 import NewUserSetUsername from "@/components/NewUser/NewUserSetUsername";
 import Link from "next/link";
+import { formatDate, getCurrentYear, getYearArray } from "@/utils/calendarUtils";
 
 const NewUser = () => {
   const [month, setMonth] = useState("");
@@ -29,8 +30,8 @@ const NewUser = () => {
   const dayRef = useRef("");
   const yearRef = useRef("");
 
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 100 }, (_, index) => currentYear - index);
+  const currentYear = getCurrentYear();
+  const years = getYearArray(currentYear);
 
   // Check if all fields are filled
   const isFormComplete = month && day && year;
@@ -55,10 +56,7 @@ const NewUser = () => {
   }, []);
 
   const handleClick = () => {
-    const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
-      2,
-      "0"
-    )}`;
+    const formattedDate = formatDate(year,month,day);
     setDob(formattedDate);
     setPasswordOverlay(true);
   };

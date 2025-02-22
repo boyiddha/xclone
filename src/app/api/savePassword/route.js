@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import connectDB from "@/utils/mongodb";
 import { User } from "@/models/userModel";
+import { BCRYPT_SALT_ROUNDS } from "@/constants/auth";
 
 export const POST = async (req) => {
   try {
@@ -17,7 +18,7 @@ export const POST = async (req) => {
     }
 
     // Hash the new password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
 
     // Update the user's password
     const user = await User.findOneAndUpdate(
