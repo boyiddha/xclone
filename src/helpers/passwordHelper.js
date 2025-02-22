@@ -5,12 +5,14 @@
 // When you want to reusable logic related to a specific area of the app
 // but not generalized across the whole application.
 
-// import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
-// export async function hashPassword(password) {
-//   return await bcrypt.hash(password, 10);
-// }
+import { BCRYPT_SALT_ROUNDS } from "@/constants/auth";
 
-// export async function comparePasswords(inputPassword, storedHash) {
-//   return await bcrypt.compare(inputPassword, storedHash);
-// }
+export async function createHashPassword(password) {
+  return await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
+}
+
+export async function comparePasswords(inputPassword, storedHash) {
+  return await bcrypt.compare(inputPassword, storedHash);
+}

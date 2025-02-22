@@ -134,7 +134,7 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
               <div className={styles.row3ContainerDiv}>
                 <div className={styles.row3ContainerFlex}>
                   <span>Enter it below to verify {email}.</span>
-                  {message === "Email sent successfully!" ? (
+                  {message === "Email sent successfully" ? (
                     ""
                   ) : (
                     <p className={styles.alertmsg}>{message}</p>

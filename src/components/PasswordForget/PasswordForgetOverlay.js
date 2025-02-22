@@ -23,7 +23,7 @@ const PasswordForgetOverlay = ({ email, setPassword, setIsFinalOverlay }) => {
     setLoading(true);
     try {
       setError("");
-      const response = await fetch("/api/forgot-password/request", {
+      const response = await fetch("/api/auth/forgot-password/request", {
         method: "POST",
         body: JSON.stringify({ email }),
         headers: { "Content-Type": "application/json" },

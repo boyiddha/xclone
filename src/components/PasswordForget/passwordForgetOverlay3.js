@@ -22,7 +22,7 @@ const PasswordForgetOverlay3 = ({ email, setPassword, setIsFinalOverlay }) => {
     }
 
     try {
-      const res = await fetch("/api/forgot-password/update", {
+      const res = await fetch("/api/auth/forgot-password/update", {
         method: "POST",
         body: JSON.stringify({ email, newPassword }),
         headers: { "Content-Type": "application/json" },

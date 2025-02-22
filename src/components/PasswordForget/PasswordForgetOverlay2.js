@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./passwordForgetOverlay2.module.css";
-import PasswordForgetOverlay3 from "./passwordForgetOverlay3";
+import PasswordForgetOverlay3 from "./PasswordForgetOverlay3";
 
 const PasswordForgetOverlay2 = ({ email, setPassword, setIsFinalOverlay }) => {
   const [code, setCode] = useState("");
@@ -9,7 +9,7 @@ const PasswordForgetOverlay2 = ({ email, setPassword, setIsFinalOverlay }) => {
 
   const isTakeCode = code.trim().length > 0;
   const verifyCode = async () => {
-    const res = await fetch("/api/forgot-password/verify", {
+    const res = await fetch("/api/auth/forgot-password/verify", {
       method: "POST",
       body: JSON.stringify({ email, code }),
       headers: { "Content-Type": "application/json" },
