@@ -266,7 +266,7 @@ const NewUser = () => {
                       className={`${styles.nextBtnContainerFlex} ${
                         isFormComplete ? styles.active : ""
                       }`}
-                      onClick={handleClick}
+                      onClick={isFormComplete ? handleClick : undefined}
                     >
                       <span className={styles.nextButton}>Next</span>
                     </div>

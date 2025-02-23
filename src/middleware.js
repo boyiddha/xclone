@@ -10,15 +10,17 @@ export async function middleware(request) {
     const token = await getToken({
       req: request,
       secret: process.env.NEXTAUTH_SECRET,
+      refresh: true,
     });
     const isAuthenticated = !!token; // If token exists, user is authenticated
 
-    // console.log(
-    //   "❌    Middleware: isAuthenticated = ",
-    //   isAuthenticated,
-    //   "🎯   Path: =============>>>>> : ",
-    //   nextUrl.pathname
-    // );
+    console.log("====== ❌  in middleware : ====== ");
+    console.log(
+      "❌    Middleware: isAuthenticated = ",
+      isAuthenticated,
+      "🎯   Path: ========>>> : ",
+      nextUrl.pathname
+    );
     // Case 1: If user is authenticated, prevent access to public routes and login
 
     //console.log("✅ token in middleware: ", token);
@@ -35,6 +37,7 @@ export async function middleware(request) {
     return response;
   }
 
+ 
 
     if (
       isAuthenticated &&
@@ -63,13 +66,16 @@ export async function middleware(request) {
     if (!isAuthenticated) {
       return NextResponse.redirect(new URL(LOGIN, request.url));
     }
+   // Avoid redirect loop by checking if the user is already on /set-password
+   const isOnSetNewUserPage = request.url.includes("/newUser");
 
-    // Avoid redirect loop by checking if the user is already on /set-password
-    const isOnSetNewUserPage = request.url.includes("/newUser");
+   if (token?.isNewUser && !isOnSetNewUserPage) {
+     console.log("isOnSetNewUserPage =    = : ",isOnSetNewUserPage);
+   console.error("❌ redirect to /newuser");
 
-    if (token?.isNewUser && !isOnSetNewUserPage) {
-      return NextResponse.redirect(new URL("/newUser", request.url));
-    }
+     return NextResponse.redirect(new URL("/newUser", request.url));
+   }
+  
 
     return NextResponse.next();
   } catch (error) {
@@ -81,3 +87,4 @@ export async function middleware(request) {
 export const config = {
   matcher: ["/(api|trpc)(.*)", "/((?!.+\\.[\\w]+$|_next).*)", "/"],
 };
+

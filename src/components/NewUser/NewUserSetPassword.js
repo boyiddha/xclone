@@ -64,7 +64,8 @@ const NewUserSetPassword = ({
           className={`${styles.nextBtnContainerFlex} ${
             password ? styles.active : ""
           }`}
-          onClick={handleClick}
+          
+          onClick={password ? handleClick : undefined}
         >
           <span className={styles.nextButton}>Next</span>
         </div>

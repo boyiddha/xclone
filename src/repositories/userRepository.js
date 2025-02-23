@@ -34,6 +34,15 @@ export async function createUser(userData) {
   }
 }
 
+export async function createOauthUser(userData) {
+  try {
+    return await User.create(userData);
+  } catch (error) {
+    console.error("Error saving user in DB :", error);
+    throw new Error("Database error while creating user " + error.message);
+  }
+}
+
 export const updateUser = async (email, dob, hashedPassword, username) => {
   try {
     return await User.findOneAndUpdate(

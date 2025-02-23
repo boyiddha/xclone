@@ -10,7 +10,9 @@ const NewUserSetUsername = ({ dob, password }) => {
 
   const handleClick = async () => {
     try {
+      console.log("chandle clock");
       const saveResponse = await saveNewOauthUser({ dob,password,username,});
+      console.log("===================",saveResponse.status);
       saveResponse.status === 200 && router.push("/home");
     } catch (e) {
       console.error(e.message);
@@ -42,7 +44,8 @@ const NewUserSetUsername = ({ dob, password }) => {
           className={`${styles.nextBtnContainerFlex} ${
             username ? styles.active : ""
           }`}
-          onClick={handleClick}
+          onClick={username ? handleClick : undefined}
+
         >
           <span className={styles.nextButton}>Next</span>
         </div>

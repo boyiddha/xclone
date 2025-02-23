@@ -4,85 +4,12 @@ import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { authConfig } from "./auth.config";
 import { User } from "./models/userModel";
-import connectDB from "./utils/mongodb";
-import bcrypt from "bcryptjs";
 
 import { jwtDecode } from "jwt-decode";
-import { doLogout } from "./app/actions";
+import { refreshAccessToken } from "./utils/auth";
+import { createUserOuathService, findUserByEmail } from "./services/userService";
 
-/**
- * Takes a token, and returns a new token with updated
- * `accessToken` and `accessTokenExpires`. If an error occurs,
- * returns the old token and an error property
- */
-async function refreshAccessToken(token) {
-  //console.log("Refreshing access token", token);
-  //console.log("✅  refresh Access Token function calling...... token: ", token);
-  try {
-    //console.log("📤 Sending refresh token:", token.refreshToken); // Debugging
-    // Debuggin: Ensure refreshToken is available before API Call
-    if (!token.refreshToken) {
-      //console.error("❌ refreshToken is missing before making API call!");
-      return { ...token, error: "Missing refresh token" };
-    }
-    const response = await fetch(
-      `${process.env.API_SERVER_BASE_URL}/api/auth/refresh`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token.refreshToken}`,
-        },
-        body: JSON.stringify({ refreshToken: token.refreshToken }),
-      }
-    );
 
-    // console.log(response);
-    // Check if the response is not OK
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("❌ Server Error response:", errorText);
-      return {
-        ...token,
-        error: "RefreshTokenExpired", // which handle in middleware
-      };
-    }
-
-    const text = await response.text();
-    // If the response is empty, log a warning
-    if (!text) {
-      console.warn("Empty response received from the server.");
-      return {
-        ...token,
-        error: "Empty response received",
-      };
-    }
-    // Parse the response as JSON
-    const tokens = JSON.parse(text);
-    //console.log(tokens);
-
-    /*const refreshedTokens = {
-        "access_token": "acess-token",
-        "expires_in": 2,
-        "refresh_token": "refresh-token"
-      }*/
-
-    //return token;
-
-    return {
-      ...token,
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken ?? token.refreshToken, // Fall back to old refresh token
-    };
-  } catch (error) {
-    console.error("❌ Refresh token error:", error);
-    
-    return {
-      ...token,
-      error: "RefreshTokenExpired", // Indicate expired refresh token which handle in middleware
-    };
-  }
-}
 // NextAuth options configuration
 export const authOptions = {
   ...authConfig,
@@ -176,26 +103,34 @@ export const authOptions = {
       // console.log("account ", account);
 
       //await connectDB();
-      const existingUser = await User.findOne({ email: user.email });
+      // const existingUser = await User.findOne({ email: user.email });
+          const result = await findUserByEmail(user.email);
+          const existingUser =result.success
+      
       if (!existingUser) {
         // Detect new user
         // Create new user
-        await User.create({
-          email: user.email,
-          fullName: user.name,
-        });
+        // await User.create({
+        //   email: user.email,
+        //   fullName: user.name,
+        // });
+        const result = await createUserOuathService(user.email, user.name);
         //console.log("Successfully Created new user..........");
         if (account.provider === "google" || account.provider === "github") {
           user.isNewUser = true; // It help to detect new user
         }
+      }else{
+        user.isNewUser = false;
       }
       // set user.name while credential log in. it helps to set session.user.name property
       // oauth=> google/github add this automatically without facing any issue
       if (account.provider === "credentials") {
         // For Credentials login, ensure `name` is fetched from the database
-        const dbUser = await User.findOne({ email: user.email });
-        if (dbUser) {
-          user.name = dbUser.fullName; // Set name if available in the database
+        //const dbUser = await User.findOne({ email: user.email });
+        const res = await findUserByEmail(user.email);
+
+        if (res.success) {
+          user.name = res.user.fullName; // Set name if available in the database
         }
       }
       return true; // Allow log in
