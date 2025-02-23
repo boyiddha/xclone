@@ -7,7 +7,17 @@ import { User } from "@/models/userModel";
 
 export const getUserByEmail = async (email) => {
   try {
-    return await User.findOne({ email }).select("-password").lean();
+    return await User.findOne({ email }).select("-password").lean();// excluding password
+
+  } catch (error) {
+    console.log("Find User in DB by email is failed: ", error);
+    throw new Error("Database query failed: " + error.message);// Let the service handle it
+  }
+};
+
+export const getUser = async (email) => {
+  try {
+    return await User.findOne({ email });
 
   } catch (error) {
     console.log("Find User in DB by email is failed: ", error);
@@ -76,3 +86,18 @@ export const updateUserPassword = async (user, newPassword) => {
 };
 
 
+export const savePassword = async (email, hashedPassword) => {
+  return await User.findOneAndUpdate(
+    { email },
+    { password: hashedPassword },
+    { new: true }
+  );
+};
+
+export const saveUsername = async (email, username) => {
+  return await User.findOneAndUpdate(
+    { email },
+    { userName: username },
+    { new: true }
+  );
+};

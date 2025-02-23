@@ -17,7 +17,7 @@
 // ✅ Handles HTTP response (returns NextResponse.json()).
 
 import { NextResponse } from "next/server";
-import { findUserByEmail, createUserService, updateUserService } from "@/services/userService";
+import { findUserByEmail, createUserService, updateUserService, savePasswordService, saveUsernameService } from "@/services/userService";
 import { getAuthToken } from "@/utils/auth";
 
 
@@ -104,6 +104,62 @@ export const updateUser = async (request) => {
   } catch (error) {
     console.error("Error in updateUser controller:", error);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
+  }
+};
+
+
+export const savePassword = async (req) => {
+  try {
+    const { email, password } = await req.json();
+
+    if (!email || !password) {
+      return NextResponse.json(
+        { message: "Email and password are required" },
+        { status: 400 }
+      );
+    }
+
+    const res = await findUserByEmail(email);
+
+    if (!res.success) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+    const result = await savePasswordService(email, password);
+
+    return NextResponse.json(result, { status: result.status });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Internal server error", error: error.message },
+      { status: 500 }
+    );
+  }
+};
+
+
+export const saveUsername = async (req) => {
+  try {
+    const { email, username } = await req.json();
+
+    if (!email || !username) {
+      return NextResponse.json(
+        { message: "Email and username are required" },
+        { status: 400 }
+      );
+    }
+
+    const res = await findUserByEmail(email);
+
+    if (!res.success) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+    const result = await saveUsernameService(email, username);
+
+    return NextResponse.json(result, { status: result.status });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Internal server error", error: error.message },
+      { status: 500 }
+    );
   }
 };
 

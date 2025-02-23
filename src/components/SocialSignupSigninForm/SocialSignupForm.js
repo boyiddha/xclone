@@ -5,8 +5,6 @@ import { FcGoogle } from "react-icons/fc";
 import { doSocialLogin } from "@/app/actions";
 
 import styles from "./socialSignup.module.css";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 const SocialSignupForm = () => {
   return (

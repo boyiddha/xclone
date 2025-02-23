@@ -8,6 +8,7 @@ import connectDB from "./utils/mongodb";
 import bcrypt from "bcryptjs";
 
 import { jwtDecode } from "jwt-decode";
+import { doLogout } from "./app/actions";
 
 /**
  * Takes a token, and returns a new token with updated
@@ -16,6 +17,7 @@ import { jwtDecode } from "jwt-decode";
  */
 async function refreshAccessToken(token) {
   //console.log("Refreshing access token", token);
+  //console.log("✅  refresh Access Token function calling...... token: ", token);
   try {
     //console.log("📤 Sending refresh token:", token.refreshToken); // Debugging
     // Debuggin: Ensure refreshToken is available before API Call
@@ -24,7 +26,7 @@ async function refreshAccessToken(token) {
       return { ...token, error: "Missing refresh token" };
     }
     const response = await fetch(
-      `${process.env.API_SERVER_BASE_URL}/api/refresh`,
+      `${process.env.API_SERVER_BASE_URL}/api/auth/refresh`,
       {
         method: "POST",
         headers: {
@@ -42,7 +44,7 @@ async function refreshAccessToken(token) {
       console.error("❌ Server Error response:", errorText);
       return {
         ...token,
-        error: "Failed to refresh access token",
+        error: "RefreshTokenExpired", // which handle in middleware
       };
     }
 
@@ -74,9 +76,10 @@ async function refreshAccessToken(token) {
     };
   } catch (error) {
     console.error("❌ Refresh token error:", error);
+    
     return {
       ...token,
-      error: "RefreshAccessTokenError",
+      error: "RefreshTokenExpired", // Indicate expired refresh token which handle in middleware
     };
   }
 }
@@ -94,7 +97,7 @@ export const authOptions = {
 
         try {
           const res = await fetch(
-            `${process.env.API_SERVER_BASE_URL}/api/login`,
+            `${process.env.API_SERVER_BASE_URL}/api/auth/login`,
             {
               method: "POST",
               body: JSON.stringify({
@@ -172,7 +175,7 @@ export const authOptions = {
       // console.log("user ", user);
       // console.log("account ", account);
 
-      await connectDB();
+      //await connectDB();
       const existingUser = await User.findOne({ email: user.email });
       if (!existingUser) {
         // Detect new user
@@ -200,12 +203,12 @@ export const authOptions = {
     jwt: async ({ token, account, user }) => {
       // user parameter exist is only the first time a user signs in via a provider like Google/OAuth
       //console.log(`In jwt callback - Token is ${JSON.stringify(token)}`);
-
+      
       // If an accessToken already exists, decode it to set the expiration time
       if (token.accessToken) {
         const decodedToken = jwtDecode(token.accessToken);
         //console.log(decodedToken);
-        token.accessTokenExpires = decodedToken?.exp * 1000;
+        token.accessTokenExpires = decodedToken?.exp * 1000;// converti into miliseconds ( JavaScript timestamp)
       }
 
       if (user?.isNewUser) {
@@ -263,7 +266,7 @@ export const authOptions = {
     },
     // Session callback
     session: async ({ session, token }) => {
-      //console.log(" ❌ session is: ", session);
+      //console.log(" ==== ❌ session is: ", session);
 
       // Ensure the session includes the user's name from the token
       // if (token.user) {
@@ -276,6 +279,10 @@ export const authOptions = {
       if (token?.isNewUser) {
         session.isNewUser = true;
       }
+      // when refresh token expired set session
+       if(token?.error==="RefreshTokenExpired"){
+         session.error="RefreshTokenExpired";
+       }
 
       session.token = token; // Make sure to attach token to session
 
@@ -284,9 +291,14 @@ export const authOptions = {
         email: token.user?.email ?? session.user.email,
         image: token.user?.image ?? session.user.image,
         isNewUser: token?.isNewUser ?? session?.isNewUser,
+        error: token?.error ?? null,
+
       };
 
       //console.log(" ❌ after setting session is: ", session);
+     
+      //session.error = token?.error ?? null; // Ensure session.error is always present
+
       return session;
     },
   },

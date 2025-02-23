@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import styles from "./setPasswordOverlay.module.css";
@@ -17,7 +18,7 @@ const SetPasswordOverlay = ({ email, isSetPassword }) => {
 
   const handleSignup = async () => {
     try {
-      const saveResponse = await fetch("/api/savePassword", {
+      const saveResponse = await fetch("/api/auth/savePassword", {
         method: "POST",
         headers: {
           "content-type": "application/json",

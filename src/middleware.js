@@ -22,6 +22,19 @@ export async function middleware(request) {
     // Case 1: If user is authenticated, prevent access to public routes and login
 
     //console.log("✅ token in middleware: ", token);
+   if (token?.error === "RefreshTokenExpired") {
+    console.log("🚨 Refresh token expired! Logging out...");
+
+    // Create a response to clear cookies
+    const response = NextResponse.redirect(new URL("/", request.url));
+
+    // Clear session cookies
+    response.cookies.set("next-auth.session-token", "", { maxAge: 0 });
+    response.cookies.set("next-auth.callback-url", "", { maxAge: 0 });
+
+    return response;
+  }
+
 
     if (
       isAuthenticated &&

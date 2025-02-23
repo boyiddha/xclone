@@ -12,9 +12,9 @@
 
 //   return await createUser(userData);
 // }
-import bcrypt from "bcryptjs";
-import { getUserByEmail, createUser,updateUser } from "@/repositories/userRepository";
-import { BCRYPT_SALT_ROUNDS } from "@/constants/auth";
+
+import { getUserByEmail, createUser,updateUser,savePassword,saveUsername } from "@/repositories/userRepository";
+import { createHashPassword } from "@/helpers/passwordHelper";
 
 export const findUserByEmail = async (email) => {
   try {
@@ -41,7 +41,7 @@ export async function createUserService(name, email, dob) {
 export const updateUserService = async (email, dob, password, username) => {
   try {
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
+    const hashedPassword = await createHashPassword(password);
     // Call repository function to update the user
     const updatedUser = await updateUser(email, dob, hashedPassword, username);
 
@@ -53,6 +53,34 @@ export const updateUserService = async (email, dob, password, username) => {
   } catch (error) {
     return { success: false, message: `Failed to update user ${error.message}`  };
   }
+};
+
+
+export const savePasswordService = async (email, password) => {
+
+  // Hash the password
+  const hashedPassword = await createHashPassword(password);
+
+  // Update user password
+  const updatedUser = await savePassword(email, hashedPassword);
+
+  if (!updatedUser) {
+    return { message: "Failed to update password", status: 500 };
+  }
+
+  return { message: "Password updated successfully", status: 200 };
+};
+
+export const saveUsernameService = async (email, username) => {
+
+  // Update user password
+  const updatedUser = await saveUsername(email, username);
+
+  if (!updatedUser) {
+    return { message: "Failed to update username", status: 500 };
+  }
+
+  return { message: "Username updated successfully", status: 200 };
 };
 
 

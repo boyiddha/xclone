@@ -1,5 +1,6 @@
 
 import { signIn, signOut } from "next-auth/react";
+// signIn, signOut both are client side function; they can't run in server side
 
 export const doSocialLogin = async (provider) => {
   await signIn(provider, {

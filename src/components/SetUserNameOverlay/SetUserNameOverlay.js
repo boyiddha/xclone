@@ -16,7 +16,7 @@ const SetUserNameOverlay = ({ email, password, setIsOverlayOpen }) => {
     //console.log("Finally =======> ; ");
     //console.log(email, password);
     try {
-      const saveResponse = await fetch("/api/saveUserName", {
+      const saveResponse = await fetch("/api/auth/saveUserName", {
         method: "POST",
         headers: {
           "content-type": "application/json",
