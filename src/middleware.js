@@ -14,30 +14,28 @@ export async function middleware(request) {
     });
     const isAuthenticated = !!token; // If token exists, user is authenticated
 
-    console.log("====== ❌  in middleware : ====== ");
-    console.log(
-      "❌    Middleware: isAuthenticated = ",
-      isAuthenticated,
-      "🎯   Path: ========>>> : ",
-      nextUrl.pathname
-    );
+    // console.log("====== ❌  in middleware : ====== ");
+    // console.log(
+    //   "❌    Middleware: isAuthenticated = ",
+    //   isAuthenticated,
+    //   "🎯   Path: ========>>> : ",
+    //   nextUrl.pathname
+    // );
     // Case 1: If user is authenticated, prevent access to public routes and login
 
     //console.log("✅ token in middleware: ", token);
-   if (token?.error === "RefreshTokenExpired") {
-    console.log("🚨 Refresh token expired! Logging out...");
+    if (token?.error === "RefreshTokenExpired") {
+      console.log("🚨 Refresh token expired! Logging out...");
 
-    // Create a response to clear cookies
-    const response = NextResponse.redirect(new URL("/", request.url));
+      // Create a response to clear cookies
+      const response = NextResponse.redirect(new URL("/", request.url));
 
-    // Clear session cookies
-    response.cookies.set("next-auth.session-token", "", { maxAge: 0 });
-    response.cookies.set("next-auth.callback-url", "", { maxAge: 0 });
+      // Clear session cookies
+      response.cookies.set("next-auth.session-token", "", { maxAge: 0 });
+      response.cookies.set("next-auth.callback-url", "", { maxAge: 0 });
 
-    return response;
-  }
-
- 
+      return response;
+    }
 
     if (
       isAuthenticated &&
@@ -66,16 +64,15 @@ export async function middleware(request) {
     if (!isAuthenticated) {
       return NextResponse.redirect(new URL(LOGIN, request.url));
     }
-   // Avoid redirect loop by checking if the user is already on /set-password
-   const isOnSetNewUserPage = request.url.includes("/newUser");
+    // Avoid redirect loop by checking if the user is already on /set-password
+    const isOnSetNewUserPage = request.url.includes("/newUser");
 
-   if (token?.isNewUser && !isOnSetNewUserPage) {
-     console.log("isOnSetNewUserPage =    = : ",isOnSetNewUserPage);
-   console.error("❌ redirect to /newuser");
+    if (token?.isNewUser && !isOnSetNewUserPage) {
+      console.log("isOnSetNewUserPage =    = : ", isOnSetNewUserPage);
+      console.error("❌ redirect to /newuser");
 
-     return NextResponse.redirect(new URL("/newUser", request.url));
-   }
-  
+      return NextResponse.redirect(new URL("/newUser", request.url));
+    }
 
     return NextResponse.next();
   } catch (error) {
@@ -87,4 +84,3 @@ export async function middleware(request) {
 export const config = {
   matcher: ["/(api|trpc)(.*)", "/((?!.+\\.[\\w]+$|_next).*)", "/"],
 };
-

@@ -7,16 +7,15 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const LogOut = () => {
-  const {data: session } = useSession();
+  const { data: session } = useSession();
   const [sess, setSession] = useState(null);
 
-  console.log("✅ Client-side session:", session);
+  //console.log("✅ Client-side session:", session);
   //console.log(" session user is: ", session.user);
 
   const handleLogout = async () => {
     await doLogout();
   };
-
 
   if (!session || !session.user) {
     return <div>Please log in</div>;
@@ -49,7 +48,6 @@ const LogOut = () => {
       >
         Logout
       </button>
-      
     </>
   );
 };

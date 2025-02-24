@@ -10,8 +10,8 @@ export const getAuthToken = async (request) => {
  * returns the old token and an error property
  */
 export async function refreshAccessToken(token) {
- //console.log("Refreshing access token", token);
- console.log("✅  refresh Access Token function calling...... token: ", token);
+  //console.log("Refreshing access token", token);
+  //console.log("✅  refresh Access Token function calling...... token: ", token);
   try {
     //console.log("📤 Sending refresh token:", token.refreshToken); // Debugging
     // Debuggin: Ensure refreshToken is available before API Call
@@ -31,7 +31,7 @@ export async function refreshAccessToken(token) {
         body: JSON.stringify({ refreshToken: token.refreshToken }),
       }
     );
- // console.log(response);
+    // console.log(response);
     // Check if the response is not OK
     if (!response.ok) {
       const errorText = await response.text();
@@ -57,11 +57,10 @@ export async function refreshAccessToken(token) {
     return {
       ...token,
       accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken ?? token.refreshToken,// Fall back to old refresh token
+      refreshToken: tokens.refreshToken ?? token.refreshToken, // Fall back to old refresh token
     };
   } catch (error) {
     console.error("❌ Refresh token error:", error);
-    return { ...token, error: "RefreshTokenExpired" };// Indicate expired refresh token which handle in middleware
+    return { ...token, error: "RefreshTokenExpired" }; // Indicate expired refresh token which handle in middleware
   }
-};
-
+}

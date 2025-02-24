@@ -1,0 +1,181 @@
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.column1 {
+  flex-grow: 1; /* This will allow it to shrink */
+  max-width: 55%;
+  transition: max-width 0.3s ease;
+}
+.column2 {
+  text-align: left;
+  min-width: 45%; /* Ensures it never shrinks */
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  color: rgb(218, 213, 213);
+}
+
+.icon {
+  font-size: 27px;
+  margin-right: 6px;
+  padding-left: 10px;
+}
+.content {
+  font-size: 22px;
+  margin-left: 7px;
+}
+.menuContainer1 {
+  padding: 10px;
+  width: 50px;
+}
+.menuContainer1:hover {
+  background-color: rgb(27, 27, 27);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.effect {
+  cursor: pointer;
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+.menuContainer2 {
+  width: 125px;
+}
+.menuContainer3 {
+  width: 145px;
+}
+.menuContainer4 {
+  width: 187px;
+}
+.menuContainer5 {
+  width: 155px;
+}
+.menuContainer6 {
+  width: 120px;
+}
+.menuContainer7 {
+  width: 187px;
+}
+.menuContainer8 {
+  width: 190px;
+}
+.menuContainer9 {
+  width: 160px;
+}
+.menuContainer10 {
+  width: 190px;
+}
+.menuContainer11 {
+  width: 146px;
+}
+.menuContainer12 {
+  width: 137px;
+}
+.effect:hover .menuContainer2,
+.effect:hover .menuContainer3,
+.effect:hover .menuContainer4,
+.effect:hover .menuContainer5,
+.effect:hover .menuContainer6,
+.effect:hover .menuContainer7,
+.effect:hover .menuContainer8,
+.effect:hover .menuContainer9,
+.effect:hover .menuContainer10,
+.effect:hover .menuContainer11,
+.effect:hover .menuContainer12 {
+  background-color: rgb(27, 27, 27);
+  border-radius: 24px;
+}
+.containerMore {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+.layoutMore {
+  position: absolute;
+  bottom: 100%; /* Position it above the More button */
+  width: 320px;
+  background-color: black;
+  border-radius: 15px;
+  box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
+
+  z-index: 10;
+  border: 1px solid rgb(77, 75, 75);
+}
+
+.postItem {
+  display: flex;
+  flex-direction: column;
+}
+.postBtn {
+  width: 230px;
+  padding: 13px;
+  text-align: center;
+  background-color: white;
+  color: black;
+  border-radius: 25px;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.postBtn:hover {
+  background-color: rgb(224, 222, 222);
+}
+.space {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.accountItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  padding-right: 17px;
+  padding-left: 10px;
+}
+.accountItem:hover {
+  background-color: rgb(27, 27, 27);
+  border-radius: 30px;
+  cursor: pointer;
+}
+.userImage {
+  border-radius: 50%;
+  padding: 13px;
+  background-color: gray;
+  margin-right: 7px;
+}
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+.fullName {
+  font-weight: bold;
+  font-size: 17px;
+}
+.userName {
+  color: gray;
+  font-size: 17px;
+}
+.options {
+  font-size: 27px;
+  margin-right: 6px;
+  padding-left: 10px;
+}
+
+.profileItem {
+  color: green;
+}
