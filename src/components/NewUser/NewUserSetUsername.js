@@ -12,7 +12,7 @@ const NewUserSetUsername = ({ dob, password }) => {
     try {
       console.log("chandle clock");
       const saveResponse = await saveNewOauthUser({ dob,password,username,});
-      console.log("===================",saveResponse.status);
+      //console.log("===================",saveResponse.status);
       saveResponse.status === 200 && router.push("/home");
     } catch (e) {
       console.error(e.message);

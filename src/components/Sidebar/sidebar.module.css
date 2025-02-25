@@ -65,7 +65,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 17px;
-  padding: 10px;
+  padding: 13px;
   width: 320px;
   border: 1px solid rgb(77, 75, 75);
   box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
@@ -92,6 +92,7 @@
   padding-right: 17px;
   background-color: rgb(62, 130, 231);
   border-radius: 20px;
+  cursor: pointer;
 }
 .buttonPrDiv {
   margin-bottom: 15px;
@@ -101,7 +102,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 17px;
-  padding: 10px;
+  padding: 13px;
   width: 320px;
   border: 1px solid rgb(77, 75, 75);
   box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
@@ -146,13 +147,14 @@
   margin-top: 7px;
   color: rgb(87, 116, 247);
   margin-bottom: 5px;
+  cursor: pointer;
 }
 
 .follows {
   display: flex;
   flex-direction: column;
   margin-top: 17px;
-  padding: 10px;
+  padding: 13px;
   width: 320px;
   border: 1px solid rgb(77, 75, 75);
   box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
@@ -171,14 +173,15 @@
   align-items: center;
   margin-top: 10px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .userImage {
-  border-radius: 50%;
-  padding: 13px;
   width: 20%;
 }
-
+.img {
+  border-radius: 50%;
+}
 .name {
   display: flex;
   flex-direction: column;
@@ -188,6 +191,13 @@
 .fullName {
   font-weight: bold;
   font-size: 17px;
+}
+.badges {
+  position:relative;
+  top:5px;
+  font-size: 19px;
+  margin-left: 2px;
+  color: rgb(71, 71, 250);
 }
 .userName {
   color: gray;
@@ -208,4 +218,20 @@
 .more {
   display: flex;
   flex-direction: column;
+  padding-left: 15px;
+  margin-top: 20px;
+  margin-bottom: 90px;
+}
+
+.item {
+  min-width: 0px;
+  font-size: 14px;
+  padding-right: 12px;
+  padding-bottom: 10px;;
+  color: #808080;
+
+}
+
+.item:hover {
+  text-decoration: underline;
 }

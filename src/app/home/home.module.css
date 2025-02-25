@@ -27,11 +27,15 @@
   flex-grow: 1; /* Take rest of the space */
   height: 100vh;
   overflow-y: auto;
+  scrollbar-width: thin;
+
   overflow-x: hidden;
   position: relative;
 }
 .main {
   width: 620px;
+  min-height: 125vh;
+  height: max-content;
   text-align: center;
   border-left: 1px solid rgba(185, 183, 183, 0.3);
   border-right: 1px solid rgba(233, 228, 228, 0.3);

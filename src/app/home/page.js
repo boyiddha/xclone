@@ -23,6 +23,7 @@ const HomePage = async () => {
         <div className={styles.mainSidebarContainer}>
           <div className={`${styles.column} ${styles.main}`}>
             <h1>Main Section</h1>
+           
           </div>
 
           <div className={`${styles.column} ${styles.sidebar}`}>

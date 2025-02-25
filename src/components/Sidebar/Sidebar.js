@@ -7,10 +7,13 @@ import styles from "./sidebar.module.css";
 import { IoIosSearch } from "react-icons/io";
 import { FaTimesCircle } from "react-icons/fa";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
+
 
 import sachin from "./../../../public/images/sachin.jpg";
 import somoytv from "./../../../public/images/somoytv.jpg";
 import dailystar from "./../../../public/images/dailystar.jpg";
+import Link from "next/link";
 
 const Sidebar = () => {
   const [search, setSearch] = useState("");
@@ -106,10 +109,19 @@ const Sidebar = () => {
           <div className={styles.titleFollow}>Who to follow</div>
           <div className={styles.follow1}>
             <div className={styles.userImg}>
-              <Image src={sachin} alt="sachin profile" width="35" height="35" />
+              <Image src={sachin}
+               alt="sachin profile"
+                width="35"
+                 height="35" 
+                className={styles.img}
+              
+              />
             </div>
             <div className={styles.name}>
-              <div className={styles.fullName}>Sachin Tendeulkar</div>
+              <div className={styles.fullName}>Sachin Tendeulkar
+              <RiVerifiedBadgeFill className={styles.badges}/>
+
+              </div>
               <div className={styles.userName}>@sachin_rt</div>
             </div>
             <div className={styles.followButton}>Follow</div>
@@ -121,10 +133,15 @@ const Sidebar = () => {
                 alt="somoytv profile"
                 width="35"
                 height="35"
+                className={styles.img}
+                
               />
             </div>
             <div className={styles.name}>
-              <div className={styles.fullName}>Somoy TV</div>
+              <div className={styles.fullName}>Somoy TV
+              <RiVerifiedBadgeFill className={styles.badges}/>
+
+              </div>
               <div className={styles.userName}>@somoytv</div>
             </div>
             <div className={styles.followButton}>Follow</div>
@@ -136,10 +153,14 @@ const Sidebar = () => {
                 alt="The daily starprofile"
                 width="35"
                 height="35"
+                className={styles.img}
               />
             </div>
             <div className={styles.name}>
-              <div className={styles.fullName}>The Daily Star</div>
+              <div className={styles.fullName}>The Daily Star 
+                  <RiVerifiedBadgeFill className={styles.badges}/>
+                
+              </div>
               <div className={styles.userName}>@dailystarnews</div>
             </div>
             <div className={styles.followButton}>Follow</div>
@@ -147,8 +168,57 @@ const Sidebar = () => {
           <div className={styles.show}>Show more</div>
         </div>
         <div className={styles.more}>
-          <div></div>
-          <div></div>
+          <div>
+
+            
+        <Link
+          className={styles.item}
+          href="https://x.com/en/tos "
+          target="_blank"
+        >
+          Terms of Service
+        </Link>
+        <Link
+          className={styles.item}
+          href="https://x.com/en/privacy"
+          target="_blank"
+        >
+          Privacy Policy
+        </Link>
+
+        <Link
+          className={styles.item}
+          href="https://help.x.com/en/rules-and-policies/x-cookies "
+          target="_blank"
+        >
+          Cookie Policy
+        </Link>
+          </div>
+          <div>
+          <Link
+          className={styles.item}
+          href="https://help.x.com/en/resources/accessibility "
+          target="_blank"
+        >
+          Accessibility
+        </Link>
+
+        <Link
+          className={styles.item}
+          href="https://business.x.com/en/help/troubleshooting/how-x-ads-work "
+          target="_blank"
+        >
+          Ads info
+        </Link>
+       
+        <Link
+          className={styles.item}
+          style={{ cursor: "default", pointerEvents: "none" }}
+          href=""
+        >
+          @2025 X Corp.
+        </Link>
+          </div>
         </div>
       </div>
     </>
