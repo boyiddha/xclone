@@ -1,0 +1,60 @@
+.layoutMore {
+  position: fixed;
+  bottom: 9%; /* Position it above the More button */
+  width: 290px;
+  background-color: black;
+  border-radius: 15px;
+  box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
+  z-index: 10;
+  border: 1px solid rgb(77, 75, 75);
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.accountItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-top: 7px;
+  padding-bottom: 3px;
+}
+.userImage {
+  border-radius: 50%;
+  padding: 13px;
+  margin-left: 10px;
+  margin-right: 7px;
+}
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.activeCheck {
+  font-size: 27px;
+  margin-left: 32px;
+  padding-left: 10px;
+}
+.fullName {
+  font-weight: bold;
+  font-size: 17px;
+}
+.userName {
+  color: gray;
+  font-size: 17px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.item {
+  margin-left: 5px;
+  padding: 10px;
+}
+.item:hover {
+  background-color: rgb(27, 27, 27);
+  cursor: pointer;
+}

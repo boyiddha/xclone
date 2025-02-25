@@ -98,19 +98,6 @@
 }
 .containerMore {
   position: relative;
-  display: inline-block;
-  width: 100%;
-}
-.layoutMore {
-  position: absolute;
-  bottom: 100%; /* Position it above the More button */
-  width: 320px;
-  background-color: black;
-  border-radius: 15px;
-  box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
-
-  z-index: 10;
-  border: 1px solid rgb(77, 75, 75);
 }
 
 .postItem {
@@ -133,8 +120,8 @@
   background-color: rgb(224, 222, 222);
 }
 .space {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 22px;
+  padding-bottom: 23px;
 }
 
 .accountItem {
@@ -142,8 +129,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding-top: 10px;
-  padding-bottom: 15px;
+  padding-top: 7px;
+  padding-bottom: 8px;
   padding-right: 17px;
   padding-left: 10px;
 }
@@ -152,10 +139,16 @@
   border-radius: 30px;
   cursor: pointer;
 }
+
+/* Disable hover when toggle box is open */
+.disabledHover {
+  pointer-events: none;
+  background-color: black;
+  cursor: default;
+}
 .userImage {
   border-radius: 50%;
   padding: 13px;
-  background-color: gray;
   margin-right: 7px;
 }
 .userInfo {

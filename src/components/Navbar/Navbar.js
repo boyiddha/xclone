@@ -18,20 +18,28 @@ import LogOut from "@/components/LogOut/LogOut";
 import styles from "./navbar.module.css";
 import { useEffect, useRef, useState } from "react";
 import MoreOptions from "./MoreOptions";
+import AccountOptions from "./AccountOptions";
 
 const Navbar = () => {
   const [isOpenMore, setIsOpenMore] = useState(false);
-  const boxRef = useRef(null);
+  const [isOpenAccount, setIsOpenAccount] = useState(false);
+  const boxMoreRef = useRef(null);
+  const boxAccountRef = useRef(null);
+  const accountItemRef = useRef(null);
 
   // Toggle function
   const toggleMore = () => {
     setIsOpenMore(true); // Open MoreOptions
   };
+  // Toggle menu when clicking the account item
+  const toggleAccount = () => {
+    setIsOpenAccount((prev) => !prev);
+  };
 
   // Close MoreOptions when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (boxRef.current && !boxRef.current.contains(event.target)) {
+      if (boxMoreRef.current && !boxMoreRef.current.contains(event.target)) {
         setIsOpenMore(false); // Close MoreOptions when clicking outside
       }
     };
@@ -44,6 +52,28 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpenMore]);
+
+  // Close menu when clicking outside both the togglebox + accountClickDiv(which ref is => accountItemRef)
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        boxAccountRef.current &&
+        !boxAccountRef.current.contains(event.target) &&
+        accountItemRef.current &&
+        !accountItemRef.current.contains(event.target)
+      ) {
+        setIsOpenAccount(false);
+      }
+    };
+
+    if (isOpenAccount) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpenAccount]);
 
   return (
     <>
@@ -150,18 +180,17 @@ const Navbar = () => {
                 </div>
               </div>
               <div className={styles.containerMore}>
-                {!isOpenMore && (
-                  <div className={styles.effect} onClick={toggleMore}>
-                    <div className={`${styles.item} ${styles.menuContainer12}`}>
-                      <div className={styles.icon}>
-                        <CiCircleMore />
-                      </div>
-                      <div className={styles.content}>More</div>
+                <div className={styles.effect} onClick={toggleMore}>
+                  <div className={`${styles.item} ${styles.menuContainer12}`}>
+                    <div className={styles.icon}>
+                      <CiCircleMore />
                     </div>
+                    <div className={styles.content}>More</div>
                   </div>
-                )}
+                </div>
+
                 {isOpenMore && (
-                  <div className={styles.moreOptionsContainer} ref={boxRef}>
+                  <div ref={boxMoreRef}>
                     <MoreOptions />
                   </div>
                 )}
@@ -172,23 +201,37 @@ const Navbar = () => {
               <div className={styles.space}></div>
             </div>
 
-            <div className={styles.accountItem}>
-              <div className={styles.userImage}>
-                <Image src={xLogo} alt="X Logo" width="20" height="20" />
+            <div className={styles.containerMore}>
+              <div
+                className={`${styles.accountItem} ${
+                  isOpenAccount ? styles.disabledHover : ""
+                }`}
+                ref={accountItemRef}
+                onClick={toggleAccount}
+              >
+                <div className={styles.userImage}>
+                  <Image src={xLogo} alt="X Logo" width="20" height="20" />
+                </div>
+                <div className={styles.userInfo}>
+                  <div className={styles.fullName}> Boyiddhanath Roy</div>
+                  <div className={styles.userName}> @boyiddha</div>
+                </div>
+                <div className={styles.options}>
+                  <IoIosMore />
+                </div>
               </div>
-              <div className={styles.userInfo}>
-                <div className={styles.fullName}> Boyiddhanath Roy</div>
-                <div className={styles.userName}> @boyiddha</div>
-              </div>
-              <div className={styles.options}>
-                <IoIosMore />
-              </div>
+
+              {isOpenAccount && (
+                <div ref={boxAccountRef}>
+                  <AccountOptions />
+                </div>
+              )}
             </div>
-            <div className={styles.profileItem}>
+            {/* <div className={styles.profileItem}>
               <div style={{ color: "white" }}>
                 <LogOut />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

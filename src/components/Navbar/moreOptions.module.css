@@ -1,13 +1,29 @@
+.layoutMore {
+  position: fixed;
+  bottom: 21%; /* Position it above the More button */
+  width: 315px;
+  border-radius: 15px;
+  background-color: black;
+  box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
+  z-index: 1000;
+  border: 1px solid rgb(77, 75, 75);
+}
+
 .icon {
   font-size: 27px;
   margin-right: 6px;
   padding-left: 10px;
 }
-.effect {
+.effect,
+.firstItem {
   cursor: pointer;
 }
 .effect:hover {
   background-color: rgb(27, 27, 27);
+}
+.firstItem:hover {
+  background-color: rgb(27, 27, 27);
+  border-radius: 15px 15px 0 0; /* Top-left | Top-right | Bottom-right | Bottom-left */
 }
 .item {
   display: flex;
@@ -20,21 +36,4 @@
 .content {
   font-size: 22px;
   margin-left: 7px;
-}
-
-.containerMore {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
-.layoutMore {
-  position: absolute;
-  bottom: 100%; /* Position it above the More button */
-  width: 320px;
-  background-color: black;
-  border-radius: 15px;
-  box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
-
-  z-index: 10;
-  border: 1px solid rgb(77, 75, 75);
 }

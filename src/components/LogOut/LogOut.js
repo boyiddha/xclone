@@ -10,7 +10,7 @@ const LogOut = () => {
   const { data: session } = useSession();
   const [sess, setSession] = useState(null);
 
-  //console.log("✅ Client-side session:", session);
+  console.log("✅ Client-side session:", session);
   //console.log(" session user is: ", session.user);
 
   const handleLogout = async () => {

@@ -1,0 +1,211 @@
+.sidebarContainer {
+  display: flex;
+  flex-direction: column;
+  padding-left: 15px;
+}
+.search {
+  display: flex;
+  align-items: center;
+  width: 320px;
+  border: 1px solid rgb(77, 75, 75);
+  border-radius: 27px;
+  padding: 9px;
+  transition: border-color 0.2s ease-in-out;
+  box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
+}
+
+.search.active {
+  border: 2px solid rgb(46, 90, 236);
+}
+
+.icon {
+  font-size: 20px;
+  color: gray;
+  margin-right: 2px;
+  cursor: pointer;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.searchBox input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  flex: 1;
+  padding: 4px;
+  background-color: black;
+  color: white;
+}
+.searchBox input::placeholder {
+  color: rgb(134, 131, 131);
+}
+.searchBox .icon {
+  color: gray;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.searchBox .icon2 {
+  margin-left: 8px;
+  cursor: pointer;
+  transition: color 0.2s;
+  font-size: 20px;
+}
+
+.searchBox .icon2:hover {
+  color: rgb(221, 217, 217);
+}
+
+.subscribe {
+  display: flex;
+  flex-direction: column;
+  margin-top: 17px;
+  padding: 10px;
+  width: 320px;
+  border: 1px solid rgb(77, 75, 75);
+  box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
+  border-radius: 20px;
+}
+.titlePr {
+  font-size: 21px;
+  font-weight: bold;
+  color: white;
+  padding-bottom: 6px;
+}
+.textPr {
+  font-size: 15px;
+  font-weight: bold;
+  color: rgb(224, 219, 219);
+  margin-bottom: 20px;
+}
+.buttonPr {
+  font-size: 17px;
+  font-weight: bold;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 17px;
+  padding-right: 17px;
+  background-color: rgb(62, 130, 231);
+  border-radius: 20px;
+}
+.buttonPrDiv {
+  margin-bottom: 15px;
+}
+
+.trends {
+  display: flex;
+  flex-direction: column;
+  margin-top: 17px;
+  padding: 10px;
+  width: 320px;
+  border: 1px solid rgb(77, 75, 75);
+  box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
+  border-radius: 20px;
+}
+
+.titleTrnds {
+  font-size: 21px;
+  font-weight: bold;
+  color: white;
+  padding-bottom: 6px;
+  margin-bottom: 15px;
+}
+.trends1 {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+.trendsContainer {
+  display: flex;
+  flex-direction: row;
+}
+.place {
+  width: 87%;
+  font-size: 13px;
+  color: gray;
+}
+.icon {
+  flex: 1;
+}
+.tag {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+.posts {
+  font-size: 13px;
+  color: gray;
+}
+
+.show {
+  margin-top: 7px;
+  color: rgb(87, 116, 247);
+  margin-bottom: 5px;
+}
+
+.follows {
+  display: flex;
+  flex-direction: column;
+  margin-top: 17px;
+  padding: 10px;
+  width: 320px;
+  border: 1px solid rgb(77, 75, 75);
+  box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
+  border-radius: 20px;
+}
+.titleFollow {
+  font-size: 21px;
+  font-weight: bold;
+  color: white;
+  padding-bottom: 6px;
+  margin-bottom: 15px;
+}
+.follow1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.userImage {
+  border-radius: 50%;
+  padding: 13px;
+  width: 20%;
+}
+
+.name {
+  display: flex;
+  flex-direction: column;
+  width: 58%;
+  margin-left: 10px;
+}
+.fullName {
+  font-weight: bold;
+  font-size: 17px;
+}
+.userName {
+  color: gray;
+  font-size: 17px;
+}
+
+.followButton {
+  flex: 1;
+  color: black;
+  background-color: white;
+  cursor: pointer;
+  padding: 7px;
+  font-weight: bold;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.more {
+  display: flex;
+  flex-direction: column;
+}

@@ -3,6 +3,7 @@ import styles from "./home.module.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Navbar from "@/components/Navbar/Navbar";
+import Sidebar from "@/components/Sidebar/Sidebar";
 
 export const metadata = {
   title: "Home / X",
@@ -19,13 +20,14 @@ const HomePage = async () => {
         <div className={`${styles.column} ${styles.navbar}`}>
           <Navbar />
         </div>
+        <div className={styles.mainSidebarContainer}>
+          <div className={`${styles.column} ${styles.main}`}>
+            <h1>Main Section</h1>
+          </div>
 
-        <div className={`${styles.column} ${styles.main}`}>
-          <h1>Main Section</h1>
-        </div>
-
-        <div className={`${styles.column} ${styles.sidebar}`}>
-          <h1>Sidebar</h1>
+          <div className={`${styles.column} ${styles.sidebar}`}>
+            <Sidebar />
+          </div>
         </div>
       </div>
     </>
