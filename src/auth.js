@@ -7,8 +7,10 @@ import { User } from "./models/userModel";
 
 import { jwtDecode } from "jwt-decode";
 import { refreshAccessToken } from "./utils/auth";
-import { createUserOuathService, findUserByEmail } from "./services/userService";
-
+import {
+  createUserOuathService,
+  findUserByEmail,
+} from "./services/userService";
 
 // NextAuth options configuration
 export const authOptions = {
@@ -104,9 +106,9 @@ export const authOptions = {
 
       //await connectDB();
       // const existingUser = await User.findOne({ email: user.email });
-          const result = await findUserByEmail(user.email);
-          const existingUser =result.success
-      
+      const result = await findUserByEmail(user.email);
+      const existingUser = result.success;
+
       if (!existingUser) {
         // Detect new user
         // Create new user
@@ -119,7 +121,7 @@ export const authOptions = {
         if (account.provider === "google" || account.provider === "github") {
           user.isNewUser = true; // It help to detect new user
         }
-      }else{
+      } else {
         user.isNewUser = false;
       }
       // set user.name while credential log in. it helps to set session.user.name property
@@ -138,12 +140,12 @@ export const authOptions = {
     jwt: async ({ token, account, user }) => {
       // user parameter exist is only the first time a user signs in via a provider like Google/OAuth
       //console.log(`In jwt callback - Token is ${JSON.stringify(token)}`);
-      
+
       // If an accessToken already exists, decode it to set the expiration time
       if (token.accessToken) {
         const decodedToken = jwtDecode(token.accessToken);
         //console.log(decodedToken);
-        token.accessTokenExpires = decodedToken?.exp * 1000;// converti into miliseconds ( JavaScript timestamp)
+        token.accessTokenExpires = decodedToken?.exp * 1000; // converti into miliseconds ( JavaScript timestamp)
       }
 
       if (user?.isNewUser) {
@@ -215,9 +217,9 @@ export const authOptions = {
         session.isNewUser = true;
       }
       // when refresh token expired set session
-       if(token?.error==="RefreshTokenExpired"){
-         session.error="RefreshTokenExpired";
-       }
+      if (token?.error === "RefreshTokenExpired") {
+        session.error = "RefreshTokenExpired";
+      }
 
       session.token = token; // Make sure to attach token to session
 
@@ -227,11 +229,10 @@ export const authOptions = {
         image: token.user?.image ?? session.user.image,
         isNewUser: token?.isNewUser ?? session?.isNewUser,
         error: token?.error ?? null,
-
       };
 
       //console.log(" ❌ after setting session is: ", session);
-     
+
       //session.error = token?.error ?? null; // Ensure session.error is always present
 
       return session;

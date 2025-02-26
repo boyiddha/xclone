@@ -1,0 +1,97 @@
+.postContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+}
+.profile {
+  display: flex;
+  display: flex;
+  justify-content: center;
+
+  margin-right: 10px; /* Add space between image and textarea */
+}
+.img {
+  border-radius: 50%;
+  margin: 10px;
+}
+.textArea {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-left: 5px;
+}
+
+.textArea textarea {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  resize: none;
+  color: rgb(238, 236, 236);
+  font-size: 18px;
+  font-weight: bold;
+  background-color: black;
+  outline: none; /* Remove the focus outline */
+}
+.textArea textarea:focus {
+  outline: none; /* Ensure no outline is shown when the textarea is focused */
+}
+
+.lineBreak {
+  height: 1px;
+  background-color: rgba(233, 228, 228, 0.3);
+  border: none;
+  margin-top: 7px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.media {
+  display: flex;
+  justify-content: space-between; /* This will place items on the left and right */
+  align-items: center;
+  padding-top: 10px;
+}
+
+.mediaIcon {
+  position: relative; /* Needed to position the tooltip */
+  color: rgb(34, 105, 236);
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.mediaIcon:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(93, 108, 131);
+  color: white;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  white-space: nowrap;
+  visibility: hidden; /* Initially hidden */
+  opacity: 0; /* Initially invisible */
+  transition: opacity 0.2s ease-in-out; /* Smooth transition */
+}
+
+.postBtn {
+  background-color: rgb(133, 130, 130);
+  color: Black;
+  padding: 8px 20px;
+  border-radius: 22px;
+  font-weight: bold;
+  cursor: default; /* initially no pointer */
+  font-size: 19px;
+  font-weight: bold;
+}
+.postBtn.active {
+  background-color: white;
+  cursor: pointer;
+}
