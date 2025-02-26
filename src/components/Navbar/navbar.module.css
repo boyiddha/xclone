@@ -19,25 +19,24 @@
   color: rgb(218, 213, 213);
 }
 
-.icon {
-  font-size: 27px;
-  margin-right: 6px;
-  padding-left: 10px;
-}
 .content {
   font-size: 22px;
   margin-left: 7px;
 }
 .menuContainer1 {
-  padding: 10px;
   width: 50px;
+  padding: 10px;
 }
 .menuContainer1:hover {
   background-color: rgb(27, 27, 27);
   cursor: pointer;
   border-radius: 50%;
 }
-
+.icon {
+  font-size: 27px;
+  margin-right: 6px;
+  padding-left: 10px;
+}
 .effect {
   cursor: pointer;
 }
@@ -47,8 +46,9 @@
   flex-direction: row;
   padding-top: 8px;
   padding-bottom: 8px;
-  margin-bottom: 8px;
+  position: relative;
 }
+
 .menuContainer2 {
   width: 125px;
 }
@@ -119,6 +119,10 @@
 .postBtn:hover {
   background-color: rgb(224, 222, 222);
 }
+.postIcon {
+  display: none;
+}
+
 .space {
   padding-top: 22px;
   padding-bottom: 23px;
@@ -151,6 +155,9 @@
   padding: 13px;
   margin-right: 7px;
 }
+.img {
+  border-radius: 50%;
+}
 .userInfo {
   display: flex;
   flex-direction: column;
@@ -171,4 +178,120 @@
 
 .profileItem {
   color: green;
+}
+
+/* When navbar shrinks to 250px, hide the text */
+@media (max-width: 1280px) {
+  /* Adjust based on total layout */
+
+  .content,
+  .userInfo,
+  .options {
+    display: none;
+  }
+
+  .item {
+    gap: 0px; /* Remove extra space when text is hidden */
+    justify-content: center;
+  }
+  .menuContainer1,
+  .menuContainer2,
+  .menuContainer3,
+  .menuContainer4,
+  .menuContainer5,
+  .menuContainer6,
+  .menuContainer7,
+  .menuContainer8,
+  .menuContainer9,
+  .menuContainer10,
+  .menuContainer11,
+  .menuContainer12,
+  .postBtn,
+  .accountItem {
+    width: 35px;
+  }
+
+  .accountItem {
+    padding: 0;
+    margin: 0;
+    height: 45px;
+  }
+  .accountItem:hover {
+    background-color: rgb(61, 60, 60);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .postBtn {
+    display: none;
+  }
+  .postIcon {
+    display: block;
+    width: 35px;
+    border-radius: 50px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  .postIcon:hover {
+    background-color: rgb(92, 90, 90);
+  }
+  .postIconWrapper,
+  .userImage {
+    display: flex;
+    flex-direction: row;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    position: relative;
+  }
+  /* Tooltip styles for both navbar icons and post icon */
+  .item::after,
+  .postIconWrapper::after,
+  .userImage::after {
+    content: attr(data-tooltip); /* Get text from data attribute */
+    position: absolute;
+    bottom: -25px; /* Position tooltip below the icon */
+    left: 30%;
+    transform: translateX(-55%);
+    background-color: rgb(87, 102, 112); /* Dark background */
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+    transition: opacity 0.2s ease-in-out;
+    pointer-events: none; /* Prevent hover flickering */
+    z-index: 1000;
+  }
+
+  /* Show tooltip on hover */
+  .item:hover::after,
+  .postIconWrapper:hover::after,
+  .userImage:hover::after {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@media (max-width: 725px) {
+  .menuContainer1 {
+    padding: 0;
+  }
+  .column1 {
+    width: 0%;
+  }
+  .icon {
+    padding: 0;
+    margin: 0;
+  }
+  .item {
+    padding-bottom: 0;
+  }
+  .userImage {
+    padding: 0px;
+    margin: 0px;
+  }
 }

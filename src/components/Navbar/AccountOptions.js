@@ -1,5 +1,5 @@
 import Image from "next/image";
-import xLogo from "./../../../public/images/x_profile.png";
+import user from "./../../../public/images/user.jpeg";
 import styles from "./accountOptions.module.css";
 import { CiCircleCheck } from "react-icons/ci";
 import { IoIosCheckmarkCircle } from "react-icons/io";
@@ -16,7 +16,13 @@ const AccountOptions = () => {
         <div className={styles.accounts}>
           <div className={styles.accountItem}>
             <div className={styles.userImage}>
-              <Image src={xLogo} alt="X Logo" width="20" height="20" />
+              <Image
+                className={styles.img}
+                src={user}
+                alt="user profile"
+                width="20"
+                height="20"
+              />
             </div>
             <div className={styles.userInfo}>
               <div className={styles.fullName}> Boyiddhanath Roy</div>

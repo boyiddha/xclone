@@ -12,8 +12,10 @@ import { RxLightningBolt } from "react-icons/rx";
 import { HiOutlineUser } from "react-icons/hi2";
 import { CiCircleMore } from "react-icons/ci";
 import { IoIosMore } from "react-icons/io";
+import { SiAppwrite } from "react-icons/si";
 
 import xLogo from "./../../../public/images/x_profile.png";
+import user from "./../../../public/images/user.jpeg";
 import LogOut from "@/components/LogOut/LogOut";
 import styles from "./navbar.module.css";
 import { useEffect, useRef, useState } from "react";
@@ -89,7 +91,10 @@ const Navbar = () => {
                 </div>
               </div>
               <div className={styles.effect}>
-                <div className={`${styles.item} ${styles.menuContainer2}`}>
+                <div
+                  className={`${styles.item} ${styles.menuContainer2}`}
+                  data-tooltip="Home"
+                >
                   <div className={styles.icon}>
                     {" "}
                     <GoHome /> {/* <GoHomeFill/> use it when it active */}
@@ -98,7 +103,10 @@ const Navbar = () => {
                 </div>
               </div>
               <div className={styles.effect}>
-                <div className={`${styles.item} ${styles.menuContainer3}`}>
+                <div
+                  className={`${styles.item} ${styles.menuContainer3}`}
+                  data-tooltip="Explore"
+                >
                   <div className={styles.icon}>
                     {" "}
                     <IoSearch />{" "}
@@ -107,7 +115,10 @@ const Navbar = () => {
                 </div>
               </div>
               <div className={styles.effect}>
-                <div className={`${styles.item} ${styles.menuContainer4}`}>
+                <div
+                  className={`${styles.item} ${styles.menuContainer4}`}
+                  data-tooltip="Notifications"
+                >
                   <div className={styles.icon}>
                     {" "}
                     <GrNotification />{" "}
@@ -116,7 +127,10 @@ const Navbar = () => {
                 </div>
               </div>
               <div className={styles.effect}>
-                <div className={`${styles.item} ${styles.menuContainer5}`}>
+                <div
+                  className={`${styles.item} ${styles.menuContainer5}`}
+                  data-tooltip="Messages"
+                >
                   <div className={styles.icon}>
                     {" "}
                     <MdOutlineMailOutline />{" "}
@@ -125,7 +139,10 @@ const Navbar = () => {
                 </div>
               </div>
               <div className={styles.effect}>
-                <div className={`${styles.item} ${styles.menuContainer6}`}>
+                <div
+                  className={`${styles.item} ${styles.menuContainer6}`}
+                  data-tooltip="Grok"
+                >
                   <div className={styles.icon}>
                     {" "}
                     <VscVscodeInsiders />{" "}
@@ -134,7 +151,10 @@ const Navbar = () => {
                 </div>
               </div>
               <div className={styles.effect}>
-                <div className={`${styles.item} ${styles.menuContainer7}`}>
+                <div
+                  className={`${styles.item} ${styles.menuContainer7}`}
+                  data-tooltip="BookMarks"
+                >
                   <div className={styles.icon}>
                     {" "}
                     <FaRegBookmark />{" "}
@@ -144,7 +164,10 @@ const Navbar = () => {
               </div>
 
               <div className={styles.effect}>
-                <div className={`${styles.item} ${styles.menuContainer8}`}>
+                <div
+                  className={`${styles.item} ${styles.menuContainer8}`}
+                  data-tooltip="Communities"
+                >
                   <div className={styles.icon}>
                     {" "}
                     <IoPeopleOutline />{" "}
@@ -153,7 +176,10 @@ const Navbar = () => {
                 </div>
               </div>
               <div className={styles.effect}>
-                <div className={`${styles.item} ${styles.menuContainer9}`}>
+                <div
+                  className={`${styles.item} ${styles.menuContainer9}`}
+                  data-tooltip="Premium"
+                >
                   <div className={styles.icon}>
                     {" "}
                     <HiOutlineBadgeCheck />{" "}
@@ -162,7 +188,10 @@ const Navbar = () => {
                 </div>
               </div>
               <div className={styles.effect}>
-                <div className={`${styles.item} ${styles.menuContainer10}`}>
+                <div
+                  className={`${styles.item} ${styles.menuContainer10}`}
+                  data-tooltip="Verified Orgs"
+                >
                   <div className={styles.icon}>
                     {" "}
                     <RxLightningBolt />{" "}
@@ -171,7 +200,10 @@ const Navbar = () => {
                 </div>
               </div>
               <div className={styles.effect}>
-                <div className={`${styles.item} ${styles.menuContainer11}`}>
+                <div
+                  className={`${styles.item} ${styles.menuContainer11}`}
+                  data-tooltip="Profile"
+                >
                   <div className={styles.icon}>
                     {" "}
                     <HiOutlineUser />{" "}
@@ -181,7 +213,10 @@ const Navbar = () => {
               </div>
               <div className={styles.containerMore}>
                 <div className={styles.effect} onClick={toggleMore}>
-                  <div className={`${styles.item} ${styles.menuContainer12}`}>
+                  <div
+                    className={`${styles.item} ${styles.menuContainer12}`}
+                    data-tooltip="More"
+                  >
                     <div className={styles.icon}>
                       <CiCircleMore />
                     </div>
@@ -198,6 +233,9 @@ const Navbar = () => {
             </div>
             <div className={styles.postItem}>
               <div className={styles.postBtn}>Post</div>
+              <div className={styles.postIconWrapper} data-tooltip="Post">
+                <SiAppwrite className={`${styles.postIcon} hidden-icon`} />
+              </div>
               <div className={styles.space}></div>
             </div>
 
@@ -209,8 +247,14 @@ const Navbar = () => {
                 ref={accountItemRef}
                 onClick={toggleAccount}
               >
-                <div className={styles.userImage}>
-                  <Image src={xLogo} alt="X Logo" width="20" height="20" />
+                <div className={styles.userImage} data-tooltip="Accounts">
+                  <Image
+                    className={styles.img}
+                    src={user}
+                    alt="user Profile"
+                    width="30"
+                    height="30"
+                  />
                 </div>
                 <div className={styles.userInfo}>
                   <div className={styles.fullName}> Boyiddhanath Roy</div>
