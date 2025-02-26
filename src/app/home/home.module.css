@@ -27,15 +27,15 @@
   display: flex;
   flex-direction: row;
   flex-grow: 1; /* Take rest of the space */
-  min-width: 990px; /* Ensures main (620px) + sidebar (340px) remain fixed */
   height: 100vh;
+  min-width: 990px;
   overflow-y: auto;
   scrollbar-width: thin;
   overflow-x: hidden;
   position: relative;
 }
 .main {
-  min-width: 620px;
+  min-width: 250px;
   width: 620px;
   flex-shrink: 0; /* Prevent shrinking */
   min-height: 125vh;
@@ -68,7 +68,8 @@
   }
 
   .mainSidebarContainer {
-    min-width: 620px; /* Ensure Main remains fixed */
+    flex-grow: 1; /* Ensure Main remains fixed */
+    min-width: 620px;
   }
 
   .navbar {
@@ -85,9 +86,12 @@
     min-width: 57px;
     max-width: 57px;
   }
-
   .mainSidebarContainer {
     flex-grow: 1; /* Allow it to shrink */
-    min-width: 200px; /* Let it shrink as needed */
+    min-width: 200px;
+  }
+  .main {
+    flex-grow: 1;
+    width: 100%;
   }
 }

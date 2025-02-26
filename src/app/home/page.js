@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Navbar from "@/components/Navbar/Navbar";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import MainSection from "@/components/MainSection/MainSection";
 
 export const metadata = {
   title: "Home / X",
@@ -22,8 +23,7 @@ const HomePage = async () => {
         </div>
         <div className={styles.mainSidebarContainer}>
           <div className={`${styles.column} ${styles.main}`}>
-            <h1>Main Section</h1>
-           
+            <MainSection />
           </div>
 
           <div className={`${styles.column} ${styles.sidebar}`}>

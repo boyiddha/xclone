@@ -264,7 +264,7 @@
     visibility: hidden; /* Initially hidden */
     transition: opacity 0.2s ease-in-out;
     pointer-events: none; /* Prevent hover flickering */
-    z-index: 1000;
+    z-index: 500;
   }
 
   /* Show tooltip on hover */

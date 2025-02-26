@@ -1,0 +1,35 @@
+.feed {
+  display: flex;
+  flex-direction: column;
+}
+.head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+.you {
+  width: 50%;
+  color: white;
+  height: 60px;
+  padding-top: 15px;
+}
+.following {
+  flex: 1;
+  color: gray;
+  height: 60px;
+  padding-top: 15px;
+}
+.you:hover,
+.following:hover {
+  background-color: rgb(27, 27, 27);
+}
+
+.lineBreak {
+  height: 1px;
+  background-color: rgba(233, 228, 228, 0.3);
+  border: none;
+}
