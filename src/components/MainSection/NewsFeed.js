@@ -28,6 +28,14 @@ const NewsFeed = ({ posts, fullName, userName }) => {
               <div className={styles.mainText}>
                 {post.content}
                 {/* <span>{new Date(post.createdAt).toLocaleString()}</span> */}
+                {post.image && (
+                  <img
+                    src={`data:${post.imageType};base64,${post.image.toString(
+                      "base64"
+                    )}`}
+                    alt="Post image"
+                  />
+                )}
               </div>
               <div className={styles.reaction}>
                 <NewsFeedFooter />
