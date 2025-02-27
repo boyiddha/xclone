@@ -8,20 +8,41 @@ import { useState, useEffect } from "react";
 
 const MainSection = () => {
   const [posts, setPosts] = useState([]);
+  const [fullName, setFullName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [loading, setLoading] = useState(true);
 
   // Fetch posts from the API
   const fetchPosts = async () => {
-    const res = await fetch("/api/posts", {
+    try {
+      const res = await fetch("/api/posts", {
+        method: "GET",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setPosts(data); // Update posts state
+      } else {
+        console.error("Failed to fetch posts");
+      }
+    } catch (error) {
+      setError("Failed to fetch posts " + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchMe = async () => {
+    const res = await fetch("/api/me", {
       method: "GET",
     });
     if (res.ok) {
       const data = await res.json();
-      setPosts(data); // Update posts state
+      setFullName(data.fullName);
+      setUserName(data.userName);
     } else {
-      console.error("Failed to fetch posts");
+      console.error("Failed to fetch Me");
     }
   };
-
   // Handle new post submission and add it to the posts list
   const handleNewPost = async (newPost) => {
     setPosts([newPost, ...posts]); // Add new post at the top
@@ -30,6 +51,7 @@ const MainSection = () => {
   // Fetch posts on component mount
   useEffect(() => {
     fetchPosts();
+    fetchMe();
   }, []);
 
   return (
@@ -52,7 +74,11 @@ const MainSection = () => {
           <hr className={styles.lineBreak} />
         </div>
         <div>
-          <NewsFeed posts={posts} />
+          {loading ? (
+            <div className={styles.spinner}></div> // Show spinner when loading
+          ) : (
+            <NewsFeed posts={posts} fullName={fullName} userName={userName} />
+          )}
         </div>
       </div>
     </>

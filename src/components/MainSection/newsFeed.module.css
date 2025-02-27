@@ -1,0 +1,51 @@
+.lineBreak {
+  height: 1px;
+  background-color: rgba(233, 228, 228, 0.3);
+  border: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.mainDiv {
+  display: flex;
+  flex-direction: column;
+}
+.postContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 7px;
+}
+.profile {
+  display: flex;
+  display: flex;
+  justify-content: center;
+
+  margin-right: 5px; /* Add space between image and textarea */
+}
+.img {
+  border-radius: 50%;
+  margin: 10px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.header,
+.reaction {
+  display: flex;
+  justify-content: space-between; /* This will place items on the left and right */
+  padding-top: 10px;
+}
+
+.reaction {
+  color: rgb(141, 140, 140);
+  font-size: 21px;
+}
+
+.mainText {
+  text-align: left;
+  padding-bottom: 3px;
+}

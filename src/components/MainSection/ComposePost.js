@@ -4,12 +4,12 @@ import styles from "./composePost.module.css";
 import user from "./../../../public/images/user.jpeg";
 import { BsImage } from "react-icons/bs";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 
 const ComposePost = ({ onPostCreated }) => {
   const [content, setContent] = useState("");
-
+  const textAreaRef = useRef(null); // Reference for textarea
   const handleChange = (e) => {
     setContent(e.target.value);
     // Adjust the textarea height to fit the content
@@ -30,6 +30,11 @@ const ComposePost = ({ onPostCreated }) => {
       const newPost = await res.json();
       setContent(""); // Clear textarea after posting
       onPostCreated(newPost); // Call the parent callback to add the new post
+
+      // Reset textarea height after posting
+      if (textAreaRef.current) {
+        textAreaRef.current.style.height = "auto"; // Set to initial height
+      }
     } else {
       console.error("Failed to create post");
     }
@@ -50,6 +55,7 @@ const ComposePost = ({ onPostCreated }) => {
         <div className={styles.textArea}>
           <div>
             <textarea
+              ref={textAreaRef} // Attach ref to textarea
               value={content}
               onChange={handleChange}
               placeholder="What is happening?!"

@@ -17,14 +17,48 @@
 // ✅ Handles HTTP response (returns NextResponse.json()).
 
 import { NextResponse } from "next/server";
-import { findUserByEmail, createUserService, updateUserService, savePasswordService, saveUsernameService } from "@/services/userService";
+import {
+  findUserByEmail,
+  createUserService,
+  updateUserService,
+  savePasswordService,
+  saveUsernameService,
+} from "@/services/userService";
 import { getAuthToken } from "@/utils/auth";
 
-
+// when send email with get req params
 export const getUser = async (req) => {
   try {
     const { searchParams } = new URL(req.url);
     const email = searchParams.get("email"); // ✅ Get email from query params
+
+    if (!email) {
+      return NextResponse.json(
+        { message: "Email is required" },
+        { status: 400 }
+      );
+    }
+
+    const result = await findUserByEmail(email);
+
+    if (!result.success) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(result.user, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+};
+
+// when send email as session
+export const getMe = async (req, session) => {
+  try {
+    const { email } = session.user;
 
     if (!email) {
       return NextResponse.json(
@@ -88,7 +122,10 @@ export const updateUser = async (request) => {
     const token = await getAuthToken(request);
 
     if (!token) {
-      return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+      return NextResponse.json(
+        { message: "Not authenticated" },
+        { status: 401 }
+      );
     }
 
     const email = token.email;
@@ -100,13 +137,15 @@ export const updateUser = async (request) => {
       return NextResponse.json({ message: result.message }, { status: 400 });
     }
 
-    return NextResponse.json({ message: result.message, user: result.user }, { status: 200 });
+    return NextResponse.json(
+      { message: result.message, user: result.user },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error in updateUser controller:", error);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 };
-
 
 export const savePassword = async (req) => {
   try {
@@ -135,7 +174,6 @@ export const savePassword = async (req) => {
   }
 };
 
-
 export const saveUsername = async (req) => {
   try {
     const { email, username } = await req.json();
@@ -162,7 +200,6 @@ export const saveUsername = async (req) => {
     );
   }
 };
-
 
 //✅  Repositories = Only fetch/store data.
 //✅  Services = Apply business logic.

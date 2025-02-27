@@ -7,7 +7,8 @@ const PostSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    content: { type: String, required: true },
+    content: { type: String },
+    image: { type: String },
   },
   { timestamps: true } // by default This adds `createdAt` and `updatedAt` fields
 );
