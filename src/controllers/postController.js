@@ -1,41 +1,82 @@
 import { NextResponse } from "next/server";
-import { createNewPost, fetchUserPosts } from "@/services/postService";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { findUserByEmail } from "@/services/userService";
+import { createPostService, getUserPostsService } from "@/services/postService";
 
-export async function createPost(req, session) {
+export const createPost = async (request) => {
   try {
-    const { email } = session.user;
-    const { content } = await req.json();
-
-    if (!content.trim()) {
+    // Get user session
+    const session = await getServerSession(authOptions);
+    if (!session) {
       return NextResponse.json(
-        { error: "Content cannot be empty" },
-        { status: 400 }
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
       );
     }
 
-    const newPost = await createNewPost(email, content);
-    if (!newPost) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(newPost, { status: 201 });
-  } catch (error) {
-    console.error("Error creating post:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
-  }
-}
-
-export async function getPosts(session) {
-  try {
+    // Find user by email
     const { email } = session.user;
-    const posts = await fetchUserPosts(email);
+    const res = await findUserByEmail(email);
+    if (!res.success)
+      return NextResponse.json({ success: false, message: "User not found" });
 
-    if (!posts) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    // Extract form data
+    const data = await request.formData();
+    const file = data.get("file");
+    const content = data.get("content");
+
+    if (!file && !content) {
+      return NextResponse.json({
+        success: false,
+        message: "Post must contain either content or a file",
+      });
     }
-    return NextResponse.json(posts, { status: 200 });
+
+    // Call the service to create a post
+    const newPost = await createPostService(res.user._id, content, file);
+
+    return NextResponse.json({
+      success: true,
+      message: "Successfully Uploaded",
+      post: newPost,
+    });
   } catch (error) {
-    console.error("Error fetching posts:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    console.error("Upload Error:", error);
+    return NextResponse.json({
+      success: false,
+      message: "Upload Failed",
+      error: error.message,
+    });
   }
-}
+};
+
+export const getPosts = async () => {
+  try {
+    // Get user session
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    // Find user by email
+    const { email } = session.user;
+    const res = await findUserByEmail(email);
+    if (!res.success)
+      return NextResponse.json({ success: false, message: "User not found" });
+
+    // Fetch posts from the service
+    const posts = await getUserPostsService(res.user._id);
+
+    return NextResponse.json({ success: true, posts });
+  } catch (error) {
+    console.error("Fetch Error:", error);
+    return NextResponse.json({
+      success: false,
+      message: "Failed to retrieve posts",
+    });
+  }
+};

@@ -95,3 +95,33 @@
   background-color: white;
   cursor: pointer;
 }
+
+.mediaPreview {
+  width: 100%; /* Take full width of the parent container */
+  height: auto; /* Maintain aspect ratio */
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.mediaPreviewContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.removePreviewBtn {
+  position: absolute;
+  top: 12px;
+  right: 4px;
+  background: black;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 10;
+}
+.removePreviewBtn:hover {
+  background: rgba(37, 37, 37, 0.7);
+}

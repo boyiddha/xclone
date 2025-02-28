@@ -1,17 +1,31 @@
-import { findUserByEmail } from "@/services/userService";
-import { createPostInDB, findPostsByUser } from "@/repositories/postRepository";
+import { savePost, findPostsByUserId } from "@/repositories/postRepository";
 
-export async function createNewPost(email, content) {
-  const res = await findUserByEmail(email);
-  if (!res.success) return null;
-  const user = res.user;
+const convertToBase64 = async (file) => {
+  const buffer = await file.arrayBuffer();
+  return Buffer.from(buffer).toString("base64");
+};
 
-  return createPostInDB(user._id, content);
-}
+export const createPostService = async (userId, content, file) => {
+  if (file === null || file === undefined) {
+    // console.log("❌ No file uploaded, skipping media.");
+    return await savePost(userId, content, null);
+  }
 
-export async function fetchUserPosts(email) {
-  const res = await findUserByEmail(email);
-  if (!res.success) return null;
-  const user = res.user;
-  return findPostsByUser(user._id);
-}
+  let media = null;
+  if (file instanceof Blob) {
+    media = {
+      name: file.name || "unknown",
+      data: await convertToBase64(file),
+      contentType: file.type || "application/octet-stream",
+    };
+  } else {
+    //console.error("❌ Invalid file format:", file);
+    return await savePost(userId, content, null); // Save without media
+  }
+
+  return await savePost(userId, content, media);
+};
+
+export const getUserPostsService = async (userId) => {
+  return await findPostsByUserId(userId);
+};

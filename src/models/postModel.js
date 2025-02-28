@@ -1,5 +1,16 @@
 import mongoose from "mongoose";
 
+const MediaSchema = new mongoose.Schema({
+  name: { type: String, required: false },
+  data: { type: String, required: false }, // Base64-encoded string (or change to Buffer if needed)
+  contentType: {
+    type: String,
+    required: function () {
+      return !!this.data;
+    },
+  }, // Required if data exists
+});
+
 const PostSchema = new mongoose.Schema(
   {
     userId: {
@@ -7,10 +18,10 @@ const PostSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    content: { type: String, required: false },
-    image: { type: Buffer }, // Store image as Buffer  (Base64 Encoding)
+    content: { type: String, trim: true, required: false }, // Trim to remove unnecessary spaces
+    media: { type: MediaSchema, default: [] }, // Default to empty array (ensures consistency)
   },
-  { timestamps: true } // by default This adds `createdAt` and `updatedAt` fields
+  { timestamps: true } // Adds `createdAt` and `updatedAt`
 );
 
-export default mongoose.models.posts || mongoose.model("posts", PostSchema);
+export default mongoose.models.Post || mongoose.model("Post", PostSchema);

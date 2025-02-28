@@ -49,3 +49,23 @@
   text-align: left;
   padding-bottom: 3px;
 }
+
+.postContent {
+  white-space: pre-line; /* Ensures that newlines are respected */
+}
+
+.media {
+  width: 100%; /* Take full width of the parent container */
+  height: auto; /* Maintain aspect ratio */
+  display: block;
+  margin-top: 17px;
+  border-radius: 20px;
+}
+
+.mediaPreview {
+  width: 100%; /* Take full width of the parent container */
+  max-height: auto; /* Maintain aspect ratio */
+  display: block;
+  margin-top: 10px;
+  border-radius: 15px;
+}

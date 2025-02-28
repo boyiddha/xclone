@@ -1,16 +1,16 @@
-"use client";
-
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./composePost.module.css";
 import user from "./../../../public/images/user.jpeg";
 import { BsImage } from "react-icons/bs";
 import Image from "next/image";
+import { ImCross } from "react-icons/im";
 
 const ComposePost = ({ onPostCreated }) => {
   const [content, setContent] = useState("");
-  const [imagePreview, setImagePreview] = useState(null); // Store the image preview URL
-  const [imageData, setImageData] = useState(null); // Store image as Base64 string
+  const [file, setFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null); // Store image preview
   const textAreaRef = useRef(null);
+  const fileInputRef = useRef(null); // Create a reference for the file input
 
   const handleChange = (e) => {
     setContent(e.target.value);
@@ -18,44 +18,59 @@ const ComposePost = ({ onPostCreated }) => {
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Convert image to Base64
+  const handleMediaChange = (e) => {
+    const selectedFile = e.target.files?.[0];
+
+    // If the selected file is the same as the previous one, reset the input
+    if (selectedFile && selectedFile.name === file?.name) {
+      e.target.value = ""; // Reset file input value
+      setFile(null);
+      setMediaPreview(null);
+      return;
+    }
+
+    if (selectedFile) {
+      setFile(selectedFile);
+
+      // Convert file to Base64 for preview
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result); // Set image preview
-        setImageData(reader.result.split(",")[1]); // Set Base64 string (remove 'data:image/png;base64,')
+        setMediaPreview(reader.result); // Store the preview for images, audio, or video
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(selectedFile); // Reads the file as a Base64 string
     }
   };
 
   const handleSubmit = async () => {
-    if (!content.trim() && !imageData) return; // Ensure at least content or image is provided
+    if (!content.trim() && !file) return; // Ensure at least content or image is provided
 
-    const formData = new FormData();
-    formData.append("content", content); // Append content
-    if (imageData) {
-      formData.append("image", imageData); // Append Base64 image data if exists
-    }
+    const data = new FormData();
+    data.append("file", file);
+    data.append("content", content);
 
-    const res = await fetch("/api/posts", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const res = await fetch("/api/posts", {
+        method: "POST",
+        body: data,
+      });
 
-    if (res.ok) {
-      const newPost = await res.json();
-      setContent(""); // Clear textarea after posting
-      setImagePreview(null); // Clear image preview
-      setImageData(null); // Clear Base64 string
-      onPostCreated(newPost); // Call the parent callback to add the new post
-      if (textAreaRef.current) {
-        textAreaRef.current.style.height = "auto"; // Reset textarea height
+      const result = await res.json();
+
+      if (result.success) {
+        //alert("File Uploaded Successfully");
+        console.log("resultpost :  ", result.post);
+        onPostCreated(result.post);
+        // Reset form
+        setFile(null);
+        setContent("");
+        setMediaPreview(null);
+        // Reset file input to allow re-selection of the same file
+        fileInputRef.current.value = ""; // This allows selecting the same file again
+      } else {
+        alert("File Upload Failed");
       }
-    } else {
-      console.error("Failed to create post");
+    } catch (error) {
+      console.error("Upload Error:", error);
     }
   };
 
@@ -77,30 +92,67 @@ const ComposePost = ({ onPostCreated }) => {
             value={content}
             onChange={handleChange}
             placeholder="What's happening?!"
-            style={{ overflow: "hidden" }}
+            style={{ overflow: "hidden", resize: "none", width: "100%" }}
           />
+          {mediaPreview && (
+            <div className={styles.mediaPreviewContainer}>
+              <button
+                className={styles.removePreviewBtn}
+                onClick={() => {
+                  setFile(null); // Remove the selected file
+                  setMediaPreview(null); // Clear the preview
+                }}
+              >
+                <ImCross />
+              </button>
+
+              {file?.type.startsWith("image/") && (
+                <img
+                  src={mediaPreview}
+                  alt="Media preview"
+                  className={styles.mediaPreview}
+                />
+              )}
+
+              {file?.type.startsWith("video/") && (
+                <video controls className={styles.mediaPreview}>
+                  <source src={mediaPreview} type={file.type} />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+
+              {file?.type.startsWith("audio/") && (
+                <div>
+                  <p>Audio Preview:</p>
+                  <audio
+                    controls
+                    src={mediaPreview}
+                    className={styles.mediaPreview}
+                  >
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              )}
+            </div>
+          )}
+
           <hr className={styles.lineBreak} />
           <div className={styles.media}>
             <label className={styles.mediaIcon}>
               <BsImage />
               <input
                 type="file"
+                ref={fileInputRef}
                 style={{ display: "none" }}
-                accept="image/*"
-                onChange={handleImageChange}
+                accept="image/*, audio/*, video/*"
+                onChange={handleMediaChange}
               />
               <div className={styles.tooltip}>Media</div>
             </label>
-            {imagePreview && (
-              <img
-                className={styles.imagePreview}
-                src={imagePreview}
-                alt="Preview"
-              />
-            )}
+
             <div
               className={`${styles.postBtn} ${
-                content.trim() || imageData ? styles.active : ""
+                content.trim() || file ? styles.active : ""
               }`}
               onClick={handleSubmit}
             >

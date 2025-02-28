@@ -27,7 +27,7 @@
   top: 0%; /* Position it above the More button */
   right: 2%;
   min-width: 200px;
-  border-radius: 15px;
+  border-radius: 10px;
   background-color: black;
   box-shadow: 7px 5px 35px 7px rgba(80, 79, 79, 0.3);
   z-index: 1000;
@@ -40,20 +40,90 @@
   cursor: pointer;
 }
 .layoutMore div:hover {
-  background-color: rgb(32, 32, 32);
+  background-color: rgb(12, 12, 12);
 }
 .item1 {
   color: red;
-  padding: 4px 7px 4px 12px;
+  padding: 10px 7px 4px 12px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
-.item2 {
-  padding: 4px 7px 4px 12px;
+.item2,
+.item3,
+.item4 {
+  padding: 10px 7px 4px 12px;
 }
 
-.item3 {
-  padding: 4px 7px 4px 12px;
+.item5 {
+  padding: 4px 7px 12px 12px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+}
+
+/* Overlay styles */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(104, 124, 141, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup {
+  background-color: black;
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  max-width: 320px;
+}
+
+.title {
+  margin-bottom: 10px;
+  font-size: 23px;
+  font-weight: bold;
+  color: white;
+}
+.description {
+  color: rgb(92, 90, 90);
+  font-size: 19px;
+}
+.popupButton1 {
+  margin-top: 20px;
+}
+.popupButton2 {
+  margin-top: 14px;
+}
+
+.deleteBtn,
+.cancelBtn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 19px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+.deleteBtn {
+  background-color: red;
+  width: 100%;
+}
+.deleteBtn:hover {
+  background-color: rgb(226, 49, 49);
+}
+
+.cancelBtn {
+  background-color: black;
+  border: 1px solid rgb(116, 127, 160);
+  width: 100%;
+}
+.cancelBtn:hover {
+  background-color: rgb(24, 23, 23);
 }
