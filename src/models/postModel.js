@@ -20,6 +20,8 @@ const PostSchema = new mongoose.Schema(
     },
     content: { type: String, trim: true, required: false }, // Trim to remove unnecessary spaces
     media: { type: MediaSchema, default: [] }, // Default to empty array (ensures consistency)
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of user IDs
+  
   },
   { timestamps: true } // Adds `createdAt` and `updatedAt`
 );

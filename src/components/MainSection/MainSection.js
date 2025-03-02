@@ -15,7 +15,7 @@ const MainSection = () => {
   // Fetch posts from the API
   const fetchPosts = async () => {
     try {
-      const response = await fetch("/api/posts", {
+      const response = await fetch("/api/tweet/posts", {
         method: "GET",
       });
 
@@ -51,7 +51,7 @@ const MainSection = () => {
 
   const handleDeletePost = async (postId) => {
     try {
-      const response = await fetch(`/api/posts/${postId}`, {
+      const response = await fetch(`/api/tweet/posts/${postId}`, {
         method: "DELETE",
       });
 

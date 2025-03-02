@@ -57,7 +57,7 @@ const ComposePost = ({ onPostCreated }) => {
     data.append("content", content);
 
     try {
-      const res = await fetch("/api/posts", {
+      const res = await fetch("/api/tweet/posts", {
         method: "POST",
         body: data,
       });

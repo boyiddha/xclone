@@ -64,6 +64,11 @@ export const authOptions = {
             accessToken,
             refreshToken,
             email: userInfo?.email,
+            id: userInfo?.id.toString(), // Convert to string
+            name: userInfo?.name,
+            username: userInfo?.username,
+           // image: userInfo?.image || null, // Default to null if no image => do it when i set user image in db
+            
           };
         } catch (e) {
           console.error(e);
@@ -155,6 +160,10 @@ export const authOptions = {
         token.isNewUser = false;
       }
 
+      if(user){
+        token.id=user.id;
+      }
+
       if (account && user) {
         //console.log(`In jwt callback - User is ${JSON.stringify(user)}`);
         //console.log(`In jwt callback - account is ${JSON.stringify(account)}`);
@@ -168,6 +177,8 @@ export const authOptions = {
           // if user found then set it to session
           if (dbUser) {
             user.name = dbUser.fullName;
+            user.id = dbUser._id;
+            user.username = dbUser.userName;
             // user.image = dbUser.image // set image if the db has an image or like as profile pic
           }
         }
@@ -179,6 +190,8 @@ export const authOptions = {
           user: {
             ...user,
             name: user.name, // Ensure `name` is set here from db
+            id: user.id,
+            username: user.username,
           },
         };
       }
@@ -229,9 +242,13 @@ export const authOptions = {
         image: token.user?.image ?? session.user.image,
         isNewUser: token?.isNewUser ?? session?.isNewUser,
         error: token?.error ?? null,
+        id: token?.id ?? session?.id,
+        username: token?.user?.username ?? token?.username ?? session?.username,
       };
 
-      //console.log(" ❌ after setting session is: ", session);
+      // console.log(" ❌ after setting session is: ", session);
+      // console.log(" ❌ after setting token is: ", token);
+
 
       //session.error = token?.error ?? null; // Ensure session.error is always present
 

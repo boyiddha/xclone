@@ -4,6 +4,10 @@
   border-radius: 50%;
   cursor: pointer;
 }
+
+.icon3{
+  background-color: yellow;
+}
 .icon1:hover {
   color: rgb(52, 91, 218);
   background-color: rgb(32, 32, 32);

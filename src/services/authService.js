@@ -22,7 +22,7 @@ export const loginService = async (email, password) => {
     accessToken,
     refreshToken,
     expiresIn: 10,
-    userInfo: { email: user.email },
+    userInfo: { email: user.email, name: user.fullName, username: user.userName, id:user._id },
     status: 200,
   };
 };

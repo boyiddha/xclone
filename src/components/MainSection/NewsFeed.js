@@ -68,7 +68,7 @@ const NewsFeed = ({ posts, fullName, userName, onDeletePost }) => {
                 )}
               </div>
               <div className={styles.reaction}>
-                <NewsFeedFooter />
+                <NewsFeedFooter  postId={post._id} likes={post.likes}/>
               </div>
             </div>
           </div>
