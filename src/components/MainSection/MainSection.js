@@ -81,10 +81,9 @@ const MainSection = () => {
         <div className={styles.head}>
           <div className={styles.you}>For you</div>
           <div className={styles.following}>Following</div>
+        
         </div>
-        <div>
-          <hr className={styles.lineBreak} />
-        </div>
+      
         <div>
           {" "}
           <ComposePost onPostCreated={handleNewPost} />{" "}

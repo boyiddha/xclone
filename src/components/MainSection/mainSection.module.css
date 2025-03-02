@@ -10,18 +10,28 @@
   cursor: pointer;
   font-size: 17px;
   font-weight: bold;
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: black;
+border-bottom: 1px solid rgba(233, 228, 228, 0.3);
+
 }
 .you {
   width: 50%;
   color: white;
-  height: 60px;
+  height: 50px;
   padding-top: 15px;
+  display: inline-block;
 }
 .following {
   flex: 1;
   color: gray;
-  height: 60px;
+  height: 50px;
   padding-top: 15px;
+  display: inline-block;
+
 }
 .you:hover,
 .following:hover {

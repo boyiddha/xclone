@@ -43,12 +43,16 @@
   text-align: center;
   border-left: 1px solid rgba(185, 183, 183, 0.3);
   border-right: 1px solid rgba(233, 228, 228, 0.3);
+
 }
 .sidebar {
   flex: 1; /* Takes the remaining space */
   min-width: 370px;
   flex-shrink: 0; /* Prevent shrinking */
   text-align: left;
+
+  position: sticky;
+  top: -200px;  
 }
 
 /* When screen is below 1280px, Navbar shrinks down to 100px */

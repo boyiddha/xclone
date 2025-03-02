@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./sidebar.module.css";
 import { IoIosSearch } from "react-icons/io";
 import { FaTimesCircle } from "react-icons/fa";

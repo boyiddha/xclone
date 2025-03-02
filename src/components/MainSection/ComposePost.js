@@ -4,6 +4,14 @@ import user from "./../../../public/images/user.jpeg";
 import { BsImage } from "react-icons/bs";
 import Image from "next/image";
 import { ImCross } from "react-icons/im";
+import { MdOutlineGifBox } from "react-icons/md";
+import { VscVscodeInsiders } from "react-icons/vsc";
+import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
+import { MdEmojiEmotions } from "react-icons/md";
+import { RiCalendarScheduleLine } from "react-icons/ri";
+import { CiLocationOn } from "react-icons/ci";
+
+
 
 const ComposePost = ({ onPostCreated }) => {
   const [content, setContent] = useState("");
@@ -138,8 +146,9 @@ const ComposePost = ({ onPostCreated }) => {
 
           <hr className={styles.lineBreak} />
           <div className={styles.media}>
-            <label className={styles.mediaIcon}>
-              <BsImage />
+            <label>
+              <span className={styles.mediaIcon}>
+              <BsImage className={styles.icon} />
               <input
                 type="file"
                 ref={fileInputRef}
@@ -148,6 +157,15 @@ const ComposePost = ({ onPostCreated }) => {
                 onChange={handleMediaChange}
               />
               <div className={styles.tooltip}>Media</div>
+              </span>
+             
+
+              <MdOutlineGifBox className={styles.icon} />
+              <VscVscodeInsiders className={styles.icon} />
+              <HiOutlineAdjustmentsHorizontal className={styles.icon} />
+              <MdEmojiEmotions className={styles.icon} />
+              <RiCalendarScheduleLine className={styles.icon} />
+              <CiLocationOn className={styles.icon} />
             </label>
 
             <div
