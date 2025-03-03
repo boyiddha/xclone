@@ -1,4 +1,9 @@
-import { savePost, findPostsByUserId } from "@/repositories/postRepository";
+import {
+  savePost,
+  findPostsByUserId,
+  findPostByPostId,
+  toggleLikeOnPost,
+} from "@/repositories/postRepository";
 
 const convertToBase64 = async (file) => {
   const buffer = await file.arrayBuffer();
@@ -28,4 +33,15 @@ export const createPostService = async (userId, content, file) => {
 
 export const getUserPostsService = async (userId) => {
   return await findPostsByUserId(userId);
+};
+
+export const likePostService = async (postId, userId) => {
+  const post = await findPostByPostId(postId);
+
+  if (!post) {
+    return { success: false, message: "Post not found", status: 404 };
+  }
+
+  const { likes, liked } = await toggleLikeOnPost(postId, userId);
+  return { success: true, likes, liked };
 };

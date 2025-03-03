@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { findUserByEmail } from "@/services/userService";
-import { createPostService, getUserPostsService } from "@/services/postService";
+import {
+  createPostService,
+  getUserPostsService,
+  likePostService,
+} from "@/services/postService";
 
 export const createPost = async (request) => {
   try {
@@ -78,5 +82,32 @@ export const getPosts = async () => {
       success: false,
       message: "Failed to retrieve posts",
     });
+  }
+};
+
+export const likeOrUnlikePost = async (req) => {
+  try {
+    const { postId, currentUserId } = await req.json();
+    // console.log(`postId: ${postId}, userId: ${currentUserId}`);
+
+    const result = await likePostService(postId, currentUserId);
+
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, message: result.message },
+        { status: result.status }
+      );
+    }
+
+    return NextResponse.json(
+      { likes: result.likes, liked: result.liked },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("❌ Error in like/unlike Controller:", error);
+    return NextResponse.json(
+      { message: "Internal server error", error: error.message },
+      { status: 500 }
+    );
   }
 };

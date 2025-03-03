@@ -1,33 +1,43 @@
 .icon {
   position: relative; /* Needed to position the tooltip */
-  padding: 6px;
-  border-radius: 50%;
   cursor: pointer;
 }
 
-.icon3{
-  background-color: yellow;
+.iconRVBS {
+  padding: 7px;
 }
 .icon1:hover {
   color: rgb(52, 91, 218);
-  background-color: rgb(32, 32, 32);
+}
+.icon1:hover .iconRVBS {
+  border-radius: 50%;
+  background-color: rgb(1, 9, 36);
+}
+
+.iconRepost {
+  padding: 7px;
 }
 .icon2:hover {
   color: rgb(93, 204, 71);
-  background-color: rgb(32, 32, 32);
+}
+.icon2:hover .iconRepost {
+  border-radius: 50%;
+  background-color: rgb(6, 34, 1);
+}
+.iconLike {
+  padding: 10px;
 }
 .icon3:hover {
-  color: rgb(245, 47, 56);
-  background-color: rgb(32, 32, 32);
+  color: rgb(238, 49, 128);
 }
-.icon4:hover {
-  color: rgb(52, 91, 218);
-  background-color: rgb(32, 32, 32);
+.icon3:hover .iconLike {
+  border-radius: 50%;
+  background-color: rgb(39, 1, 17);
 }
+
 .icon1:hover .tooltip,
 .icon2:hover .tooltip,
-.icon3:hover .tooltip,
-.icon4:hover .tooltip {
+.icon3:hover .tooltip {
   visibility: visible;
   opacity: 1;
 }
