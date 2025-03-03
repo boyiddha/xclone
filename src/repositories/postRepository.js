@@ -27,3 +27,18 @@ export const toggleLikeOnPost = async (postId, userId) => {
 
   return { likes: updatedPost.likes.length, liked: !hasLiked };
 };
+
+export const toggleRepost = async (postId, userId) => {
+  const post = await findPostByPostId(postId);
+  const hasReposted = post.reposts.includes(userId);
+
+  const updatedPost = await Post.findOneAndUpdate(
+    { _id: postId },
+    hasReposted
+      ? { $pull: { reposts: userId } }
+      : { $addToSet: { reposts: userId } },
+    { new: true }
+  );
+
+  return { reposts: updatedPost.reposts.length, reposted: !hasReposted };
+};

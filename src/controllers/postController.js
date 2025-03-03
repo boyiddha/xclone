@@ -6,6 +6,7 @@ import {
   createPostService,
   getUserPostsService,
   likePostService,
+  repostWithoutQuoteService,
 } from "@/services/postService";
 
 export const createPost = async (request) => {
@@ -105,6 +106,33 @@ export const likeOrUnlikePost = async (req) => {
     );
   } catch (error) {
     console.error("❌ Error in like/unlike Controller:", error);
+    return NextResponse.json(
+      { message: "Internal server error", error: error.message },
+      { status: 500 }
+    );
+  }
+};
+
+export const repostWithoutQuote = async (req) => {
+  try {
+    const { postId, currentUserId } = await req.json();
+    // console.log(`postId: ${postId}, userId: ${currentUserId}`);
+
+    const result = await repostWithoutQuoteService(postId, currentUserId);
+
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, message: result.message },
+        { status: result.status }
+      );
+    }
+
+    return NextResponse.json(
+      { reposts: result.reposts, reposted: result.reposted },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("❌ Error in repost without quote Controller:", error);
     return NextResponse.json(
       { message: "Internal server error", error: error.message },
       { status: 500 }

@@ -3,6 +3,7 @@ import {
   findPostsByUserId,
   findPostByPostId,
   toggleLikeOnPost,
+  toggleRepost,
 } from "@/repositories/postRepository";
 
 const convertToBase64 = async (file) => {
@@ -44,4 +45,15 @@ export const likePostService = async (postId, userId) => {
 
   const { likes, liked } = await toggleLikeOnPost(postId, userId);
   return { success: true, likes, liked };
+};
+
+export const repostWithoutQuoteService = async (postId, userId) => {
+  const post = await findPostByPostId(postId);
+
+  if (!post) {
+    return { success: false, message: "Post not found", status: 404 };
+  }
+
+  const { reposts, reposted } = await toggleRepost(postId, userId);
+  return { success: true, reposts, reposted };
 };

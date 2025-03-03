@@ -7,17 +7,46 @@ import { FaHeart } from "react-icons/fa";
 import { RiBarChartGroupedLine } from "react-icons/ri";
 import { CiBookmark } from "react-icons/ci";
 import { MdOutlineFileUpload } from "react-icons/md";
+import { LuPenLine } from "react-icons/lu";
 
 import styles from "./newsFeedFooter.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 
-const NewsFeedFooter = ({ postId, likes }) => {
+const NewsFeedFooter = ({ postId, likes, reposts }) => {
   const [likeCount, setLikeCount] = useState(likes?.length || 0);
   const [liked, setLiked] = useState(false);
+
+  const [repostCount, setRepostedCount] = useState(reposts?.length || 0);
+  const [reposted, setReposted] = useState(false);
+
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [isOpenMore, setIsOpenMore] = useState(false);
+  const boxMoreRef = useRef(null);
 
   const { data: session } = useSession();
+
+  // Toggle function
+  const toggleMore = () => {
+    setIsOpenMore(true); // Open MoreOptions
+  };
+
+  // Close MoreOptions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (boxMoreRef.current && !boxMoreRef.current.contains(event.target)) {
+        setIsOpenMore(false); // Close MoreOptions when clicking outside
+      }
+    };
+
+    if (isOpenMore) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpenMore]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -34,6 +63,7 @@ const NewsFeedFooter = ({ postId, likes }) => {
           setCurrentUserId(userId);
 
           setLiked(likes.includes(userId));
+          setReposted(reposts.includes(userId));
         }
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -57,20 +87,63 @@ const NewsFeedFooter = ({ postId, likes }) => {
     }
   };
 
+  const handleRepost = async () => {
+    const res = await fetch("/api/tweet/repost", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ postId, currentUserId }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setReposted(data.reposted);
+      setRepostedCount(data.reposts);
+      setIsOpenMore(false);
+    }
+  };
+
   return (
     <>
       <div className={`${styles.icon} ${styles.icon1}`}>
         <span className={styles.iconRVBS}>
           <LuMessageCircle />
+          <div className={styles.tooltip}>Reply</div>
         </span>
-        <div className={styles.tooltip}>Reply</div>
       </div>
-      <div className={`${styles.icon} ${styles.icon2}`}>
-        <span className={styles.iconRepost}>
-          {" "}
-          <BiRepost />
-        </span>
-        <div className={styles.tooltip}>Repost</div>
+      <div style={{ position: "relative" }}>
+        <div
+          className={`${styles.icon} ${styles.icon2} ${
+            isOpenMore && !reposted ? styles.disabled : ""
+          } `}
+          style={{ color: reposted ? "rgb(93, 204, 71)" : "" }}
+          onClick={reposted ? handleRepost : undefined}
+        >
+          <span className={styles.iconRepost}>
+            {" "}
+            <BiRepost onClick={toggleMore} />
+            <div className={styles.tooltip}>
+              {reposted ? "Undo Repost" : "Repost"}
+            </div>
+          </span>
+          <span>{repostCount > 0 ? repostCount : ""}</span>
+        </div>
+        {isOpenMore && !reposted && (
+          <div ref={boxMoreRef}>
+            <div className={styles.layoutMore}>
+              <div className={styles.rowRepost} onClick={handleRepost}>
+                <span className={styles.space}>
+                  <BiRepost />
+                </span>
+                Repost
+              </div>
+              <div className={styles.rowQuote}>
+                <span className={styles.space}>
+                  <LuPenLine />
+                </span>
+                Quote
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <div
         className={`${styles.icon} ${styles.icon3}`}
