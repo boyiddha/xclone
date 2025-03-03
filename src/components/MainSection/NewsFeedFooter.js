@@ -13,7 +13,13 @@ import styles from "./newsFeedFooter.module.css";
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 
-const NewsFeedFooter = ({ postId, likes, reposts }) => {
+const NewsFeedFooter = ({
+  postId,
+  likes,
+  reposts,
+  onPostReposted,
+  onPostRemove,
+}) => {
   const [likeCount, setLikeCount] = useState(likes?.length || 0);
   const [liked, setLiked] = useState(false);
 
@@ -71,7 +77,7 @@ const NewsFeedFooter = ({ postId, likes, reposts }) => {
     };
 
     fetchUser();
-  }, [session, likes]);
+  }, [session?.user?.email]);
 
   const handleLike = async () => {
     const res = await fetch("/api/tweet/like", {
@@ -95,9 +101,19 @@ const NewsFeedFooter = ({ postId, likes, reposts }) => {
     });
     if (res.ok) {
       const data = await res.json();
+
       setReposted(data.reposted);
       setRepostedCount(data.reposts);
       setIsOpenMore(false);
+      if (data.reposted) {
+        // do an repost
+        // update the posts in <MainSection/> to get the updated result in NewsFeed
+        onPostReposted(data.newPost);
+      } else {
+        // remove repost
+        // update the posts in parent
+        onPostRemove(data.repostId);
+      }
     }
   };
 

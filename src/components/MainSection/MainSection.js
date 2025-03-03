@@ -49,6 +49,10 @@ const MainSection = () => {
     setPosts([newPost, ...posts]); // Add new post at the top
   };
 
+  const handlePostRemoved = (repostId) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== repostId)); // Remove repost
+  };
+
   const handleDeletePost = async (postId) => {
     try {
       const response = await fetch(`/api/tweet/posts/${postId}`, {
@@ -81,9 +85,8 @@ const MainSection = () => {
         <div className={styles.head}>
           <div className={styles.you}>For you</div>
           <div className={styles.following}>Following</div>
-        
         </div>
-      
+
         <div>
           {" "}
           <ComposePost onPostCreated={handleNewPost} />{" "}
@@ -99,9 +102,12 @@ const MainSection = () => {
           ) : (
             <NewsFeed
               posts={posts}
+              originalPosts={posts} // pass same posts to find originals
               fullName={fullName}
               userName={userName}
               onDeletePost={handleDeletePost}
+              onPostReposted={handleNewPost}
+              handlePostRemoved={handlePostRemoved}
             />
           )}
         </div>

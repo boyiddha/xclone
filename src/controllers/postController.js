@@ -128,7 +128,11 @@ export const repostWithoutQuote = async (req) => {
     }
 
     return NextResponse.json(
-      { reposts: result.reposts, reposted: result.reposted },
+      {
+        reposts: result.reposts,
+        reposted: result.reposted,
+        newPost: result.newPost,
+      },
       { status: 200 }
     );
   } catch (error) {

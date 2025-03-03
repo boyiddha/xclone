@@ -22,6 +22,11 @@ const PostSchema = new mongoose.Schema(
     media: { type: MediaSchema, default: [] }, // Default to empty array (ensures consistency)
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who liked this post
     reposts: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who reposted this post
+    reposted: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+      default: null, // Stores the original post ID if it's a repost
+    },
   },
   { timestamps: true } // Adds `createdAt` and `updatedAt`
 );
