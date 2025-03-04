@@ -21,6 +21,7 @@ import styles from "./navbar.module.css";
 import { useEffect, useRef, useState } from "react";
 import MoreOptions from "./MoreOptions";
 import AccountOptions from "./AccountOptions";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const [isOpenMore, setIsOpenMore] = useState(false);
@@ -28,6 +29,7 @@ const Navbar = () => {
   const boxMoreRef = useRef(null);
   const boxAccountRef = useRef(null);
   const accountItemRef = useRef(null);
+  const router = useRouter();
 
   // Toggle function
   const toggleMore = () => {
@@ -94,6 +96,7 @@ const Navbar = () => {
                 <div
                   className={`${styles.item} ${styles.menuContainer2}`}
                   data-tooltip="Home"
+                  onClick={() => router.push("/home")}
                 >
                   <div className={styles.icon}>
                     {" "}

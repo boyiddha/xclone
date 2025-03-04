@@ -1,0 +1,8 @@
+.reactionsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; /* This will place items on the left and right */
+  align-items: center;
+
+  height: 45px;
+}

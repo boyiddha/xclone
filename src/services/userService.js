@@ -13,7 +13,14 @@
 //   return await createUser(userData);
 // }
 
-import { getUserByEmail, createUser,createOauthUser, updateUser,savePassword,saveUsername } from "@/repositories/userRepository";
+import {
+  getUserByEmail,
+  createUser,
+  createOauthUser,
+  updateUser,
+  savePassword,
+  saveUsername,
+} from "@/repositories/userRepository";
 import { createHashPassword } from "@/helpers/passwordHelper";
 
 export const findUserByEmail = async (email) => {
@@ -24,7 +31,7 @@ export const findUserByEmail = async (email) => {
     }
     return { success: true, user };
   } catch (error) {
-        throw new Error(error); // Let the controller handle errors
+    throw new Error(error); // Let the controller handle errors
   }
 };
 
@@ -34,17 +41,17 @@ export async function createUserService(name, email, dob) {
     await createUser({ fullName: name, email, dob });
     return { success: true };
   } catch (error) {
-    return { success: false, message:error };
+    return { success: false, message: error };
   }
 }
 
-export async function createUserOuathService(email,name) {
+export async function createUserOuathService(email, name) {
   try {
     // Call the repository function to save user
-    await createOauthUser({fullName:name, email });
+    await createOauthUser({ fullName: name, email });
     return { success: true };
   } catch (error) {
-    return { success: false, message:error };
+    return { success: false, message: error };
   }
 }
 
@@ -59,15 +66,20 @@ export const updateUserService = async (email, dob, password, username) => {
       return { success: false, message: "User not found" };
     }
 
-    return { success: true, message: "User updated successfully", user: updatedUser };
+    return {
+      success: true,
+      message: "User updated successfully",
+      user: updatedUser,
+    };
   } catch (error) {
-    return { success: false, message: `Failed to update user ${error.message}`  };
+    return {
+      success: false,
+      message: `Failed to update user ${error.message}`,
+    };
   }
 };
 
-
 export const savePasswordService = async (email, password) => {
-
   // Hash the password
   const hashedPassword = await createHashPassword(password);
 
@@ -82,7 +94,6 @@ export const savePasswordService = async (email, password) => {
 };
 
 export const saveUsernameService = async (email, username) => {
-
   // Update user password
   const updatedUser = await saveUsername(email, username);
 
@@ -92,5 +103,3 @@ export const saveUsernameService = async (email, username) => {
 
   return { message: "Username updated successfully", status: 200 };
 };
-
-

@@ -1,0 +1,45 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; /* This will place items on the left and right */
+  padding-top: 10px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: row;
+  margin-top: 15px;
+}
+
+.profileImg {
+  margin-right: 10px;
+}
+
+.img {
+  border-radius: 50%;
+}
+.profileName {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.fullname {
+  font-weight: bold;
+}
+.username {
+  margin-top: 3px;
+  color: rgb(129, 128, 128);
+}
+
+.more {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.more:hover {
+  background-color: rgb(39, 38, 38);
+  color: rgb(48, 86, 209);
+}

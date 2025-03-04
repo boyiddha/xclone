@@ -63,6 +63,11 @@
 .mainText {
   text-align: left;
   padding-bottom: 3px;
+  cursor: pointer;
+}
+
+.mainText:hover {
+  background-color: rgb(14, 14, 14);
 }
 
 .postContent {

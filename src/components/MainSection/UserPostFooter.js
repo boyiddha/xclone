@@ -10,20 +10,15 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { LuPenLine } from "react-icons/lu";
 
 import styles from "./newsFeedFooter.module.css";
+import styles2 from "./userPostFooter.module.css";
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 
-const NewsFeedFooter = ({
-  postId,
-  likes,
-  reposts,
-  onPostReposted,
-  onPostRemove,
-}) => {
-  const [likeCount, setLikeCount] = useState(likes?.length || 0);
+const UserPostFooter = ({ post, postId }) => {
+  const [likeCount, setLikeCount] = useState(post.likes?.length || 0);
   const [liked, setLiked] = useState(false);
 
-  const [repostCount, setRepostedCount] = useState(reposts?.length || 0);
+  const [repostCount, setRepostedCount] = useState(post.reposts?.length || 0);
   const [reposted, setReposted] = useState(false);
 
   const [currentUserId, setCurrentUserId] = useState(null);
@@ -59,7 +54,7 @@ const NewsFeedFooter = ({
       if (!session?.user?.email) return;
 
       try {
-        const res = await fetch("api/me", {
+        const res = await fetch("/api/me", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
@@ -67,8 +62,8 @@ const NewsFeedFooter = ({
           const data = await res.json();
           const userId = data._id.toString();
           setCurrentUserId(userId);
-          setLiked(likes.includes(userId));
-          setReposted(reposts.includes(userId));
+          setLiked(post.likes.includes(userId));
+          setReposted(post.reposts.includes(userId));
         }
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -104,21 +99,11 @@ const NewsFeedFooter = ({
       setReposted(data.reposted);
       setRepostedCount(data.reposts);
       setIsOpenMore(false);
-      if (data.reposted) {
-        // do an repost
-        // update the posts in <MainSection/> to get the updated result in NewsFeed
-        onPostReposted(data.newPost);
-      } else {
-        // remove repost
-        // update the posts in parent
-        //console.log("removed reposted id : ", data.removedRepostedId);
-        onPostRemove(data.removedRepostedId);
-      }
     }
   };
 
   return (
-    <>
+    <div className={styles2.reactionsContainer}>
       <div className={`${styles.icon} ${styles.icon1}`}>
         <span className={styles.iconRVBS}>
           <LuMessageCircle />
@@ -198,8 +183,8 @@ const NewsFeedFooter = ({
           <div className={styles.tooltip}>Share</div>
         </span>
       </div>
-    </>
+    </div>
   );
 };
 
-export default NewsFeedFooter;
+export default UserPostFooter;

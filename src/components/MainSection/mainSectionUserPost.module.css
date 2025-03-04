@@ -1,0 +1,110 @@
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 7px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #007bff; /* Change color as needed */
+  border-bottom: 4px solid rgb(43, 155, 43);
+  border-left: 4px solid #407bb9;
+  border-right: 4px solid rgb(97, 167, 97);
+
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: auto; /* Center the spinner */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.lineBreak {
+  height: 1px;
+  background-color: rgba(233, 228, 228, 0.3);
+  border: none;
+}
+
+.postContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.back {
+  color: white;
+  margin-top: 10px;
+  text-align: left;
+}
+.backIcon {
+  margin-right: 20px;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 22px;
+}
+.backIcon:hover {
+  background-color: rgb(26, 26, 26);
+  border-radius: 50%;
+}
+.backTitle {
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.repostedText {
+  color: rgb(116, 113, 113);
+  font-weight: bold;
+  text-align: left;
+  margin-left: 20px;
+  width: 25%;
+}
+.repostedIcon {
+  margin-right: 13px;
+  font-size: 20px;
+}
+.repostedText:hover {
+  border-bottom: 1px solid rgb(66, 66, 66);
+  cursor: pointer;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+.content {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.postContent {
+  white-space: pre-line; /* Ensures that newlines are respected */
+}
+
+.mainText {
+  text-align: left;
+  padding-bottom: 15px;
+}
+
+.view {
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+  color: rgb(110, 110, 110);
+  height: 50px;
+}
+.viewIcon {
+  margin-right: 10px;
+}
+.view:hover {
+  background-color: rgb(17, 17, 17);
+}
+
+.media {
+  width: 100%; /* Take full width of the parent container */
+  height: auto; /* Maintain aspect ratio */
+  display: block;
+  margin-top: 17px;
+  border-radius: 20px;
+}
