@@ -10,8 +10,10 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { LuPenLine } from "react-icons/lu";
 
 import styles from "./newsFeedFooter.module.css";
+import ComposeRepost from "@/components/ComposeRepost/ComposeRepost";
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const NewsFeedFooter = ({
   postId,
@@ -30,11 +32,24 @@ const NewsFeedFooter = ({
   const [isOpenMore, setIsOpenMore] = useState(false);
   const boxMoreRef = useRef(null);
 
+  const [showRepostModal, setShowRepostModal] = useState(false);
+  const router = useRouter();
+
   const { data: session } = useSession();
 
   // Toggle function
   const toggleMore = () => {
     setIsOpenMore(true); // Open MoreOptions
+  };
+
+  const handleOpenRepost = () => {
+    setShowRepostModal(true);
+    router.push("/compose/post", { scroll: false });
+  };
+
+  const handleCloseRepost = () => {
+    router.push("/home"); // Restore previous URL
+    setShowRepostModal(false);
   };
 
   // Close MoreOptions when clicking outside
@@ -151,12 +166,29 @@ const NewsFeedFooter = ({
                 </span>
                 Repost
               </div>
-              <div className={styles.rowQuote}>
+              <div className={styles.rowQuote} onClick={handleOpenRepost}>
                 <span className={styles.space}>
                   <LuPenLine />
                 </span>
                 Quote
               </div>
+            </div>
+          </div>
+        )}
+
+        {showRepostModal && (
+          <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+              <button
+                onClick={handleCloseRepost}
+                className={styles.closeButton}
+              >
+                X
+              </button>
+              <ComposeRepost
+                onPostCreated={() => handleCloseRepost()}
+                repostedPost={postId} // Pass original post
+              />
             </div>
           </div>
         )}
