@@ -54,6 +54,9 @@ export const repostWithoutQuoteService = async (postId, userId) => {
     return { success: false, message: "Post not found", status: 404 };
   }
 
-  const { reposts, reposted, newPost } = await toggleRepost(postId, userId);
-  return { success: true, reposts, reposted, newPost };
+  const { reposts, reposted, newPost, removedRepostId } = await toggleRepost(
+    postId,
+    userId
+  );
+  return { success: true, reposts, reposted, newPost, removedRepostId };
 };

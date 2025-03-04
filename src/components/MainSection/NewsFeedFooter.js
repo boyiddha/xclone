@@ -112,7 +112,8 @@ const NewsFeedFooter = ({
       } else {
         // remove repost
         // update the posts in parent
-        onPostRemove(data.repostId);
+        //console.log("removed reposted id : ", data.removedRepostedId);
+        onPostRemove(data.removedRepostedId);
       }
     }
   };

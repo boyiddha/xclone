@@ -132,6 +132,7 @@ export const repostWithoutQuote = async (req) => {
         reposts: result.reposts,
         reposted: result.reposted,
         newPost: result.newPost,
+        removedRepostedId: result.removedRepostId,
       },
       { status: 200 }
     );
