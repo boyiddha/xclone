@@ -63,17 +63,56 @@
 .mainText {
   text-align: left;
   padding-bottom: 3px;
+}
+
+.mainContentDiv {
   cursor: pointer;
 }
-
-.mainText:hover {
+.mainContentDiv:hover {
   background-color: rgb(14, 14, 14);
 }
-
 .postContent {
   white-space: pre-line; /* Ensures that newlines are respected */
 }
 
+.ownerPostContainer {
+  width: 90%;
+  margin-top: 7px;
+  border-radius: 15px;
+  border: 1px solid rgb(51, 51, 51);
+  cursor: pointer;
+  padding: 7px;
+}
+.ownerPostContainer:hover {
+  background-color: rgb(14, 14, 14);
+}
+.ownerPostHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.ownerUsername {
+  margin-left: 7px;
+  font-size: 17px;
+  color: rgb(116, 115, 115);
+}
+
+.ownerFullname {
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  margin-left: 6px;
+}
+
+.ownerPostContent {
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  color: white;
+}
 .media {
   width: 100%; /* Take full width of the parent container */
   height: auto; /* Maintain aspect ratio */

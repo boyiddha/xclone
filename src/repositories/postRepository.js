@@ -10,6 +10,11 @@ export const findPostsByUserId = async (userId) => {
   return await Post.find({ userId }).sort({ createdAt: -1 });
 };
 
+// return all posts from db
+export const findAllPosts = async () => {
+  return await Post.find().sort({ createdAt: -1 });
+};
+
 // return a post associtae with this postId
 export const findPostByPostId = async (postId) => {
   return await Post.findById(postId);
@@ -28,57 +33,7 @@ export const toggleLikeOnPost = async (postId, userId) => {
   return { likes: updatedPost.likes.length, liked: !hasLiked };
 };
 
-// export const toggleRepost = async (postId, userId) => {
-//   try {
-//     const post = await Post.findById(postId);
-//     if (!post) {
-//       throw new Error("Post not found");
-//     }
-
-//     const hasReposted = post.reposts.includes(userId);
-//     let newRepost = null;
-//     let removedRepostedId = null;
-//     // Update the original post's reposts array
-//     const updatedPost = await Post.findByIdAndUpdate(
-//       postId,
-//       hasReposted
-//         ? { $pull: { reposts: userId } } // Remove user from reposts
-//         : { $addToSet: { reposts: userId } }, // Add user to reposts
-//       { new: true }
-//     );
-
-//     if (hasReposted) {
-//       // If user already reposted, delete their reposted post
-//       const removedRepost = await Post.findOneAndDelete({
-//         userId,
-//         reposted: postId,
-//       });
-//       removedRepostedId = removedRepost ? removedRepost._id : null;
-//     } else {
-//       // If user is reposting for the first time, create a new reposted post
-//       newRepost = await Post.create({
-//         userId,
-//         content: "",
-//         media: {},
-//         likes: [],
-//         reposts: [],
-//         reposted: postId, // Store the original post ID
-//       });
-//     }
-
-//     return {
-//       reposts: updatedPost.reposts.length,
-//       reposted: !hasReposted,
-//       newPost: newRepost,
-//       removedRepostedId, // return removed repost id when undo repost
-//     };
-//   } catch (error) {
-//     console.error("❌ Error in toggleRepost:", error);
-//     throw new Error("Failed to toggle repost");
-//   }
-// };
-
-export const toggleRepost = async (postId, userId) => {
+export const toggleRepost = async (postId, userId, content) => {
   try {
     let post = await Post.findById(postId);
     if (!post) {
@@ -117,7 +72,7 @@ export const toggleRepost = async (postId, userId) => {
       // If user is reposting a repost, make sure it references the original post
       newRepost = await Post.create({
         userId,
-        content: "",
+        content,
         media: {},
         likes: [],
         reposts: [],

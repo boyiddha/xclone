@@ -4,9 +4,10 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { findUserByEmail } from "@/services/userService";
 import {
   createPostService,
+  getAllPostsService,
   getUserPostsService,
   likePostService,
-  repostWithoutQuoteService,
+  repostService,
 } from "@/services/postService";
 
 export const createPost = async (request) => {
@@ -56,7 +57,7 @@ export const createPost = async (request) => {
   }
 };
 
-export const getPosts = async () => {
+export const getUserPosts = async (req) => {
   try {
     // Get user session
     const session = await getServerSession(authOptions);
@@ -75,6 +76,20 @@ export const getPosts = async () => {
 
     // Fetch posts from the service
     const posts = await getUserPostsService(res.user._id);
+
+    return NextResponse.json({ success: true, posts });
+  } catch (error) {
+    console.error("Fetch Error:", error);
+    return NextResponse.json({
+      success: false,
+      message: "Failed to retrieve posts",
+    });
+  }
+};
+
+export const returnAllPosts = async (req) => {
+  try {
+    const posts = await getAllPostsService();
 
     return NextResponse.json({ success: true, posts });
   } catch (error) {
@@ -113,12 +128,12 @@ export const likeOrUnlikePost = async (req) => {
   }
 };
 
-export const repostWithoutQuote = async (req) => {
+export const repostController = async (req) => {
   try {
-    const { postId, currentUserId } = await req.json();
+    const { postId, currentUserId, content } = await req.json();
     // console.log(`postId: ${postId}, userId: ${currentUserId}`);
 
-    const result = await repostWithoutQuoteService(postId, currentUserId);
+    const result = await repostService(postId, currentUserId, content);
 
     if (!result.success) {
       return NextResponse.json(

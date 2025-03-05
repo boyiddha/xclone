@@ -37,20 +37,16 @@ const NewsFeedFooter = ({
 
   const { data: session } = useSession();
 
-  // Toggle function
-  const toggleMore = () => {
-    setIsOpenMore(true); // Open MoreOptions
-  };
+  useEffect(() => {
+    const handlePopState = () => {
+      setShowRepostModal(false);
+    };
 
-  const handleOpenRepost = () => {
-    setShowRepostModal(true);
-    router.push("/compose/post", { scroll: false });
-  };
-
-  const handleCloseRepost = () => {
-    router.push("/home"); // Restore previous URL
-    setShowRepostModal(false);
-  };
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   // Close MoreOptions when clicking outside
   useEffect(() => {
@@ -74,7 +70,7 @@ const NewsFeedFooter = ({
       if (!session?.user?.email) return;
 
       try {
-        const res = await fetch("api/me", {
+        const res = await fetch(`${window.location.origin}/api/me`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
@@ -93,6 +89,22 @@ const NewsFeedFooter = ({
     fetchUser();
   }, [session?.user?.email]);
 
+  // Toggle function
+  const toggleMore = () => {
+    setIsOpenMore(true); // Open MoreOptions
+  };
+
+  const handleOpenRepost = () => {
+    setIsOpenMore(false);
+    setShowRepostModal(true);
+    window.history.pushState(null, "", "/compose/post"); // Change URL without navigation
+  };
+
+  const handleCloseRepost = () => {
+    setShowRepostModal(false);
+    router.push("/home");
+  };
+
   const handleLike = async () => {
     const res = await fetch("/api/tweet/like", {
       method: "POST",
@@ -108,10 +120,11 @@ const NewsFeedFooter = ({
   };
 
   const handleRepost = async () => {
+    let content = "";
     const res = await fetch("/api/tweet/repost", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ postId, currentUserId }),
+      body: JSON.stringify({ postId, currentUserId, content }),
     });
     if (res.ok) {
       const data = await res.json();
@@ -177,20 +190,13 @@ const NewsFeedFooter = ({
         )}
 
         {showRepostModal && (
-          <div className={styles.modalOverlay}>
-            <div className={styles.modalContent}>
-              <button
-                onClick={handleCloseRepost}
-                className={styles.closeButton}
-              >
-                X
-              </button>
-              <ComposeRepost
-                onPostCreated={() => handleCloseRepost()}
-                repostedPost={postId} // Pass original post
-              />
-            </div>
-          </div>
+          <ComposeRepost
+            onPostReposted={onPostReposted}
+            setReposted={setReposted}
+            setRepostedCount={setRepostedCount}
+            handleCloseRepost={() => handleCloseRepost()}
+            repostedId={postId} // Pass original post
+          />
         )}
       </div>
       <div

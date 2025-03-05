@@ -11,11 +11,24 @@ const MainSection = () => {
   const [fullName, setFullName] = useState("");
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState([]);
+
+  // fetch all users (fullName, userName)
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch("/api/users");
+      if (!res.ok) throw new Error("Failed to fetch users");
+      const data = await res.json();
+      setUsers(data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
 
   // Fetch posts from the API
-  const fetchPosts = async () => {
+  const fetchAllPosts = async () => {
     try {
-      const response = await fetch("/api/tweet/posts", {
+      const response = await fetch("/api/posts", {
         method: "GET",
       });
 
@@ -75,7 +88,8 @@ const MainSection = () => {
 
   // Fetch posts on component mount
   useEffect(() => {
-    fetchPosts();
+    fetchUsers();
+    fetchAllPosts();
     fetchMe();
   }, []);
 
@@ -105,6 +119,7 @@ const MainSection = () => {
               originalPosts={posts} // pass same posts to find originals
               fullName={fullName}
               userName={userName}
+              users={users}
               onDeletePost={handleDeletePost}
               onPostReposted={handleNewPost}
               handlePostRemoved={handlePostRemoved}

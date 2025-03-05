@@ -1,4 +1,4 @@
-import { repostWithoutQuote } from "@/controllers/postController";
+import { repostController } from "@/controllers/postController";
 export const POST = async (request) => {
-  return await repostWithoutQuote(request);
+  return await repostController(request);
 };

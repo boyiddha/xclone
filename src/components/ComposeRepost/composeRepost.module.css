@@ -1,0 +1,166 @@
+/* Overlay covering the whole screen */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(49, 49, 49, 0.5); /* Dark transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures it appears above other content */
+}
+
+/* Pop-up box styling */
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: black;
+  max-width: 550px;
+  width: 100%;
+  padding: 20px 20px 20px 5px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Close button */
+.closeButton {
+  background: none;
+  color: white;
+  border: none;
+  font-size: 20px;
+  padding: 7px;
+  cursor: pointer;
+}
+.closeButton:hover {
+  border-radius: 50%;
+  background-color: rgb(36, 36, 36);
+}
+
+.inputField {
+  display: flex;
+  flex-direction: row;
+  padding: 3px;
+}
+
+.profile {
+  display: flex;
+  display: flex;
+  justify-content: center;
+}
+.img {
+  border-radius: 50%;
+}
+.textArea {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-left: 3px;
+}
+
+.textArea textarea {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  resize: none;
+  color: rgb(238, 236, 236);
+  font-size: 18px;
+  font-weight: bold;
+  background-color: black;
+  outline: none; /* Remove the focus outline */
+}
+.textArea textarea:focus {
+  outline: none; /* Ensure no outline is shown when the textarea is focused */
+}
+
+.postContainer {
+  width: 90%;
+  margin-left: 30px;
+  border-radius: 15px;
+  border: 1px solid rgb(51, 51, 51);
+}
+.contentDiv {
+  padding: 5px;
+}
+
+.postHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.username {
+  margin-left: 7px;
+  font-size: 17px;
+  color: rgb(116, 115, 115);
+}
+
+.fullname {
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  margin-left: 6px;
+}
+
+.postContent {
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  color: white;
+}
+
+.media {
+  width: 100%; /* Take full width of the parent container */
+  height: auto; /* Maintain aspect ratio */
+  display: block;
+  margin-top: 17px;
+  border-radius: 20px;
+}
+
+/* Post button */
+.postButton {
+  background-color: rgb(167, 167, 167);
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  align-self: flex-end;
+}
+
+.active {
+  cursor: pointer;
+  background-color: white;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 7px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #007bff; /* Change color as needed */
+  border-bottom: 4px solid rgb(43, 155, 43);
+  border-left: 4px solid #407bb9;
+  border-right: 4px solid rgb(97, 167, 97);
+
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: auto; /* Center the spinner */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
