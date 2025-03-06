@@ -10,11 +10,14 @@ import { RiBarChartGroupedLine } from "react-icons/ri";
 import { BiRepost } from "react-icons/bi";
 
 const MainSectionUserPost = () => {
-  const { username, postId } = useParams(); // Get dynamic parameters
-  const router = useRouter(); // Initialize router for navigation
+  const { username, postId } = useParams();
+  const router = useRouter();
+
   const [post, setPost] = useState(null);
   const [isRepost, setIsRepost] = useState(false);
   const [fullName, setFullName] = useState("");
+  const [ownerImage, setImage] = useState(null);
+  const [ownerId, setOwnerId] = useState(null); // Default to null instead of ""
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -42,33 +45,53 @@ const MainSectionUserPost = () => {
       setLoading(true);
       const postData = await fetchPost(postId);
 
-      if (postData?.reposted) {
-        // Fetch the original post if this is a repost
-        const originalPost = await fetchPost(postData.reposted);
-        if (originalPost) {
-          setPost(originalPost);
+      if (postData) {
+        if (postData.reposted) {
+          const originalPost = await fetchPost(postData.reposted);
+          if (originalPost) {
+            setPost(originalPost);
+            setOwnerId(originalPost.userId);
+          }
+          setIsRepost(true);
+        } else {
+          setPost(postData);
+          setOwnerId(postData.userId);
         }
-        setIsRepost(true);
-      } else {
-        setPost(postData);
       }
 
       setLoading(false);
     };
 
-    const fetchMe = async () => {
-      const res = await fetch("/api/me", { method: "GET" });
-      if (res.ok) {
-        const data = await res.json();
-        setFullName(data.fullName);
-      } else {
-        console.error("Failed to fetch Me");
+    fetchData();
+  }, [postId]);
+
+  //   Use Two useEffect Hooks:
+
+  // First useEffect → Fetches post and sets ownerId.
+  // Second useEffect → Waits for ownerId to update, then fetches the owner.
+  // Fetch owner **only when ownerId is set**
+
+  useEffect(() => {
+    if (!ownerId) return;
+
+    const fetchOwner = async () => {
+      //console.log(" ✅ Fetching owner with Id:", ownerId);
+      try {
+        const res = await fetch(`/api/users/${ownerId}`, { method: "GET" });
+        if (res.ok) {
+          const data = await res.json();
+          setFullName(data.user.fullName);
+          setImage(data.user.image || null);
+        } else {
+          console.error("Failed to fetch owner details");
+        }
+      } catch (error) {
+        console.error("Error fetching owner:", error);
       }
     };
 
-    fetchData();
-    fetchMe();
-  }, [postId]);
+    fetchOwner();
+  }, [ownerId]); // Runs only when ownerId updates
 
   return (
     <>
@@ -83,6 +106,7 @@ const MainSectionUserPost = () => {
           </span>
           <span className={styles.backTitle}>Post</span>
         </div>
+
         {error && <div className={styles.error}>{error}</div>}
         {loading ? (
           <div className={styles.spinner}></div>
@@ -90,9 +114,7 @@ const MainSectionUserPost = () => {
           <div className={styles.content}>
             {isRepost && (
               <div className={styles.repostedText}>
-                <span>
-                  <BiRepost className={styles.repostedIcon} />
-                </span>
+                <BiRepost className={styles.repostedIcon} />
                 <span>You reposted</span>
               </div>
             )}
@@ -101,16 +123,16 @@ const MainSectionUserPost = () => {
               <UserPostHeader
                 fullName={fullName}
                 userName={username}
+                ownerImage={ownerImage}
                 postId={postId}
               />
             </div>
 
             <div className={styles.mainText}>
-              {post.content && (
+              {post?.content && (
                 <div className={styles.postContent}>{post.content}</div>
               )}
-
-              {post.media?.data && (
+              {post?.media?.data && (
                 <div>
                   {post.media.contentType.startsWith("image/") ? (
                     <img

@@ -27,6 +27,15 @@ const PostSchema = new mongoose.Schema(
       ref: "Post",
       default: null, // Stores the original post ID if it's a repost
     },
+    //Each reply is a separate post but references a parentPostId.
+    //If parentPostId is null, it’s a normal post.
+    //If parentPostId is set, it's a reply to another post.
+    parentPostId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+      default: null,
+    },
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who commented in this post
   },
   { timestamps: true } // Adds `createdAt` and `updatedAt`
 );

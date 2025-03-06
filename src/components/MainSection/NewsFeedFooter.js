@@ -11,6 +11,7 @@ import { LuPenLine } from "react-icons/lu";
 
 import styles from "./newsFeedFooter.module.css";
 import ComposeRepost from "@/components/ComposeRepost/ComposeRepost";
+import ComposeReply from "@/components/ComposeReply/ComposeReply";
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -21,6 +22,7 @@ const NewsFeedFooter = ({
   reposts,
   onPostReposted,
   onPostRemove,
+  userImage,
 }) => {
   const [likeCount, setLikeCount] = useState(likes?.length || 0);
   const [liked, setLiked] = useState(false);
@@ -33,6 +35,7 @@ const NewsFeedFooter = ({
   const boxMoreRef = useRef(null);
 
   const [showRepostModal, setShowRepostModal] = useState(false);
+  const [showReplyModal, setShowReplyModal] = useState(false);
   const router = useRouter();
 
   const { data: session } = useSession();
@@ -40,6 +43,7 @@ const NewsFeedFooter = ({
   useEffect(() => {
     const handlePopState = () => {
       setShowRepostModal(false);
+      setShowReplyModal(false);
     };
 
     window.addEventListener("popstate", handlePopState);
@@ -102,6 +106,8 @@ const NewsFeedFooter = ({
 
   const handleCloseRepost = () => {
     setShowRepostModal(false);
+    setShowReplyModal(false);
+
     router.push("/home");
   };
 
@@ -145,14 +151,41 @@ const NewsFeedFooter = ({
     }
   };
 
+  const handleOpenReply = () => {
+    setShowReplyModal(true);
+    window.history.pushState(null, "", "/compose/post"); // Change URL without navigation
+  };
+
+  const handleCloseReply = () => {
+    setShowReplyModal(false);
+    router.push("/home");
+  };
+  // Each reply is a separate post but references a parentPostId.
+  const handleReply = () => {};
+
   return (
     <>
-      <div className={`${styles.icon} ${styles.icon1}`}>
+      <div
+        className={`${styles.icon} ${styles.icon1}`}
+        onClick={handleOpenReply}
+      >
         <span className={styles.iconRVBS}>
           <LuMessageCircle />
           <div className={styles.tooltip}>Reply</div>
         </span>
       </div>
+      {showReplyModal && (
+        <ComposeReply
+          onPostReposted={onPostReposted}
+          setReposted={setReposted}
+          setRepostedCount={setRepostedCount}
+          handleCloseRepost={() => handleCloseRepost()}
+          repostedId={postId} // Pass original post
+          userImage={userImage}
+          currentUserId={currentUserId}
+        />
+      )}
+
       <div style={{ position: "relative" }}>
         <div
           className={`${styles.icon} ${styles.icon2} ${
@@ -196,6 +229,8 @@ const NewsFeedFooter = ({
             setRepostedCount={setRepostedCount}
             handleCloseRepost={() => handleCloseRepost()}
             repostedId={postId} // Pass original post
+            userImage={userImage}
+            currentUserId={currentUserId}
           />
         )}
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import styles from "./composeRepost.module.css";
+import styles from "./composeReply.module.css";
 
 import { RxCross2 } from "react-icons/rx";
 import Image from "next/image";
@@ -123,50 +123,28 @@ const ComposeRepost = ({
         <div onClick={handleCloseRepost} className={styles.closeButton}>
           <RxCross2 />
         </div>
-        <div className={styles.inputField}>
-          <div className={styles.profile}>
-            {userImage && (
-              <Image
-                className={styles.img}
-                src={userImage}
-                alt="user profile"
-                width="35"
-                height="35"
-              />
-            )}
-          </div>
-          <div className={styles.textArea}>
-            <textarea
-              ref={textAreaRef}
-              value={content}
-              onChange={handleChange}
-              placeholder="Add a comment"
-            />
-          </div>
-        </div>
-
         {loading ? (
           <div className={styles.spinner}></div> // Show spinner when loading
         ) : (
           <div className={styles.postContainer}>
-            <div className={styles.contentDiv}>
-              <div className={styles.postHeader}>
-                {ownerUserImage && (
-                  <Image
-                    className={styles.img}
-                    src={ownerUserImage}
-                    alt="user profile"
-                    width="35"
-                    height="35"
-                  />
-                )}
-
+            <div className={styles.profile}>
+              {ownerUserImage && (
+                <Image
+                  className={styles.img}
+                  src={ownerUserImage}
+                  alt="user profile"
+                  width="35"
+                  height="35"
+                />
+              )}
+            </div>
+            <div className={styles.column2}>
+              <div className={styles.name}>
                 <span className={styles.fullname}>{ownerFullName}</span>
 
                 <span className={styles.username}>{ownerUserName}</span>
               </div>
               <div className={styles.postContent}>
-                {/* Display Content */}
                 {post?.content && (
                   <div className={styles.postContentText}>{post?.content}</div>
                 )}
@@ -205,6 +183,30 @@ const ComposeRepost = ({
             </div>
           </div>
         )}
+
+        <div className={styles.postContainer}>
+          <div className={styles.profile}>
+            {ownerUserImage && (
+              <Image
+                className={styles.img}
+                src={ownerUserImage}
+                alt="user profile"
+                width="35"
+                height="35"
+              />
+            )}
+          </div>
+
+          <div className={styles.textArea}>
+            <textarea
+              ref={textAreaRef}
+              value={content}
+              onChange={handleChange}
+              placeholder="Add another post"
+            />
+          </div>
+        </div>
+
         <div
           className={`${styles.postButton} ${isActive ? styles.active : ""}`}
           onClick={() => {

@@ -10,6 +10,9 @@ const MainSection = () => {
   const [posts, setPosts] = useState([]);
   const [fullName, setFullName] = useState("");
   const [userName, setUserName] = useState("");
+  const [err, setError] = useState("");
+  const [userImage, setUserImage] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState("");
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
 
@@ -53,6 +56,8 @@ const MainSection = () => {
       const data = await res.json();
       setFullName(data.fullName);
       setUserName(data.userName);
+      setUserImage(data.image || null);
+      setCurrentUserId(data._id);
     } else {
       console.error("Failed to fetch Me");
     }
@@ -67,6 +72,14 @@ const MainSection = () => {
   };
 
   const handleDeletePost = async (postId) => {
+    // Find the post by its ID
+    const postToDelete = posts.find((post) => post._id === postId);
+
+    // Check if the current user is the owner of the post
+    if (!postToDelete || postToDelete.userId !== currentUserId) {
+      alert("You are not OWNER of this post.");
+      return;
+    }
     try {
       const response = await fetch(`/api/tweet/posts/${postId}`, {
         method: "DELETE",
@@ -103,7 +116,10 @@ const MainSection = () => {
 
         <div>
           {" "}
-          <ComposePost onPostCreated={handleNewPost} />{" "}
+          <ComposePost
+            onPostCreated={handleNewPost}
+            userImage={userImage}
+          />{" "}
         </div>
         <div>
           <hr className={styles.lineBreak} />
@@ -119,6 +135,8 @@ const MainSection = () => {
               originalPosts={posts} // pass same posts to find originals
               fullName={fullName}
               userName={userName}
+              userImage={userImage}
+              currentUserId={currentUserId}
               users={users}
               onDeletePost={handleDeletePost}
               onPostReposted={handleNewPost}

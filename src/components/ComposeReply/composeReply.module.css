@@ -35,31 +35,62 @@
   font-size: 20px;
   padding: 7px;
   cursor: pointer;
+  margin-bottom: 15px;
 }
 .closeButton:hover {
   border-radius: 50%;
   background-color: rgb(36, 36, 36);
 }
 
-.inputField {
+.postContainer {
   display: flex;
   flex-direction: row;
-  padding: 3px;
-  width: 90%;
+  width: 100%;
+  margin-bottom: 16px;
 }
 
-.profile {
-  display: flex;
-  display: flex;
-  justify-content: center;
-}
 .img {
   border-radius: 50%;
 }
-.textArea {
+
+.column2 {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  text-align: left;
+}
+
+.username {
+  margin-left: 7px;
+  font-size: 17px;
+  color: rgb(116, 115, 115);
+}
+
+.fullname {
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  margin-left: 6px;
+}
+
+.postContent {
+  margin-left: 5px;
+  word-wrap: break-word;
+  width: 100%;
+  color: white;
+}
+.postContentText {
+  white-space: pre-line; /* Ensures that newlines are respected */
+}
+
+.media {
+  width: 100%; /* Take full width of the parent container */
+  height: auto; /* Maintain aspect ratio */
+  display: block;
+  margin-top: 17px;
+  border-radius: 20px;
+}
+
+.textArea {
   margin-left: 3px;
   width: 100%;
 }
@@ -77,56 +108,6 @@
 }
 .textArea textarea:focus {
   outline: none; /* Ensure no outline is shown when the textarea is focused */
-}
-
-.postContainer {
-  width: 90%;
-  margin-left: 30px;
-  border-radius: 15px;
-  border: 1px solid rgb(51, 51, 51);
-}
-.contentDiv {
-  padding: 5px;
-}
-
-.postHeader {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.username {
-  margin-left: 7px;
-  font-size: 17px;
-  color: rgb(116, 115, 115);
-}
-
-.fullname {
-  color: white;
-  font-size: 17px;
-  font-weight: bold;
-  margin-left: 6px;
-}
-
-.postContent {
-  margin-bottom: 10px;
-  word-wrap: break-word;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  color: white;
-}
-.postContentText {
-  white-space: pre-line; /* Ensures that newlines are respected */
-}
-
-.media {
-  width: 100%; /* Take full width of the parent container */
-  height: auto; /* Maintain aspect ratio */
-  display: block;
-  margin-top: 17px;
-  border-radius: 20px;
 }
 
 /* Post button */

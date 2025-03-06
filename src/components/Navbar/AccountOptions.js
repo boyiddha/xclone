@@ -1,11 +1,10 @@
 import Image from "next/image";
-import user from "./../../../public/images/user.jpeg";
 import styles from "./accountOptions.module.css";
 import { CiCircleCheck } from "react-icons/ci";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { doLogout } from "@/app/actions";
 
-const AccountOptions = () => {
+const AccountOptions = ({ fullName, userName, userImage }) => {
   const handleLogOut = async () => {
     await doLogout();
   };
@@ -16,17 +15,19 @@ const AccountOptions = () => {
         <div className={styles.accounts}>
           <div className={styles.accountItem}>
             <div className={styles.userImage}>
-              <Image
-                className={styles.img}
-                src={user}
-                alt="user profile"
-                width="20"
-                height="20"
-              />
+              {userImage && (
+                <Image
+                  className={styles.img}
+                  src={userImage}
+                  alt="user profile"
+                  width="20"
+                  height="20"
+                />
+              )}
             </div>
             <div className={styles.userInfo}>
-              <div className={styles.fullName}> Boyiddhanath Roy</div>
-              <div className={styles.userName}> @boyiddha</div>
+              <div className={styles.fullName}> {fullName}</div>
+              <div className={styles.userName}> @{userName}</div>
             </div>
             <div className={styles.activeCheck}>
               <CiCircleCheck />

@@ -1,6 +1,6 @@
 "use client";
 import styles from "./newsFeed.module.css";
-import user from "./../../../public/images/user.jpeg";
+
 import Image from "next/image";
 import NewsFeedHeader from "./NewsFeedHeader";
 import NewsFeedFooter from "./NewsFeedFooter";
@@ -12,6 +12,8 @@ const NewsFeed = ({
   originalPosts, // Contains all posts to find original post if needed
   fullName,
   userName,
+  userImage,
+  currentUserId,
   users,
   onDeletePost,
   onPostReposted,
@@ -33,11 +35,12 @@ const NewsFeed = ({
         // Find original post owner info if it's a repost with text
         let ownerFullName = "";
         let ownerUserName = "";
-        if (isRepostWithText && originalPost?.userId) {
-          const owner = users?.find((user) => user._id === originalPost.userId);
-          ownerFullName = owner?.fullName || "Unknown";
-          ownerUserName = owner?.userName || "Unknown";
-        }
+        let ownerImage = null;
+
+        const owner = users?.find((user) => user._id === originalPost.userId);
+        ownerFullName = owner?.fullName || "Unknown";
+        ownerUserName = owner?.userName || "Unknown";
+        ownerImage = owner?.image || null;
 
         return (
           <div key={post?._id} className={styles.mainDiv}>
@@ -53,19 +56,32 @@ const NewsFeed = ({
 
             <div className={styles.postContainer}>
               <div className={styles.profile}>
-                <Image
-                  className={styles.img}
-                  src={user}
-                  alt="user profile"
-                  width="35"
-                  height="35"
-                />
+                {isRepostWithText
+                  ? userImage && (
+                      <Image
+                        className={styles.img}
+                        src={userImage}
+                        alt="user profile"
+                        width="35"
+                        height="35"
+                      />
+                    )
+                  : ownerImage && (
+                      <Image
+                        className={styles.img}
+                        src={ownerImage}
+                        alt="user profile"
+                        width="35"
+                        height="35"
+                      />
+                    )}
               </div>
+
               <div className={styles.content}>
                 <div className={styles.header}>
                   <NewsFeedHeader
-                    fullName={fullName}
-                    userName={userName}
+                    fullName={isRepostWithText ? fullName : ownerFullName}
+                    userName={isRepostWithText ? userName : ownerUserName}
                     postId={post?._id}
                     onDeletePost={onDeletePost}
                   />
@@ -88,13 +104,16 @@ const NewsFeed = ({
                       >
                         <div className={styles.ownerContentDiv}>
                           <div className={styles.ownerPostHeader}>
-                            <Image
-                              className={styles.img}
-                              src={user}
-                              alt="user profile"
-                              width="35"
-                              height="35"
-                            />
+                            {ownerImage && (
+                              <Image
+                                className={styles.img}
+                                src={ownerImage}
+                                alt="user profile"
+                                width="35"
+                                height="35"
+                              />
+                            )}
+
                             <span className={styles.ownerFullname}>
                               {ownerFullName}
                             </span>
@@ -162,7 +181,7 @@ const NewsFeed = ({
                     <div
                       className={styles.mainContentDiv}
                       onClick={() =>
-                        router.push(`/${userName}/status/${post?._id}`)
+                        router.push(`/${ownerUserName}/status/${post?._id}`)
                       }
                     >
                       {originalPost?.content && (
@@ -219,6 +238,7 @@ const NewsFeed = ({
                     reposts={post?.reposts}
                     onPostReposted={onPostReposted}
                     onPostRemove={handlePostRemoved}
+                    userImage={userImage}
                   />
                 </div>
               </div>

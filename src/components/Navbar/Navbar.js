@@ -15,7 +15,6 @@ import { IoIosMore } from "react-icons/io";
 import { SiAppwrite } from "react-icons/si";
 
 import xLogo from "./../../../public/images/x_profile.png";
-import user from "./../../../public/images/user.jpeg";
 import LogOut from "@/components/LogOut/LogOut";
 import styles from "./navbar.module.css";
 import { useEffect, useRef, useState } from "react";
@@ -26,6 +25,9 @@ import { useRouter } from "next/navigation";
 const Navbar = () => {
   const [isOpenMore, setIsOpenMore] = useState(false);
   const [isOpenAccount, setIsOpenAccount] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userImage, setUserImage] = useState("");
   const boxMoreRef = useRef(null);
   const boxAccountRef = useRef(null);
   const accountItemRef = useRef(null);
@@ -79,6 +81,22 @@ const Navbar = () => {
     };
   }, [isOpenAccount]);
 
+  useEffect(() => {
+    const fetchMe = async () => {
+      const res = await fetch("/api/me", {
+        method: "GET",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setFullName(data.fullName);
+        setUserName(data.userName);
+        setUserImage(data.image);
+      } else {
+        console.error("Failed to fetch Me");
+      }
+    };
+    fetchMe();
+  }, []);
   return (
     <>
       <div className={styles.mainContainer}>
@@ -251,17 +269,19 @@ const Navbar = () => {
                 onClick={toggleAccount}
               >
                 <div className={styles.userImage} data-tooltip="Accounts">
-                  <Image
-                    className={styles.img}
-                    src={user}
-                    alt="user Profile"
-                    width="30"
-                    height="30"
-                  />
+                  {userImage && (
+                    <Image
+                      className={styles.img}
+                      src={userImage}
+                      alt="user Profile"
+                      width="30"
+                      height="30"
+                    />
+                  )}
                 </div>
                 <div className={styles.userInfo}>
-                  <div className={styles.fullName}> Boyiddhanath Roy</div>
-                  <div className={styles.userName}> @boyiddha</div>
+                  <div className={styles.fullName}> {fullName}</div>
+                  <div className={styles.userName}> @{userName}</div>
                 </div>
                 <div className={styles.options}>
                   <IoIosMore />
@@ -270,7 +290,11 @@ const Navbar = () => {
 
               {isOpenAccount && (
                 <div ref={boxAccountRef}>
-                  <AccountOptions />
+                  <AccountOptions
+                    fullName={fullName}
+                    userName={userName}
+                    userImage={userImage}
+                  />
                 </div>
               )}
             </div>

@@ -13,6 +13,10 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
+  image: {
+    type: String,
+    default: null,
+  },
   email: {
     required: true,
     type: String,

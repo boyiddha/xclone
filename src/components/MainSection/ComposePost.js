@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./composePost.module.css";
-import user from "./../../../public/images/user.jpeg";
 import { BsImage } from "react-icons/bs";
 import Image from "next/image";
 import { ImCross } from "react-icons/im";
@@ -11,9 +10,7 @@ import { MdEmojiEmotions } from "react-icons/md";
 import { RiCalendarScheduleLine } from "react-icons/ri";
 import { CiLocationOn } from "react-icons/ci";
 
-
-
-const ComposePost = ({ onPostCreated }) => {
+const ComposePost = ({ onPostCreated, userImage }) => {
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
   const [mediaPreview, setMediaPreview] = useState(null); // Store image preview
@@ -86,13 +83,15 @@ const ComposePost = ({ onPostCreated }) => {
     <>
       <div className={styles.postContainer}>
         <div className={styles.profile}>
-          <Image
-            className={styles.img}
-            src={user}
-            alt="user profile"
-            width="35"
-            height="35"
-          />
+          {userImage && (
+            <Image
+              className={styles.img}
+              src={userImage}
+              alt="user profile"
+              width="35"
+              height="35"
+            />
+          )}
         </div>
         <div className={styles.textArea}>
           <textarea
@@ -148,17 +147,16 @@ const ComposePost = ({ onPostCreated }) => {
           <div className={styles.media}>
             <label>
               <span className={styles.mediaIcon}>
-              <BsImage className={styles.icon} />
-              <input
-                type="file"
-                ref={fileInputRef}
-                style={{ display: "none" }}
-                accept="image/*, audio/*, video/*"
-                onChange={handleMediaChange}
-              />
-              <div className={styles.tooltip}>Media</div>
+                <BsImage className={styles.icon} />
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  accept="image/*, audio/*, video/*"
+                  onChange={handleMediaChange}
+                />
+                <div className={styles.tooltip}>Media</div>
               </span>
-             
 
               <MdOutlineGifBox className={styles.icon} />
               <VscVscodeInsiders className={styles.icon} />

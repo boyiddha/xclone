@@ -90,7 +90,6 @@ export const getUserPosts = async (req) => {
 export const returnAllPosts = async (req) => {
   try {
     const posts = await getAllPostsService();
-
     return NextResponse.json({ success: true, posts });
   } catch (error) {
     console.error("Fetch Error:", error);
