@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { User } from "./userModel";
 
 const MediaSchema = new mongoose.Schema({
   name: { type: String, required: false },
@@ -19,7 +20,7 @@ const PostSchema = new mongoose.Schema(
       required: true,
     },
     content: { type: String, trim: true, required: false }, // Trim to remove unnecessary spaces
-    media: { type: MediaSchema, default: [] }, // Default to empty array (ensures consistency)
+    media: { type: MediaSchema, default: null }, // => This expects media to be an object, not an array.
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who liked this post
     reposts: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who reposted this post
     reposted: {
@@ -35,7 +36,8 @@ const PostSchema = new mongoose.Schema(
       ref: "Post",
       default: null,
     },
-    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who commented in this post
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }], // Array of commented post id. we can also stroe here User id
+    // but as we need later print all commented post that's why??????
   },
   { timestamps: true } // Adds `createdAt` and `updatedAt`
 );

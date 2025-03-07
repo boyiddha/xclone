@@ -14,7 +14,7 @@ import styles2 from "./userPostFooter.module.css";
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 
-const UserPostFooter = ({ post, postId }) => {
+const UserPostFooter = ({ post, postId, replyCount }) => {
   const [likeCount, setLikeCount] = useState(post.likes?.length || 0);
   const [liked, setLiked] = useState(false);
 
@@ -62,8 +62,8 @@ const UserPostFooter = ({ post, postId }) => {
           const data = await res.json();
           const userId = data._id.toString();
           setCurrentUserId(userId);
-          setLiked(post.likes.includes(userId));
-          setReposted(post.reposts.includes(userId));
+          setLiked(post?.likes?.includes(userId));
+          setReposted(post?.reposts?.includes(userId));
         }
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -109,6 +109,7 @@ const UserPostFooter = ({ post, postId }) => {
           <LuMessageCircle />
           <div className={styles.tooltip}>Reply</div>
         </span>
+        <span> {replyCount > 0 ? replyCount : ""}</span>
       </div>
       <div style={{ position: "relative" }}>
         <div

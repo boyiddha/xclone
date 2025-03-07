@@ -20,6 +20,7 @@ const NewsFeedFooter = ({
   postId,
   likes,
   reposts,
+  comments,
   onPostReposted,
   onPostRemove,
   userImage,
@@ -29,6 +30,7 @@ const NewsFeedFooter = ({
 
   const [repostCount, setRepostedCount] = useState(reposts?.length || 0);
   const [reposted, setReposted] = useState(false);
+  const [replyCount, setRepliedCount] = useState(comments?.length || 0);
 
   const [currentUserId, setCurrentUserId] = useState(null);
   const [isOpenMore, setIsOpenMore] = useState(false);
@@ -173,14 +175,14 @@ const NewsFeedFooter = ({
           <LuMessageCircle />
           <div className={styles.tooltip}>Reply</div>
         </span>
+        <span>{replyCount > 0 ? replyCount : ""}</span>
       </div>
       {showReplyModal && (
         <ComposeReply
-          onPostReposted={onPostReposted}
-          setReposted={setReposted}
-          setRepostedCount={setRepostedCount}
-          handleCloseRepost={() => handleCloseRepost()}
-          repostedId={postId} // Pass original post
+          onPostReplied={onPostReposted}
+          setRepliedCount={setRepliedCount}
+          handleCloseReply={() => handleCloseReply()}
+          repliedPostId={postId} // Pass original post
           userImage={userImage}
           currentUserId={currentUserId}
         />

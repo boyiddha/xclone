@@ -15,10 +15,6 @@ const ComposeRepost = ({
   userImage,
   currentUserId,
 }) => {
-  const [ownerFullName, setOwnerFullName] = useState("");
-  const [ownerUserName, setOwnerUserName] = useState("");
-  const [ownerUserImage, setOwnerUserImage] = useState(null);
-  const [ownerUserId, setOwnerUserId] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
   const [post, setPost] = useState(null); // To store fetched reposted post info
@@ -33,8 +29,6 @@ const ComposeRepost = ({
         if (res.ok) {
           const data = await res.json();
           setPost(data.post);
-          // Set the ownerUserId after fetching the reposted post
-          setOwnerUserId(data.post.userId);
         } else {
           console.error("Failed to fetch reposted post");
         }
@@ -49,28 +43,6 @@ const ComposeRepost = ({
       fetchRepostedPost(); // Fetch reposted post first
     }
   }, [repostedId]); // Depend only on repostedId to fetch the reposted post
-
-  useEffect(() => {
-    const fetchOwner = async () => {
-      if (!ownerUserId) return; // Don't run fetchOwner until ownerUserId is set
-
-      const res = await fetch(`/api/users/${ownerUserId}`, {
-        method: "GET",
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setOwnerFullName(data.user.fullName);
-        setOwnerUserName(data.user.userName);
-        setOwnerUserImage(data.user.image || null);
-      } else {
-        console.error("Failed to fetch owner");
-      }
-    };
-
-    if (ownerUserId) {
-      fetchOwner(); // Now fetch owner only after ownerUserId is set
-    }
-  }, [ownerUserId]); // Depend on ownerUserId to trigger fetchOwner when it changes
 
   const handleChange = (e) => {
     setContent(e.target.value);
@@ -151,19 +123,23 @@ const ComposeRepost = ({
           <div className={styles.postContainer}>
             <div className={styles.contentDiv}>
               <div className={styles.postHeader}>
-                {ownerUserImage && (
+                {post?.userId?.image && (
                   <Image
                     className={styles.img}
-                    src={ownerUserImage}
+                    src={post?.userId?.image}
                     alt="user profile"
                     width="35"
                     height="35"
                   />
                 )}
 
-                <span className={styles.fullname}>{ownerFullName}</span>
+                <span className={styles.fullname}>
+                  {post?.userId?.fullName}
+                </span>
 
-                <span className={styles.username}>{ownerUserName}</span>
+                <span className={styles.username}>
+                  {post?.userId?.userName}
+                </span>
               </div>
               <div className={styles.postContent}>
                 {/* Display Content */}

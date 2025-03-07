@@ -3,11 +3,13 @@ import mongoose, { Schema } from "mongoose";
 const userSchema = new Schema({
   fullName: {
     required: true,
-    type: String,
+    type: String, // use trim:true for string field
+    trim: true, // This ensures no extra spaces are stored in db
   },
   userName: {
     type: String,
     default: null,
+    trim: true,
   },
   password: {
     type: String,
@@ -20,6 +22,7 @@ const userSchema = new Schema({
   email: {
     required: true,
     type: String,
+    unique: true, // ✅ Prevent duplicate emails
   },
   dob: {
     type: Date,
@@ -47,5 +50,6 @@ userSchema.pre("save", function (next) {
   next();
 });
 
+// define the model as "User" while pointing to the "users" collection,
 export const User =
-  mongoose?.models?.users ?? mongoose.model("users", userSchema);
+  mongoose?.models?.User ?? mongoose.model("User", userSchema, "users");

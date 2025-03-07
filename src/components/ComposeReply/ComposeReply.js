@@ -6,19 +6,14 @@ import styles from "./composeReply.module.css";
 import { RxCross2 } from "react-icons/rx";
 import Image from "next/image";
 
-const ComposeRepost = ({
-  onPostReposted,
-  setReposted,
-  setRepostedCount,
-  handleCloseRepost,
-  repostedId,
+const ComposeReply = ({
+  onPostReplied,
+  setRepliedCount,
+  handleCloseReply,
+  repliedPostId,
   userImage,
   currentUserId,
 }) => {
-  const [ownerFullName, setOwnerFullName] = useState("");
-  const [ownerUserName, setOwnerUserName] = useState("");
-  const [ownerUserImage, setOwnerUserImage] = useState(null);
-  const [ownerUserId, setOwnerUserId] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
   const [post, setPost] = useState(null); // To store fetched reposted post info
@@ -27,14 +22,13 @@ const ComposeRepost = ({
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    const fetchRepostedPost = async () => {
+    const fetchRepliedPost = async () => {
       try {
-        const res = await fetch(`/api/tweet/posts/${repostedId}`);
+        const res = await fetch(`/api/tweet/posts/${repliedPostId}`);
         if (res.ok) {
           const data = await res.json();
           setPost(data.post);
-          // Set the ownerUserId after fetching the reposted post
-          setOwnerUserId(data.post.userId);
+          // console.log("✅  data: ", data.post);
         } else {
           console.error("Failed to fetch reposted post");
         }
@@ -45,32 +39,10 @@ const ComposeRepost = ({
       }
     };
 
-    if (repostedId) {
-      fetchRepostedPost(); // Fetch reposted post first
+    if (repliedPostId) {
+      fetchRepliedPost(); // Fetch reposted post first
     }
-  }, [repostedId]); // Depend only on repostedId to fetch the reposted post
-
-  useEffect(() => {
-    const fetchOwner = async () => {
-      if (!ownerUserId) return; // Don't run fetchOwner until ownerUserId is set
-
-      const res = await fetch(`/api/users/${ownerUserId}`, {
-        method: "GET",
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setOwnerFullName(data.user.fullName);
-        setOwnerUserName(data.user.userName);
-        setOwnerUserImage(data.user.image || null);
-      } else {
-        console.error("Failed to fetch owner");
-      }
-    };
-
-    if (ownerUserId) {
-      fetchOwner(); // Now fetch owner only after ownerUserId is set
-    }
-  }, [ownerUserId]); // Depend on ownerUserId to trigger fetchOwner when it changes
+  }, [repliedPostId]); // Depend only on repostedId to fetch the reposted post
 
   const handleChange = (e) => {
     setContent(e.target.value);
@@ -83,44 +55,43 @@ const ComposeRepost = ({
     if (!content.trim()) return;
 
     try {
-      let postId = repostedId;
-      const res = await fetch("/api/tweet/repost", {
+      const res = await fetch("/api/tweet/reply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ postId, currentUserId, content }),
+        body: JSON.stringify({
+          postId: repliedPostId,
+          currentUserId,
+          content,
+        }),
       });
-      if (res.ok) {
-        const result = await res.json();
 
-        setContent(""); // Clear content
-        setFile(null); // Reset file
+      const result = await res.json();
 
-        setReposted(result.reposted);
-        setRepostedCount(result.reposts);
-        if (result.reposted) {
-          // do an repost
-          // update the posts in <MainSection/> to get the updated result in NewsFeed
-          onPostReposted(result.newPost);
-        } else {
-          // remove repost
-          // update the posts in parent
-          //console.log("removed reposted id : ", data.removedRepostedId);
-          onPostRemove(result.removedRepostedId);
-        }
-
-        handleCloseRepost();
-      } else {
-        alert("Repost failed");
+      if (!res.ok) {
+        console.error("Reply failed:", result.message);
+        alert(result.message || "Failed to post reply");
+        return;
       }
+
+      setContent(""); // Clear content
+      setFile(null); // Reset file
+
+      setRepliedCount(result.commentCount || 0); // Ensure fallback if undefined
+
+      // Notify parent component to update UI
+      onPostReplied(result.replyPost);
+
+      handleCloseReply();
     } catch (error) {
-      console.error("Error posting:", error);
+      console.error("Error posting reply:", error);
+      alert("Something went wrong. Please try again.");
     }
   };
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <div onClick={handleCloseRepost} className={styles.closeButton}>
+        <div onClick={handleCloseReply} className={styles.closeButton}>
           <RxCross2 />
         </div>
         {loading ? (
@@ -128,10 +99,10 @@ const ComposeRepost = ({
         ) : (
           <div className={styles.postContainer}>
             <div className={styles.profile}>
-              {ownerUserImage && (
+              {post?.userId?.image && (
                 <Image
                   className={styles.img}
-                  src={ownerUserImage}
+                  src={post?.userId?.image}
                   alt="user profile"
                   width="35"
                   height="35"
@@ -140,9 +111,13 @@ const ComposeRepost = ({
             </div>
             <div className={styles.column2}>
               <div className={styles.name}>
-                <span className={styles.fullname}>{ownerFullName}</span>
+                <span className={styles.fullname}>
+                  {post?.userId?.fullName}
+                </span>
 
-                <span className={styles.username}>{ownerUserName}</span>
+                <span className={styles.username}>
+                  {post?.userId?.userName}
+                </span>
               </div>
               <div className={styles.postContent}>
                 {post?.content && (
@@ -186,10 +161,10 @@ const ComposeRepost = ({
 
         <div className={styles.postContainer}>
           <div className={styles.profile}>
-            {ownerUserImage && (
+            {userImage && (
               <Image
                 className={styles.img}
-                src={ownerUserImage}
+                src={userImage}
                 alt="user profile"
                 width="35"
                 height="35"
@@ -222,4 +197,4 @@ const ComposeRepost = ({
   );
 };
 
-export default ComposeRepost;
+export default ComposeReply;

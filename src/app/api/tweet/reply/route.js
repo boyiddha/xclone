@@ -3,30 +3,38 @@ import Post from "@/models/postModel";
 
 export async function POST(req) {
   try {
-    const { userId, content, parentPostId, media } = await req.json();
+    const { postId, currentUserId, content } = await req.json();
 
-    if (!userId || !content || !parentPostId) {
+    if (!postId || !content || !currentUserId) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    // Create a new reply post
-    const newReply = new Post({
-      userId,
+    // Create a new comment post (reply)
+    const newComment = await Post.create({
+      userId: currentUserId,
       content,
-      media,
-      parentPostId,
+      parentPostId: postId,
     });
 
-    await newReply.save();
+    // Update the parent post by storing the comment post ID
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      { $push: { comments: newComment._id } },
+      { new: true }
+    );
 
-    // Update parent post to store user ID in comments array
-    await Post.findByIdAndUpdate(parentPostId, { $push: { comments: userId } });
+    // Get the updated comment count
+    const commentCount = updatedPost.comments.length;
 
     return NextResponse.json(
-      { message: "Reply posted successfully", reply: newReply },
+      {
+        message: "Comment posted successfully",
+        replyPost: newComment,
+        commentCount,
+      },
       { status: 201 }
     );
   } catch (error) {

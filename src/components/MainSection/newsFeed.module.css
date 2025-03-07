@@ -60,7 +60,23 @@
   font-size: 21px;
 }
 
+.replyToDiv {
+  text-align: left;
+}
+
+.replyTotext {
+  color: rgb(121, 121, 121);
+}
+.replyTo {
+  color: rgb(31, 73, 209);
+}
+.replyTo:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .mainText {
+  margin-top: 5px;
   text-align: left;
   padding-bottom: 3px;
 }

@@ -42,6 +42,24 @@ const NewsFeed = ({
         ownerUserName = owner?.userName || "Unknown";
         ownerImage = owner?.image || null;
 
+        const isReplyPost = post?.parentPostId;
+
+        // Find the original post if it's a reply
+        const mainPost = isReplyPost
+          ? originalPosts.find((p) => p._id === post.parentPostId)
+          : null;
+
+        // Get the owner user ID from the original post
+        const ownerUserId = mainPost?.userId;
+
+        // Find the owner user object to get the username
+        const postOwner = ownerUserId
+          ? users.find((u) => u._id === ownerUserId)
+          : null;
+
+        // Extract the username (or default to an empty string)
+        const replyToUserName = postOwner?.userName || "";
+
         return (
           <div key={post?._id} className={styles.mainDiv}>
             {/* Show "You reposted" if it's a repost */}
@@ -86,6 +104,12 @@ const NewsFeed = ({
                     onDeletePost={onDeletePost}
                   />
                 </div>
+                {isReplyPost && (
+                  <div className={styles.replyToDiv}>
+                    <span className={styles.replyTotext}>Replying to </span>
+                    <span className={styles.replyTo}>@{replyToUserName}</span>
+                  </div>
+                )}
                 <div className={styles.mainText}>
                   {isRepostWithText ? (
                     <div>
@@ -236,6 +260,7 @@ const NewsFeed = ({
                     postId={post?._id}
                     likes={post?.likes}
                     reposts={post?.reposts}
+                    comments={post?.comments}
                     onPostReposted={onPostReposted}
                     onPostRemove={handlePostRemoved}
                     userImage={userImage}
