@@ -1,4 +1,5 @@
 import Post from "@/models/postModel";
+import { User } from "@/models/userModel";
 
 export const savePost = async (userId, content, media) => {
   const newPost = new Post({ userId, content, media });
@@ -91,6 +92,58 @@ export const toggleRepost = async (postId, userId, content) => {
     throw new Error("Failed to toggle repost");
   }
 };
+
+export async function findPostById(postId) {
+  return await Post.findById(postId)
+    .populate({
+      path: "userId",
+      model: "User", // ✅ Explicitly specify the model
+      select: "fullName userName image", // Get user info
+    })
+    .populate({
+      path: "reposted",
+      populate: {
+        path: "userId",
+        model: "User",
+        select: "fullName userName image",
+      },
+      select: "content media userId likes reposts comments",
+    })
+    .populate({
+      path: "parentPostId", // Get parent post ID if it's a reply
+      populate: {
+        path: "userId",
+        model: "User",
+        select: "fullName userName image",
+      },
+      select: "content media likes reposts comments",
+    })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "userId",
+        model: "User",
+        select: "fullName userName image",
+      },
+      select: "content media likes reposts comments",
+    })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "comments", // Fetch child comments recursively
+        populate: {
+          path: "userId",
+          model: "User",
+          select: "fullName userName image",
+        },
+        select: "content media likes reposts comments",
+      },
+    });
+}
+
+export async function deletePost(postId) {
+  return await Post.findByIdAndDelete(postId);
+}
 
 //✅  convert image into base64 and save it in db
 

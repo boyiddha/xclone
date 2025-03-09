@@ -21,6 +21,14 @@ export const getUser = async (email) => {
   }
 };
 
+export async function getUserByIdFromDB(userId) {
+  return await User.findById(userId);
+}
+
+export async function getAllUsersFromDB() {
+  return await User.find({}, "fullName userName image");
+}
+
 export async function createUser(userData) {
   try {
     return await User.create(userData);

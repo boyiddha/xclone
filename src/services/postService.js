@@ -5,6 +5,8 @@ import {
   toggleLikeOnPost,
   toggleRepost,
   findAllPosts,
+  findPostById,
+  deletePost,
 } from "@/repositories/postRepository";
 
 const convertToBase64 = async (file) => {
@@ -66,3 +68,11 @@ export const repostService = async (postId, userId, content) => {
   );
   return { success: true, reposts, reposted, newPost, removedRepostId };
 };
+
+export async function fetchPost(postId) {
+  return await findPostById(postId);
+}
+
+export async function removePost(postId) {
+  return await deletePost(postId);
+}

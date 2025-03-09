@@ -23,6 +23,8 @@ import {
   updateUserService,
   savePasswordService,
   saveUsernameService,
+  findUserById,
+  findAllUsers,
 } from "@/services/userService";
 import { getAuthToken } from "@/utils/auth";
 
@@ -82,6 +84,41 @@ export const getMe = async (req, session) => {
     );
   }
 };
+
+export async function getUserById(userId) {
+  try {
+    const user = await findUserById(userId);
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "User not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ success: true, user }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return NextResponse.json(
+      { success: false, message: "Error fetching user" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function getAllUsers() {
+  try {
+    const users = await findAllUsers();
+
+    return NextResponse.json(users, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return NextResponse.json(
+      { message: "Error fetching users", error: error.message },
+      { status: 500 }
+    );
+  }
+}
 
 export async function registerUser(req) {
   try {

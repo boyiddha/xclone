@@ -20,6 +20,8 @@ import {
   updateUser,
   savePassword,
   saveUsername,
+  getUserByIdFromDB,
+  getAllUsersFromDB,
 } from "@/repositories/userRepository";
 import { createHashPassword } from "@/helpers/passwordHelper";
 
@@ -35,6 +37,10 @@ export const findUserByEmail = async (email) => {
   }
 };
 
+export async function findUserById(userId) {
+  return await getUserByIdFromDB(userId);
+}
+
 export async function createUserService(name, email, dob) {
   try {
     // Call the repository function to save user
@@ -43,6 +49,10 @@ export async function createUserService(name, email, dob) {
   } catch (error) {
     return { success: false, message: error };
   }
+}
+
+export async function findAllUsers() {
+  return await getAllUsersFromDB();
 }
 
 export async function createUserOuathService(email, name) {
