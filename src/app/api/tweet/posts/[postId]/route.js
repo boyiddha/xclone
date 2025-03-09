@@ -48,7 +48,13 @@ export async function GET(req, { params }) {
       })
       .populate({
         path: "parentPostId",
-        select: "_id", // Get parent post ID if it's a reply
+        //select: "_id", // Get parent post ID if it's a reply
+        populate: {
+          path: "userId",
+          model: "User", // ✅ Explicitly specify the model
+          select: "fullName userName image", // Get user info
+        },
+        select: "content media likes reposts comments", // Get comment details
       })
       .populate({
         path: "comments",
@@ -58,6 +64,18 @@ export async function GET(req, { params }) {
           select: "fullName userName image", // Get user info
         },
         select: "content media likes reposts comments", // Get comment details
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "comments", // Fetch child comments recursively
+          populate: {
+            path: "userId",
+            model: "User",
+            select: "fullName userName image",
+          },
+          select: "content media likes reposts comments",
+        },
       });
 
     if (!post) {
@@ -66,7 +84,7 @@ export async function GET(req, { params }) {
         { status: 404 }
       );
     }
-    // console.log("✅  post is : ", post);
+    //console.log("✅  post is : ", post);
     // console.log("✅  post id ", post._id);
     // console.log("✔  post content ", post.content);
     // console.log("✔  post likes ", post.likes);
@@ -74,7 +92,7 @@ export async function GET(req, { params }) {
     // console.log("✔  post reposts ", post.reposts);
     // console.log("✔  post reposted", post.reposted);
     // console.log("✔  post parentPostId ", post.parentPostId);
-    // console.log("✔  post comments ", post.comments);
+     //console.log("✔  post comments ", post.comments);
 
     return NextResponse.json({ success: true, post }, { status: 200 });
   } catch (error) {

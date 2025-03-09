@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between; /* This will place items on the left and right */
-  padding-top: 10px;
 }
 
 .profile {

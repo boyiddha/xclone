@@ -1,12 +1,11 @@
 import Image from "next/image";
 import { IoIosMore } from "react-icons/io";
-
 import styles from "./commentSection.module.css";
 import UserPostFooter from "../MainSection/UserPostFooter";
 
-const CommentSection = ({ comments }) => {
+const CommentSection = ({ comments, level = 0 }) => {
   return (
-    <>
+    <div style={{ marginLeft: `${level * 20}px` }}> {/* Indentation for nested comments */}
       {comments.map((comment) => (
         <div key={comment._id} className={styles.mainContainer}>
           <div className={styles.commentContainer}>
@@ -74,6 +73,8 @@ const CommentSection = ({ comments }) => {
                   </div>
                 )}
               </div>
+
+              {/* Comment Actions (Likes, Replies, etc.) */}
               <div className={styles.reactions}>
                 <UserPostFooter
                   post={comment}
@@ -84,12 +85,19 @@ const CommentSection = ({ comments }) => {
             </div>
           </div>
 
-          <div className={styles.row2}>
-            <hr className={styles.lineBreak} />
-          </div>
+          {/* Recursive Rendering for Nested Comments */}
+          {comment.comments && comment.comments.length > 0 && (
+            <CommentSection comments={comment.comments} level={level + 1} />
+          )}
+           {level===0 && (
+             <div className={styles.row2}>
+             <hr className={styles.lineBreak} />
+           </div>
+           )} 
+         
         </div>
       ))}
-    </>
+    </div>
   );
 };
 

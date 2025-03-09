@@ -4,11 +4,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import styles from "./mainSectionUserPost.module.css";
 import { IoArrowBackSharp } from "react-icons/io5";
+import { IoIosMore } from "react-icons/io";
+
 import UserPostFooter from "./UserPostFooter";
 import UserPostHeader from "./UserPostHeader";
 import { RiBarChartGroupedLine } from "react-icons/ri";
 import { BiRepost } from "react-icons/bi";
 import CommentSection from "../CommentSection/CommentSection";
+import Image from "next/image";
 
 const MainSectionUserPost = () => {
   const { username, postId } = useParams();
@@ -44,6 +47,7 @@ const MainSectionUserPost = () => {
 
   // Determine actual post content and user info if reposted
   const actualPost = post?.reposted ? post.reposted : post;
+  const parentPost = post?.parentPostId;
 
   return (
     <div className={styles.postContainer}>
@@ -65,6 +69,53 @@ const MainSectionUserPost = () => {
         <div className={styles.spinner}></div>
       ) : (
         <div className={styles.content}>
+          {/* if it is a commented post then show parnet post data  */}
+          {parentPost && (
+            <div className={styles.parentPost}>
+              <div className={styles.column1}>
+                <div className={styles.profileImg}>
+                  {parentPost?.userId?.image && (
+                    <Image
+                      className={styles.img}
+                      src={parentPost?.userId?.image}
+                      alt="user profile"
+                      width="35"
+                      height="35"
+                    />
+                  )}
+                </div>
+                <div className={styles.verticalLine}></div>
+              </div>
+              <div className={styles.column2}>
+                <div className={styles.profileName}>
+                  <div>
+                    <span className={styles.fullName}>
+                      {parentPost?.userId?.fullName}
+                    </span>
+                    <span className={styles.userName}>
+                      {parentPost?.userId?.userName}
+                    </span>
+                  </div>
+                  <div className={styles.more}>
+                    <IoIosMore />
+                  </div>
+                </div>
+                <div className={styles.contentDiv}>{parentPost?.content}</div>
+                <div className={styles.reaction}>
+                  <UserPostFooter post={parentPost} postId={parentPost?._id} />
+                </div>
+              </div>
+              {/* <UserPostHeader
+                fullName={parentPost?.userId?.fullName}
+                userName={parentPost?.userId?.userName}
+                ownerImage={parentPost?.userId?.image}
+                postId={parentPost?._id}
+              />
+              <div className={styles.mainText}>{parentPost?.content}</div>
+              <UserPostFooter post={parentPost} postId={parentPost?._id} /> */}
+            </div>
+          )}
+
           {/* Repost Indicator */}
           {post?.reposted && (
             <div className={styles.repostedText}>

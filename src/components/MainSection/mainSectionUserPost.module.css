@@ -109,3 +109,73 @@
   margin-top: 17px;
   border-radius: 20px;
 }
+
+.parentPost {
+  display: flex;
+  flex-direction: row;
+}
+
+.profileImg {
+  margin-right: 10px;
+}
+
+.img {
+  border-radius: 50%;
+}
+
+.column1 {
+  display: flex;
+  flex-direction: column;
+}
+
+.verticalLine {
+  display: flex;
+  flex-grow: 1;
+  position: relative;
+}
+
+.verticalLine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 45%;
+  width: 2px; /* Adjust thickness */
+  background-color: gray; /* Adjust color */
+  transform: translateX(-45%);
+}
+
+.column2 {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.profileName {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; /* This will place items on the left and right */
+}
+
+.fullName {
+  font-weight: bold;
+}
+.userName {
+  margin-left: 5px;
+  color: rgb(129, 128, 128);
+}
+
+.more {
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.more:hover {
+  background-color: rgb(39, 38, 38);
+  color: rgb(48, 86, 209);
+}
+
+.contentDiv {
+  display: flex;
+  justify-content: flex-start;
+}
