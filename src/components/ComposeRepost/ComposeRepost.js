@@ -14,6 +14,7 @@ const ComposeRepost = ({
   repostedId,
   userImage,
   currentUserId,
+  ownerId,
 }) => {
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
@@ -71,7 +72,20 @@ const ComposeRepost = ({
         setRepostedCount(result.reposts);
         if (result.reposted) {
           // do an repost
+
+          // if the user reposted the post create a notification
+          await fetch("/api/notification", {
+            method: "POST",
+            body: JSON.stringify({
+              recipient: ownerId, // post owner Id
+              sender: currentUserId,
+              postId: postId,
+              type: "repostWithQuote",
+            }),
+          });
+
           // update the posts in <MainSection/> to get the updated result in NewsFeed
+
           onPostReposted(result.newPost);
         } else {
           // remove repost

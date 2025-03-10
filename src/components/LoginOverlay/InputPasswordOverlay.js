@@ -68,7 +68,7 @@ const InputPasswordOverlay = ({ loginEmail }) => {
                   <p>{loginEmail}</p>
                 </div>
               </div>
-              <div className={styles.err}>{error}</div>
+              {/* <div className={styles.err}>{error}</div> */}
 
               <div className={styles.inputPassword}>
                 <div className={styles.passwordBtn}>

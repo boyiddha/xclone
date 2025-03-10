@@ -1,19 +1,21 @@
-import Image from "next/image";
-import styles from "./home.module.css";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import styles from "./notification.module.css";
+
 import Navbar from "@/components/Navbar/Navbar";
 import Sidebar from "@/components/Sidebar/Sidebar";
-import MainSection from "@/components/MainSection/MainSection";
+import MainSection from "@/components/Notification/MainSection";
+
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export const metadata = {
-  title: "Home / X",
+  title: "Notification / X",
 };
 
 const HomePage = async () => {
   //Get session using getServerSession() and your authOptions
   // const session = await getServerSession(authOptions);
   // console.log("✅  session home page : , ", session);
+
   return (
     <>
       {" "}

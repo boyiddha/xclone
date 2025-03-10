@@ -105,14 +105,6 @@ const MainSectionUserPost = () => {
                   <UserPostFooter post={parentPost} postId={parentPost?._id} />
                 </div>
               </div>
-              {/* <UserPostHeader
-                fullName={parentPost?.userId?.fullName}
-                userName={parentPost?.userId?.userName}
-                ownerImage={parentPost?.userId?.image}
-                postId={parentPost?._id}
-              />
-              <div className={styles.mainText}>{parentPost?.content}</div>
-              <UserPostFooter post={parentPost} postId={parentPost?._id} /> */}
             </div>
           )}
 

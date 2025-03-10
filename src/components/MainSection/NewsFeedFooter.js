@@ -24,6 +24,7 @@ const NewsFeedFooter = ({
   onPostReposted,
   onPostRemove,
   userImage,
+  ownerId,
 }) => {
   const [likeCount, setLikeCount] = useState(likes?.length || 0);
   const [liked, setLiked] = useState(false);
@@ -124,6 +125,18 @@ const NewsFeedFooter = ({
       const data = await res.json();
       setLiked(data.liked);
       setLikeCount(data.likes);
+      if (data.liked) {
+        // if the user liked the post create a notification
+        await fetch("/api/notification", {
+          method: "POST",
+          body: JSON.stringify({
+            recipient: ownerId, // post owner Id
+            sender: currentUserId,
+            postId: postId,
+            type: "like",
+          }),
+        });
+      }
     }
   };
 
@@ -142,7 +155,20 @@ const NewsFeedFooter = ({
       setIsOpenMore(false);
       if (data.reposted) {
         // do an repost
+
+        // if the user reposted the post create a notification
+        await fetch("/api/notification", {
+          method: "POST",
+          body: JSON.stringify({
+            recipient: ownerId, // post owner Id
+            sender: currentUserId,
+            postId: postId,
+            type: "repost",
+          }),
+        });
+
         // update the posts in <MainSection/> to get the updated result in NewsFeed
+
         onPostReposted(data.newPost);
       } else {
         // remove repost
@@ -185,6 +211,7 @@ const NewsFeedFooter = ({
           repliedPostId={postId} // Pass original post
           userImage={userImage}
           currentUserId={currentUserId}
+          ownerId={ownerId}
         />
       )}
 
@@ -233,6 +260,7 @@ const NewsFeedFooter = ({
             repostedId={postId} // Pass original post
             userImage={userImage}
             currentUserId={currentUserId}
+            ownerId={ownerId}
           />
         )}
       </div>

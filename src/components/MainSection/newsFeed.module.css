@@ -32,7 +32,6 @@
 }
 .profile {
   display: flex;
-  display: flex;
   justify-content: center;
 
   margin-right: 5px; /* Add space between image and textarea */
@@ -45,7 +44,8 @@
 .content {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  flex-grow: 1;
+  max-width: 90%;
 }
 
 .header,
@@ -87,12 +87,16 @@
 .mainContentDiv:hover {
   background-color: rgb(14, 14, 14);
 }
+
 .postContent {
-  white-space: pre-line; /* Ensures that newlines are respected */
+  white-space: pre-wrap; /*  Keeps newlines while allowing text to wrap when necessary. */
+  word-wrap: break-word; /* Prevents long words from overflowing */
+  overflow-wrap: break-word; /* Ensures proper wrapping for long words */
+  line-height: 1.5; /* Improves readability */
 }
 
 .ownerPostContainer {
-  width: 90%;
+  max-width: 90%;
   margin-top: 7px;
   border-radius: 15px;
   border: 1px solid rgb(51, 51, 51);
@@ -128,6 +132,13 @@
   align-items: flex-start;
   width: 100%;
   color: white;
+}
+.ownerPostText {
+  white-space: pre-wrap; /*  Keeps newlines while allowing text to wrap when necessary. */
+  word-wrap: break-word; /* Prevents long words from overflowing */
+  overflow-wrap: break-word; /* Ensures proper wrapping for long words */
+  line-height: 1.5; /* Improves readability */
+  max-width: 100%;
 }
 .media {
   width: 100%; /* Take full width of the parent container */

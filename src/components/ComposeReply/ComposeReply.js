@@ -13,6 +13,7 @@ const ComposeReply = ({
   repliedPostId,
   userImage,
   currentUserId,
+  ownerId,
 }) => {
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
@@ -75,6 +76,17 @@ const ComposeReply = ({
 
       setContent(""); // Clear content
       setFile(null); // Reset file
+
+      // if the user commented on the post create a notification
+      await fetch("/api/notification", {
+        method: "POST",
+        body: JSON.stringify({
+          recipient: ownerId, // post owner Id
+          sender: currentUserId,
+          postId: repliedPostId, // main post id
+          type: "comment",
+        }),
+      });
 
       setRepliedCount(result.commentCount || 0); // Ensure fallback if undefined
 

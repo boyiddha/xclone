@@ -40,7 +40,7 @@ const AccountOptions = ({ fullName, userName, userImage }) => {
           <div className={styles.item}>Add an existing account</div>
           <div className={styles.item}>Manage accounts</div>
           <div className={styles.item} onClick={handleLogOut}>
-            Log out @boyiddha
+            Log out @{userName}
           </div>
         </div>
       </div>

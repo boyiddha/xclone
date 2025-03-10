@@ -54,8 +54,9 @@ export const likePostService = async (postId, userId) => {
   return { success: true, likes, liked };
 };
 
-export const repostService = async (postId, userId, content) => {
+export const repostService = async (postId, currentUserId, content) => {
   const post = await findPostByPostId(postId);
+  const userId = currentUserId;
 
   if (!post) {
     return { success: false, message: "Post not found", status: 404 };

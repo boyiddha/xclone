@@ -78,7 +78,10 @@
   flex-direction: column;
 }
 .postContent {
-  white-space: pre-line; /* Ensures that newlines are respected */
+  white-space: pre-wrap; /*  Keeps newlines while allowing text to wrap when necessary. */
+  word-wrap: break-word; /* Prevents long words from overflowing */
+  overflow-wrap: break-word; /* Ensures proper wrapping for long words */
+  line-height: 1.5; /* Improves readability */
 }
 
 .mainText {

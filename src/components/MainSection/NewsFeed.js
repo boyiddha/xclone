@@ -36,11 +36,13 @@ const NewsFeed = ({
         let ownerFullName = "";
         let ownerUserName = "";
         let ownerImage = null;
+        let ownerId = "";
 
-        const owner = users?.find((user) => user._id === originalPost.userId);
+        const owner = users?.find((user) => user._id === originalPost?.userId);
         ownerFullName = owner?.fullName || "Unknown";
         ownerUserName = owner?.userName || "Unknown";
         ownerImage = owner?.image || null;
+        ownerId = owner?._id;
 
         const isReplyPost = post?.parentPostId;
 
@@ -149,7 +151,7 @@ const NewsFeed = ({
                           <div className={styles.ownerPostContent}>
                             {/* Display Content */}
                             {originalPost?.content && (
-                              <div className={styles.postContent}>
+                              <div className={styles.ownerPostText}>
                                 {originalPost?.content}
                               </div>
                             )}
@@ -264,6 +266,7 @@ const NewsFeed = ({
                     onPostReposted={onPostReposted}
                     onPostRemove={handlePostRemoved}
                     userImage={userImage}
+                    ownerId={ownerId}
                   />
                 </div>
               </div>
