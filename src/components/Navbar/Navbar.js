@@ -225,6 +225,7 @@ const Navbar = () => {
                 <div
                   className={`${styles.item} ${styles.menuContainer11}`}
                   data-tooltip="Profile"
+                  onClick={() => router.push(`/${userName}`)}
                 >
                   <div className={styles.icon}>
                     {" "}

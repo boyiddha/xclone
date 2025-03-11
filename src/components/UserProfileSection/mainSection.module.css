@@ -1,0 +1,28 @@
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  color: white;
+}
+
+.pages {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid rgb(109, 109, 109);
+}
+
+.pageItem {
+  cursor: pointer;
+  padding: 10px 15px;
+  color: gray;
+  font-weight: bold;
+}
+
+.pageItem:hover {
+  background-color: rgb(39, 39, 39);
+}
+
+.active {
+  color: white;
+  border-bottom: 4px solid rgb(65, 136, 243);
+}

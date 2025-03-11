@@ -74,7 +74,7 @@ export const getMe = async (req, session) => {
     if (!result.success) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-
+    //console.log("✅  user is: ", result.user);
     return NextResponse.json(result.user, { status: 200 });
   } catch (error) {
     console.error("Error fetching user:", error);

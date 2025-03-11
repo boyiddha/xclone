@@ -1,0 +1,180 @@
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+.head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: black;
+}
+
+.back {
+  color: white;
+  text-align: left;
+}
+.backIcon {
+  margin-right: 20px;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 22px;
+}
+.backIcon:hover {
+  background-color: rgb(58, 58, 58);
+  border-radius: 50%;
+}
+
+.name {
+  display: flex;
+  flex-direction: column;
+}
+.fullName {
+  font-weight: bold;
+  font-size: 22px;
+}
+.totalPost {
+  font-size: 15px;
+  color: rgb(148, 148, 148);
+  text-align: left;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 7px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #007bff; /* Change color as needed */
+  border-bottom: 4px solid rgb(43, 155, 43);
+  border-left: 4px solid #407bb9;
+  border-right: 4px solid rgb(97, 167, 97);
+
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: auto; /* Center the spinner */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.mainDiv {
+  display: flex;
+  flex-direction: column;
+}
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+}
+.coverImageContainer {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  cursor: pointer;
+}
+
+.profileData {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.profileImageButton {
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+}
+.profileImageContainer {
+  position: relative;
+  top: -50px;
+}
+.profileImage {
+  border-radius: 50%;
+  border: 4px solid black;
+  cursor: pointer;
+}
+.editButton {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 1;
+  font-weight: bold;
+}
+.button {
+  padding: 7px 15px 7px 15px;
+  border: 1px solid rgb(185, 215, 243);
+  border-radius: 20px;
+  cursor: pointer;
+}
+.button:hover {
+  background-color: rgb(22, 22, 22);
+}
+
+.headerName {
+  display: flex;
+  flex-direction: row;
+}
+.name {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.userName {
+  color: rgb(148, 147, 147);
+}
+.badges {
+  margin-left: 10px;
+}
+.badgesTitle {
+  border: 1px solid rgb(187, 214, 245);
+  padding: 0px 15px 5px 12px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.badgesTitle:hover {
+  background-color: rgb(22, 22, 22);
+}
+.badgesIcon {
+  position: relative;
+  top: 5px;
+  font-size: 19px;
+  margin-left: 2px;
+  color: rgb(44, 119, 231);
+}
+
+.joiningDate {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 20px;
+  color: rgb(148, 147, 147);
+}
+
+.follow {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 17px;
+  margin-bottom: 20px;
+  color: rgb(148, 147, 147);
+}
+
+.following {
+  margin-right: 20px;
+}
+.following:hover,
+.follower:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.totalText {
+  color: white;
+  font-weight: bold;
+}

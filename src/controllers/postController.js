@@ -79,6 +79,8 @@ export const getUserPosts = async (req) => {
     // Fetch posts from the service
     const posts = await getUserPostsService(res.user._id);
 
+    //console.log("✅  user posts: ", posts);
+
     return NextResponse.json({ success: true, posts });
   } catch (error) {
     console.error("Fetch Error:", error);

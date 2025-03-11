@@ -16,3 +16,8 @@ export const getYearArray = (currentYear, range = 100) => {
 export const formatDate = (year, month, day) => {
   return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
 };
+export const formatJoiningDate = (joiningDate) => {
+  const date = new Date(joiningDate);
+  const options = { year: "numeric", month: "long" };
+  return `Joined ${date.toLocaleDateString("en-US", options)}`;
+};
