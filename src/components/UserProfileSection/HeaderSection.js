@@ -7,6 +7,8 @@ import { FaCalendarAlt } from "react-icons/fa";
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import EditProfileOverlay from "./EditProfileOverlay";
+import { useState } from "react";
 
 const HeaderSection = ({
   totalPost,
@@ -18,8 +20,32 @@ const HeaderSection = ({
   joiningDateMessage,
   following,
   follower,
+  userId,
 }) => {
   const router = useRouter();
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleClose = () => {
+    setIsEditing(false);
+  };
+
+  const handleSave = async (updatedData) => {
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) throw new Error("Failed to update user");
+
+      const updatedUser = await response.json();
+      setUser(updatedUser); // Update UI with new data
+      setIsEditing(false); // Close overlay
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
 
   return (
     <>
@@ -58,18 +84,37 @@ const HeaderSection = ({
                 <div className={styles.profileData}>
                   <div className={styles.profileImageButton}>
                     <div className={styles.profileImageContainer}>
-                      <Image
-                        src={userImage}
-                        width="100"
-                        height="100"
-                        alt="User profile image"
-                        className={styles.profileImage}
-                      />
+                      {userImage && (
+                        <Image
+                          src={userImage}
+                          width="100"
+                          height="100"
+                          alt="User profile image"
+                          className={styles.profileImage}
+                        />
+                      )}
                     </div>
                     <div className={styles.editButton}>
-                      <div className={styles.button}>Edit profile</div>
+                      <div
+                        className={styles.button}
+                        onClick={() => setIsEditing(true)}
+                      >
+                        Edit profile
+                      </div>
                     </div>
                   </div>
+
+                  {isEditing && (
+                    <EditProfileOverlay
+                      fullName={fullName}
+                      userName={userName}
+                      userImage={userImage}
+                      userCoverImage={userCoverImage}
+                      onClose={handleClose}
+                      onSave={handleSave}
+                    />
+                  )}
+
                   <div className={styles.headerName}>
                     <div className={styles.name}>
                       <div className={styles.fullName}>{fullName}</div>

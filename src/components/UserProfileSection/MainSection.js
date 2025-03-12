@@ -25,11 +25,24 @@ const MainSection = () => {
   const [joiningDateMessage, setJoiningDateMessage] = useState("");
   const [following, setFollowing] = useState(0);
   const [follower, setFollower] = useState(0);
+  const [users, setUsers] = useState([]);
 
   const justChangeURL = (page) => {
     const basePath = pathname.split("/")[1];
     const newUrl = page === "posts" ? `/${basePath}` : `/${basePath}/${page}`;
     window.history.pushState(null, "", newUrl);
+  };
+
+  // fetch all users (fullName, userName)
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch("/api/users");
+      if (!res.ok) throw new Error("Failed to fetch users");
+      const data = await res.json();
+      setUsers(data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
   };
 
   const fetchMe = async () => {
@@ -69,9 +82,47 @@ const MainSection = () => {
     }
   };
 
+  // Handle new post submission and add it to the posts list
+  const handleNewPost = async (newPost) => {
+    setPosts([newPost, ...posts]); // Add new post at the top
+  };
+
+  const handlePostRemoved = (repostId) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== repostId)); // Remove repost
+  };
+
+  const handleDeletePost = async (postId) => {
+    // Find the post by its ID
+    const postToDelete = posts.find((post) => post._id === postId);
+
+    // Check if the current user is the owner of the post
+    if (!postToDelete || postToDelete.userId !== currentUserId) {
+      alert("You are not OWNER of this post.");
+      return;
+    }
+    try {
+      const response = await fetch(`/api/tweet/posts/${postId}`, {
+        method: "DELETE",
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        // Remove deleted post from the state
+        setPosts((prevPosts) =>
+          prevPosts.filter((post) => post._id !== postId)
+        );
+      } else {
+        console.error(result.message || "Failed to delete post");
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       await fetchMe(); // Ensure fetchMe completes before proceeding
+      await fetchUsers();
       if (userId) {
         await fetchPosts(); // Now fetchNotifications will run after userId is set
       }
@@ -94,6 +145,7 @@ const MainSection = () => {
             joiningDateMessage={joiningDateMessage}
             following={following}
             follower={follower}
+            userId={userId}
           />
         </div>
         {/* Page Navigation */}
@@ -108,17 +160,17 @@ const MainSection = () => {
           </div>
           <div
             className={`${styles.pageItem} ${
-              pathname === `/${userName}/ReplyPage` ? styles.active : ""
+              pathname === `/${userName}/with_replies` ? styles.active : ""
             }`}
-            onClick={() => justChangeURL("ReplyPage")}
+            onClick={() => justChangeURL("with_replies")}
           >
             Replies
           </div>
           <div
             className={`${styles.pageItem} ${
-              pathname === `/${userName}/LikePage` ? styles.active : ""
+              pathname === `/${userName}/likes` ? styles.active : ""
             }`}
-            onClick={() => justChangeURL("LikePage")}
+            onClick={() => justChangeURL("likes")}
           >
             Likes
           </div>
@@ -127,9 +179,46 @@ const MainSection = () => {
         </div>
 
         <div className={styles.contentSection}>
-          {pathname === `/${userName}` && <UserPost />}
-          {pathname === `/${userName}/ReplyPage` && <UserReply />}
-          {pathname === `/${userName}/LikePage` && <UserLike />}
+          {pathname === `/${userName}` && (
+            <UserPost
+              posts={posts}
+              originalPosts={posts} // pass same posts to find originals
+              fullName={fullName}
+              userName={userName}
+              userImage={userImage}
+              currentUserId={userId}
+              users={users}
+              onDeletePost={handleDeletePost}
+              onPostReposted={handleNewPost}
+              handlePostRemoved={handlePostRemoved}
+            />
+          )}
+          {pathname === `/${userName}/with_replies` && (
+            <UserReply
+              posts={posts}
+              originalPosts={posts} // Contains all posts to find original post if needed
+              users={users}
+              fullName={fullName}
+              userName={userName}
+              userImage={userImage}
+              onDeletePost={handleDeletePost}
+              onPostReposted={handleNewPost}
+              handlePostRemoved={handlePostRemoved}
+            />
+          )}
+          {pathname === `/${userName}/likes` && (
+            <UserLike
+              posts={posts}
+              userId={userId}
+              users={users}
+              fullName={fullName}
+              userName={userName}
+              userImage={userImage}
+              onDeletePost={handleDeletePost}
+              onPostReposted={handleNewPost}
+              handlePostRemoved={handlePostRemoved}
+            />
+          )}
         </div>
       </div>
     </>

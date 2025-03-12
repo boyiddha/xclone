@@ -1,0 +1,167 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(95, 95, 95, 0.5); /* Dark transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures it appears above other content */
+}
+
+.editProfileContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: black;
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.headerRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  width: 100%;
+}
+
+.closeIcon {
+  font-size: 24px;
+  cursor: pointer;
+  margin: 4px;
+}
+.close:hover {
+  border-radius: 50%;
+  background-color: rgb(56, 55, 55);
+}
+
+.headerText {
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 25px;
+}
+
+.saveButton {
+  background-color: rgb(156, 156, 156);
+  color: black;
+  border: none;
+  padding: 7px 19px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: default; /* initially no pointer */
+}
+.active {
+  background-color: white;
+  cursor: pointer;
+}
+
+.saveButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.coverImageRow {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.profileImageRow {
+  position: relative;
+  height: 70px;
+  top: -50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.profileImage {
+  border-radius: 50%;
+  border: 4px solid black;
+}
+
+.action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  color: white;
+}
+
+.add {
+  margin-right: 15px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 12px;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.remove {
+  margin-left: 15px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  padding: 7px;
+  font-size: 25px;
+}
+
+.add:hover,
+.remove:hover {
+  background-color: rgb(85, 85, 85);
+  cursor: pointer;
+}
+
+/* .addPhotoButton,
+.removePhotoButton {
+  position: absolute;
+  bottom: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.addPhotoButton {
+  left: 10px;
+}
+
+.removePhotoButton {
+  right: 10px;
+}
+  */
+
+.hiddenInput {
+  display: none;
+}
+
+.inputName {
+  width: 100%;
+}
+
+.inputName input {
+  background-color: black;
+  color: white;
+  border: 1px solid gray;
+  padding: 20px;
+  margin-top: 24px;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 8px;
+  outline: none;
+}
+
+.inputName input:focus {
+  border: 2px solid rgb(47, 115, 241);
+}

@@ -95,7 +95,7 @@
   font-size: 19px;
   font-weight: bold;
 }
-.postBtn.active {
+.active {
   background-color: white;
   cursor: pointer;
 }

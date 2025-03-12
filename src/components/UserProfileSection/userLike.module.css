@@ -1,0 +1,106 @@
+.lineBreak {
+  height: 1px;
+  background-color: rgba(233, 228, 228, 0.3);
+  border: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.message {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: rgb(27, 22, 71);
+  border-radius: 10px;
+  margin-top: 4px;
+  height: 45px;
+}
+.messageTitle {
+  margin-left: 10px;
+}
+.messageText {
+  margin-left: 8px;
+}
+
+.mainDiv {
+  display: flex;
+  flex-direction: column;
+}
+
+.postContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 7px;
+}
+.profile {
+  display: flex;
+  justify-content: center;
+
+  margin-right: 5px; /* Add space between image and textarea */
+}
+.img {
+  border-radius: 50%;
+  margin: 10px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  max-width: 90%;
+}
+
+.header,
+.reaction {
+  display: flex;
+  justify-content: space-between; /* This will place items on the left and right */
+  padding-top: 10px;
+}
+
+.reaction {
+  color: rgb(141, 140, 140);
+  font-size: 21px;
+}
+
+.replyToDiv {
+  text-align: left;
+}
+
+.replyTotext {
+  color: rgb(121, 121, 121);
+}
+.replyTo {
+  color: rgb(31, 73, 209);
+}
+.replyTo:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.mainText {
+  margin-top: 5px;
+  text-align: left;
+  padding-bottom: 3px;
+}
+
+.mainContentDiv {
+  cursor: pointer;
+}
+.mainContentDiv:hover {
+  background-color: rgb(14, 14, 14);
+}
+
+.postContent {
+  white-space: pre-wrap; /*  Keeps newlines while allowing text to wrap when necessary. */
+  word-wrap: break-word; /* Prevents long words from overflowing */
+  overflow-wrap: break-word; /* Ensures proper wrapping for long words */
+  line-height: 1.5; /* Improves readability */
+  text-align: left;
+}
+
+.media {
+  width: 100%; /* Take full width of the parent container */
+  height: auto; /* Maintain aspect ratio */
+  display: block;
+  border-radius: 20px;
+}

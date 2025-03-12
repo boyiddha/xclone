@@ -1,0 +1,157 @@
+.lineBreak {
+  height: 1px;
+  background-color: rgba(233, 228, 228, 0.3);
+  border: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.mainDiv {
+  display: flex;
+  flex-direction: column;
+}
+.repostedText {
+  color: rgb(116, 113, 113);
+  font-weight: bold;
+  text-align: left;
+  margin-left: 20px;
+  width: 25%;
+}
+.repostedIcon {
+  margin-right: 13px;
+  font-size: 20px;
+}
+.repostedText:hover {
+  border-bottom: 1px solid rgb(66, 66, 66);
+  cursor: pointer;
+}
+.postContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 7px;
+}
+.profile {
+  display: flex;
+  justify-content: center;
+
+  margin-right: 5px; /* Add space between image and textarea */
+}
+.img {
+  border-radius: 50%;
+  margin: 10px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  max-width: 90%;
+}
+
+.header,
+.reaction {
+  display: flex;
+  justify-content: space-between; /* This will place items on the left and right */
+  padding-top: 10px;
+}
+
+.reaction {
+  color: rgb(141, 140, 140);
+  font-size: 21px;
+}
+
+.replyToDiv {
+  text-align: left;
+}
+
+.replyTotext {
+  color: rgb(121, 121, 121);
+}
+.replyTo {
+  color: rgb(31, 73, 209);
+}
+.replyTo:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.mainText {
+  margin-top: 5px;
+  text-align: left;
+  padding-bottom: 3px;
+}
+
+.mainContentDiv {
+  cursor: pointer;
+}
+.mainContentDiv:hover {
+  background-color: rgb(14, 14, 14);
+}
+
+.postContent {
+  white-space: pre-wrap; /*  Keeps newlines while allowing text to wrap when necessary. */
+  word-wrap: break-word; /* Prevents long words from overflowing */
+  overflow-wrap: break-word; /* Ensures proper wrapping for long words */
+  line-height: 1.5; /* Improves readability */
+}
+
+.ownerPostContainer {
+  max-width: 90%;
+  margin-top: 7px;
+  border-radius: 15px;
+  border: 1px solid rgb(51, 51, 51);
+  cursor: pointer;
+  padding: 7px;
+}
+.ownerPostContainer:hover {
+  background-color: rgb(14, 14, 14);
+}
+.ownerPostHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.ownerUsername {
+  margin-left: 7px;
+  font-size: 17px;
+  color: rgb(116, 115, 115);
+}
+
+.ownerFullname {
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  margin-left: 6px;
+}
+
+.ownerPostContent {
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  color: white;
+}
+.ownerPostText {
+  white-space: pre-wrap; /*  Keeps newlines while allowing text to wrap when necessary. */
+  word-wrap: break-word; /* Prevents long words from overflowing */
+  overflow-wrap: break-word; /* Ensures proper wrapping for long words */
+  line-height: 1.5; /* Improves readability */
+  max-width: 100%;
+}
+.media {
+  width: 100%; /* Take full width of the parent container */
+  height: auto; /* Maintain aspect ratio */
+  display: block;
+  margin-top: 17px;
+  border-radius: 20px;
+}
+
+.mediaPreview {
+  width: 100%; /* Take full width of the parent container */
+  max-height: auto; /* Maintain aspect ratio */
+  display: block;
+  margin-top: 10px;
+  border-radius: 15px;
+}
