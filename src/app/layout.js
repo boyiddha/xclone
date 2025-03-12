@@ -4,7 +4,6 @@ import "./globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-
 import connectDB from "@/lib/mongodb";
 
 const lato = Lato({
@@ -21,12 +20,11 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   const conn = connectDB(); // Universally connect DB
   const session = await getServerSession(authOptions); // Get session server-side
+
   return (
     <html lang="en">
-      <body className={lato.variable}>
-      <AuthProvider session={session}>
-          {children} 
-        </AuthProvider>
+      <body className={lato.className}>
+        <AuthProvider session={session}>{children}</AuthProvider>
       </body>
     </html>
   );

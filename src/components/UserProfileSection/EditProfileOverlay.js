@@ -134,6 +134,18 @@ const EditProfileOverlay = ({
             className={styles.hiddenInput}
             onChange={(e) => handleFileChange(e, "cover")}
           />
+
+          {selectedCoverFile && (
+            <Cropper
+              image={selectedCoverFile}
+              crop={crop}
+              zoom={zoom}
+              aspect={3 / 1}
+              onCropChange={setCrop}
+              onZoomChange={setZoom}
+              onCropComplete={handleCropComplete}
+            />
+          )}
         </div>
 
         {/* Profile Image Row */}
@@ -184,3 +196,164 @@ const EditProfileOverlay = ({
 };
 
 export default EditProfileOverlay;
+
+// import { useState, useRef, useEffect, useCallback } from "react";
+// import Image from "next/image";
+// import Cropper from "react-easy-crop";
+// import { IoCloseSharp } from "react-icons/io5";
+// import { FiCamera } from "react-icons/fi";
+
+// import getCroppedImg from "@/utils/cropImage"; // Utility to crop image
+// import styles from "./editProfileOverlay.module.css";
+
+// const EditProfileOverlay = ({
+//   fullName,
+//   userName,
+//   userImage,
+//   userCoverImage,
+//   onClose,
+//   onSave,
+// }) => {
+//   const [inputFullName, setInputFullName] = useState(fullName);
+//   const [coverImage, setCoverImage] = useState(userCoverImage);
+//   const [profileImage, setProfileImage] = useState(userImage);
+//   const [selectedImage, setSelectedImage] = useState(null);
+//   const [imageType, setImageType] = useState(null);
+//   const [crop, setCrop] = useState({ x: 0, y: 0 });
+//   const [zoom, setZoom] = useState(1);
+//   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+//   const fileInputRef = useRef(null);
+//   const overlayRef = useRef(null);
+
+//   const handleFileChange = (event, type) => {
+//     const image = event.target.files[0];
+//     if (image) {
+//       setImageType(type);
+//       setSelectedImage(URL.createObjectURL(image));
+//     }
+//   };
+
+//   const handleCropComplete = useCallback((_, croppedAreaPixels) => {
+//     setCroppedAreaPixels(croppedAreaPixels);
+//   }, []);
+
+//   const handleApplyCrop = async () => {
+//     if (selectedImage && croppedAreaPixels) {
+//       const croppedImage = await getCroppedImg(
+//         selectedImage,
+//         croppedAreaPixels
+//       );
+//       if (imageType === "cover") setCoverImage(croppedImage);
+//       else setProfileImage(croppedImage);
+//       setSelectedImage(null); // Close cropping modal
+//     }
+//   };
+
+//   const handleSave = () => {
+//     const updatedData = {
+//       fullName: inputFullName,
+//       coverImage,
+//       profileImage,
+//     };
+//     onSave(updatedData);
+//     onClose();
+//   };
+
+//   return (
+//     <div className={styles.overlay}>
+//       <div ref={overlayRef} className={styles.editProfileContainer}>
+//         <div className={styles.headerRow}>
+//           <IoCloseSharp className={styles.closeIcon} onClick={onClose} />
+//           <span className={styles.headerText}>Edit Profile</span>
+//           <div className={styles.saveButton} onClick={handleSave}>
+//             Save
+//           </div>
+//         </div>
+
+//         <div className={styles.coverImageRow}>
+//           {coverImage && (
+//             <Image
+//               src={coverImage}
+//               fill
+//               alt="Cover Image"
+//               className={styles.coverImage}
+//             />
+//           )}
+//           <span
+//             className={styles.add}
+//             onClick={() => fileInputRef.current.click()}
+//           >
+//             <FiCamera />
+//           </span>
+//           <input
+//             type="file"
+//             accept="image/*"
+//             ref={fileInputRef}
+//             className={styles.hiddenInput}
+//             onChange={(e) => handleFileChange(e, "cover")}
+//           />
+//         </div>
+
+//         <div className={styles.profileImageRow}>
+//           {profileImage && (
+//             <Image
+//               src={profileImage}
+//               width="130"
+//               height="130"
+//               alt="Profile Image"
+//               className={styles.profileImage}
+//             />
+//           )}
+//           <span
+//             className={styles.add}
+//             onClick={() => fileInputRef.current.click()}
+//           >
+//             <FiCamera />
+//           </span>
+//           <input
+//             type="file"
+//             accept="image/*"
+//             ref={fileInputRef}
+//             className={styles.hiddenInput}
+//             onChange={(e) => handleFileChange(e, "profile")}
+//           />
+//         </div>
+
+//         <div className={styles.inputName}>
+//           <input
+//             type="text"
+//             value={inputFullName}
+//             onChange={(e) => setInputFullName(e.target.value)}
+//           />
+//         </div>
+//       </div>
+
+//       {selectedImage && (
+//         <div className={styles.cropContainer}>
+//           <Cropper
+//             image={selectedImage}
+//             crop={crop}
+//             zoom={zoom}
+//             aspect={imageType === "cover" ? 3 / 1 : 1 / 1}
+//             onCropChange={setCrop}
+//             onZoomChange={setZoom}
+//             onCropComplete={handleCropComplete}
+//           />
+//           <button
+//             onClick={handleApplyCrop}
+//             style={{
+//               position: "relative",
+//               backgroundColor: "red",
+//               height: "100px",
+//               width: "100px",
+//             }}
+//           >
+//             Apply
+//           </button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default EditProfileOverlay;
