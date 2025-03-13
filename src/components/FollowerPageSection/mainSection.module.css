@@ -1,0 +1,16 @@
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  color: white;
+}
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: black;
+  margin-bottom: 30px;
+}

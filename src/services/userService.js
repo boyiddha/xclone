@@ -18,6 +18,7 @@ import {
   createUser,
   createOauthUser,
   updateUser,
+  updateUserById,
   savePassword,
   saveUsername,
   getUserByIdFromDB,
@@ -87,6 +88,10 @@ export const updateUserService = async (email, dob, password, username) => {
       message: `Failed to update user ${error.message}`,
     };
   }
+};
+
+export const updateUserProfileService = async (userId, newData) => {
+  return await updateUserById(userId, newData);
 };
 
 export const savePasswordService = async (email, password) => {

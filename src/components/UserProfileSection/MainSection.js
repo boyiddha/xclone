@@ -146,6 +146,9 @@ const MainSection = () => {
             following={following}
             follower={follower}
             userId={userId}
+            setFullName={setFullName}
+            setUserImage={setUserImage}
+            setUserCoverImage={setUserCoverImage}
           />
         </div>
         {/* Page Navigation */}

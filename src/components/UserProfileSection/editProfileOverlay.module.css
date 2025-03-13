@@ -51,20 +51,15 @@
 }
 
 .saveButton {
-  background-color: rgb(156, 156, 156);
+  background-color: white;
   color: black;
   border: none;
   padding: 7px 19px;
   border-radius: 20px;
   font-size: 16px;
   font-weight: bold;
-  cursor: default; /* initially no pointer */
-}
-.active {
-  background-color: white;
   cursor: pointer;
 }
-
 .saveButton:disabled {
   background-color: #ccc;
   cursor: not-allowed;
@@ -80,8 +75,8 @@
 }
 .profileImageRow {
   position: relative;
-  height: 70px;
-  top: -50px;
+  height: 75px;
+  top: -35px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -106,6 +101,19 @@
   border-radius: 50%;
   font-size: 20px;
 }
+.actionProfilePhoto {
+  position: absolute;
+  top: 45px;
+  color: white;
+  height: 100%;
+  width: 100%;
+}
+.addProfilePhoto {
+  background: rgb(51, 51, 51);
+  padding: 12px;
+  border-radius: 50%;
+  font-size: 20px;
+}
 
 .remove {
   margin-left: 15px;
@@ -116,31 +124,11 @@
 }
 
 .add:hover,
-.remove:hover {
+.remove:hover,
+.addProfilePhoto:hover {
   background-color: rgb(85, 85, 85);
   cursor: pointer;
 }
-
-/* .addPhotoButton,
-.removePhotoButton {
-  position: absolute;
-  bottom: 8px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.addPhotoButton {
-  left: 10px;
-}
-
-.removePhotoButton {
-  right: 10px;
-}
-  */
 
 .hiddenInput {
   display: none;
@@ -164,4 +152,106 @@
 
 .inputName input:focus {
   border: 2px solid rgb(47, 115, 241);
+}
+
+.cropContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cropWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: black;
+  max-width: 600px;
+  width: 100%;
+  height: 500px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* First Row: Buttons */
+.cropActions {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 7px;
+}
+
+.backIconDiv {
+  padding: 5px;
+}
+.backIcon {
+  font-size: 24px;
+  cursor: pointer;
+}
+.backIconDiv:hover {
+  border-radius: 50%;
+  background-color: rgb(56, 55, 55);
+}
+
+.editText {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.applyButton {
+  background-color: white;
+  color: black;
+  padding: 7px 17px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.applyButton:hover {
+  background: rgb(209, 209, 209);
+}
+
+/* Second Row: Cropper */
+.cropArea {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  overflow: hidden;
+  background-color: rgb(34, 34, 34);
+}
+
+.cropSelection {
+  border: 5px solid rgb(44, 107, 224) !important;
+}
+
+/* Third Row: Zoom Control */
+.zoomControls {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.zoomControls input {
+  width: 70%;
+  cursor: pointer;
+}
+
+.zoomIn {
+  margin-right: 20px;
+  font-size: 20px;
+  color: rgb(179, 177, 177);
+}
+.zoomOut {
+  margin-left: 20px;
+  font-size: 20px;
+  color: rgb(179, 177, 177);
 }

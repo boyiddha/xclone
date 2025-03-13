@@ -60,6 +60,10 @@ export const updateUser = async (email, dob, hashedPassword, username) => {
   }
 };
 
+export const updateUserById = async (userId, newData) => {
+  return await User.findByIdAndUpdate(userId, newData, { new: true });
+};
+
 export const saveResetCode = async (email, resetCode, expiresAt) => {
   try {
     return await User.findOneAndUpdate(

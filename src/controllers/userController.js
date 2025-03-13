@@ -25,6 +25,7 @@ import {
   saveUsernameService,
   findUserById,
   findAllUsers,
+  updateUserProfileService,
 } from "@/services/userService";
 import { getAuthToken } from "@/utils/auth";
 
@@ -237,6 +238,33 @@ export const saveUsername = async (req) => {
     );
   }
 };
+
+export async function updateUserProfile(req, params) {
+  try {
+    const { userId } = await params;
+
+    const { fullName, coverImage, profileImage } = await req.json();
+
+    const updatedUser = await updateUserProfileService(userId, {
+      fullName,
+      coverImage,
+      image: profileImage,
+    });
+
+    if (!updatedUser) {
+      return new Response(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+      });
+    }
+
+    return new Response(JSON.stringify(updatedUser), { status: 200 });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+    });
+  }
+}
 
 //✅  Repositories = Only fetch/store data.
 //✅  Services = Apply business logic.

@@ -21,6 +21,9 @@ const HeaderSection = ({
   following,
   follower,
   userId,
+  setFullName,
+  setUserImage,
+  setUserCoverImage,
 }) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
@@ -36,11 +39,17 @@ const HeaderSection = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData),
       });
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
 
-      if (!response.ok) throw new Error("Failed to update user");
-
+      //console.log("✅  User updated successfully:");
       const updatedUser = await response.json();
-      setUser(updatedUser); // Update UI with new data
+      // Update UI with new data
+      setFullName(updatedUser.fullName);
+      setUserImage(updatedUser.image);
+      setUserCoverImage(updatedUser.coverImage);
+
       setIsEditing(false); // Close overlay
     } catch (error) {
       console.error("Error updating user:", error);
@@ -136,11 +145,19 @@ const HeaderSection = ({
                     </span>
                   </div>
                   <div className={styles.follow}>
-                    <span className={styles.following}>
+                    <span
+                      className={styles.following}
+                      onClick={() => router.push(`/${userName}/following`)}
+                    >
                       <span className={styles.totalText}>{following}</span>{" "}
                       {" Following"}
                     </span>
-                    <span className={styles.follower}>
+                    <span
+                      className={styles.follower}
+                      onClick={() =>
+                        router.push(`/${userName}/verified_followers`)
+                      }
+                    >
                       <span className={styles.totalText}>{follower}</span>{" "}
                       {" Follower"}
                     </span>
