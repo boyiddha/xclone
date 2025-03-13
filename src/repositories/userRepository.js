@@ -22,7 +22,10 @@ export const getUser = async (email) => {
 };
 
 export async function getUserByIdFromDB(userId) {
-  return await User.findById(userId);
+  return await User.findById(userId).select("-password");
+}
+export async function getUserByUserNameFromDB(username) {
+  return await User.findOne({ userName: username }).select("-password");
 }
 
 export async function getAllUsersFromDB() {

@@ -22,6 +22,7 @@ import {
   savePassword,
   saveUsername,
   getUserByIdFromDB,
+  getUserByUserNameFromDB,
   getAllUsersFromDB,
 } from "@/repositories/userRepository";
 import { createHashPassword } from "@/helpers/passwordHelper";
@@ -40,6 +41,9 @@ export const findUserByEmail = async (email) => {
 
 export async function findUserById(userId) {
   return await getUserByIdFromDB(userId);
+}
+export async function findUserByUsername(username) {
+  return await getUserByUserNameFromDB(username);
 }
 
 export async function createUserService(name, email, dob) {

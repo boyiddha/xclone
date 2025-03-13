@@ -24,6 +24,7 @@ import {
   savePasswordService,
   saveUsernameService,
   findUserById,
+  findUserByUsername,
   findAllUsers,
   updateUserProfileService,
 } from "@/services/userService";
@@ -86,18 +87,32 @@ export const getMe = async (req, session) => {
   }
 };
 
-export async function getUserById(userId) {
+export async function getUserByIdentifier(identifier) {
   try {
-    const user = await findUserById(userId);
+    // check if the dynamic api routes params is a mongoDB object Id
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(identifier);
 
-    if (!user) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 }
-      );
+    if (isObjectId) {
+      const user = await findUserById(identifier);
+
+      if (!user) {
+        return NextResponse.json(
+          { success: false, message: "User not found" },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json({ success: true, user }, { status: 200 });
+    } else {
+      const user = await findUserByUsername(identifier);
+      if (!user) {
+        return NextResponse.json(
+          { success: false, message: "User not found" },
+          { status: 404 }
+        );
+      }
+      return NextResponse.json({ success: true, user }, { status: 200 });
     }
-
-    return NextResponse.json({ success: true, user }, { status: 200 });
   } catch (error) {
     console.error("Error fetching user:", error);
     return NextResponse.json(
@@ -110,7 +125,6 @@ export async function getUserById(userId) {
 export async function getAllUsers() {
   try {
     const users = await findAllUsers();
-
     return NextResponse.json(users, { status: 200 });
   } catch (error) {
     console.error("Error fetching users:", error);

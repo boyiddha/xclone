@@ -14,7 +14,7 @@ const UserProfilePage = async ({ params }) => {
         </div>
         <div className={styles.mainSidebarContainer}>
           <div className={`${styles.column} ${styles.main}`}>
-            <MainSection />
+            <MainSection username={username} />
           </div>
 
           <div className={`${styles.column} ${styles.sidebar}`}>

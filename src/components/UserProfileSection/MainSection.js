@@ -12,7 +12,7 @@ import UserPost from "./UserPost";
 import UserReply from "./UserReply";
 import UserLike from "./UserLike";
 
-const MainSection = () => {
+const MainSection = ({ username }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
@@ -26,6 +26,7 @@ const MainSection = () => {
   const [following, setFollowing] = useState(0);
   const [follower, setFollower] = useState(0);
   const [users, setUsers] = useState([]);
+  const [meFetched, setMeFetched] = useState(false);
 
   const justChangeURL = (page) => {
     const basePath = pathname.split("/")[1];
@@ -42,27 +43,6 @@ const MainSection = () => {
       setUsers(data);
     } catch (error) {
       console.error("Error fetching users:", error);
-    }
-  };
-
-  const fetchMe = async () => {
-    const res = await fetch("/api/me", {
-      method: "GET",
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setFullName(data.fullName);
-      setUserName(data.userName);
-      setUserImage(data.image || null);
-      setUserCoverImage(data.coverImage || null);
-      setCurrentUserId(data._id);
-      setFollowing(data.following.length || 0);
-      setFollower(data.followers.length || 0);
-
-      const joiningDate = formatJoiningDate(data.createdAt);
-      setJoiningDateMessage(joiningDate);
-    } else {
-      console.error("Failed to fetch Me");
     }
   };
 
@@ -120,16 +100,38 @@ const MainSection = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchMe(); // Ensure fetchMe completes before proceeding
-      await fetchUsers();
-      if (userId) {
-        await fetchPosts(); // Now fetchNotifications will run after userId is set
+    const fetchMe = async () => {
+      try {
+        const res = await fetch(`/api/users/${username}`);
+        if (!res.ok) throw new Error("Failed to fetch user");
+
+        const data = await res.json();
+        setFullName(data.user.fullName);
+        setUserName(data.user.userName);
+        setUserImage(data.user.image || null);
+        setUserCoverImage(data.user.coverImage || null);
+        setCurrentUserId(data.user._id);
+        setFollowing(data?.user?.following?.length || 0);
+        setFollower(data?.user?.followers?.length || 0);
+
+        const joiningDate = formatJoiningDate(data.user.createdAt);
+        setJoiningDateMessage(joiningDate);
+      } catch (error) {
+        console.error("Error fetching user:", error);
       }
     };
 
+    fetchMe();
+  }, [username]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchUsers();
+      await fetchPosts();
+    };
+
     fetchData();
-  }, [userId]);
+  }, [userId]); // run after fetchMe
 
   return (
     <>
