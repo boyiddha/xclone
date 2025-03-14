@@ -5,7 +5,7 @@ import { IoArrowBackSharp } from "react-icons/io5";
 
 import { useRouter } from "next/navigation";
 
-const HeaderSection = ({ fullName, userName, userId, basePath }) => {
+const HeaderSection = ({ fullName, userName, userId, basePath, loading }) => {
   const router = useRouter();
 
   return (
@@ -20,10 +20,15 @@ const HeaderSection = ({ fullName, userName, userId, basePath }) => {
             <IoArrowBackSharp />
           </span>
         </div>
-        <div className={styles.name}>
-          <div className={styles.fullName}>{fullName}</div>
-          <div className={styles.userName}>@{userName}</div>
-        </div>
+
+        {loading ? (
+          <div className={styles.spinner}></div> // Show spinner when loading
+        ) : (
+          <div className={styles.name}>
+            <div className={styles.fullName}>{fullName}</div>
+            <div className={styles.userName}>@{userName}</div>
+          </div>
+        )}
       </div>
 
       {/* Page Navigation */}

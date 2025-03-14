@@ -24,8 +24,18 @@ export const getUser = async (email) => {
 export async function getUserByIdFromDB(userId) {
   return await User.findById(userId).select("-password");
 }
+
 export async function getUserByUserNameFromDB(username) {
-  return await User.findOne({ userName: username }).select("-password");
+  return await User.findOne({ userName: username })
+    .select("-password") // Exclude password field
+    .populate({
+      path: "followers", // Populate followers
+      select: "userName fullName image", // Only include the specified fields
+    })
+    .populate({
+      path: "following", // Populate following
+      select: "userName fullName image", // Only include the specified fields
+    });
 }
 
 export async function getAllUsersFromDB() {
@@ -119,3 +129,7 @@ export const saveUsername = async (email, username) => {
     { new: true }
   );
 };
+
+export async function updateUserFollowers(user) {
+  return await user.save();
+}

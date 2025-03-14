@@ -18,6 +18,8 @@ const MainSection = ({ username }) => {
   const pathname = usePathname();
   const [posts, setPosts] = useState([]);
   const [userId, setCurrentUserId] = useState("");
+  const [loggedInUserId, setLoggedInUserId] = useState("");
+
   const [fullName, setFullName] = useState("");
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState(null);
@@ -25,13 +27,27 @@ const MainSection = ({ username }) => {
   const [joiningDateMessage, setJoiningDateMessage] = useState("");
   const [following, setFollowing] = useState(0);
   const [follower, setFollower] = useState(0);
+  const [followingList, setFollowingList] = useState([]);
+  const [followerList, setFollowerList] = useState([]);
   const [users, setUsers] = useState([]);
-  const [meFetched, setMeFetched] = useState(false);
 
   const justChangeURL = (page) => {
     const basePath = pathname.split("/")[1];
     const newUrl = page === "posts" ? `/${basePath}` : `/${basePath}/${page}`;
     window.history.pushState(null, "", newUrl);
+  };
+
+  const fetchMe = async () => {
+    try {
+      const res = await fetch(`/api/me`);
+      if (!res.ok) throw new Error("Failed to fetch user");
+
+      const data = await res.json();
+
+      setLoggedInUserId(data._id);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
   };
 
   // fetch all users (fullName, userName)
@@ -48,7 +64,7 @@ const MainSection = ({ username }) => {
 
   const fetchPosts = async () => {
     try {
-      const res = await fetch(`/api/tweet/posts`);
+      const res = await fetch(`/api/posts/${username}`);
       const data = await res.json();
       if (data.success) {
         setPosts(data.posts);
@@ -76,7 +92,7 @@ const MainSection = ({ username }) => {
     const postToDelete = posts.find((post) => post._id === postId);
 
     // Check if the current user is the owner of the post
-    if (!postToDelete || postToDelete.userId !== currentUserId) {
+    if (!postToDelete || postToDelete.userId !== loggedInUserId) {
       alert("You are not OWNER of this post.");
       return;
     }
@@ -100,7 +116,7 @@ const MainSection = ({ username }) => {
   };
 
   useEffect(() => {
-    const fetchMe = async () => {
+    const fetchUser = async () => {
       try {
         const res = await fetch(`/api/users/${username}`);
         if (!res.ok) throw new Error("Failed to fetch user");
@@ -113,6 +129,8 @@ const MainSection = ({ username }) => {
         setCurrentUserId(data.user._id);
         setFollowing(data?.user?.following?.length || 0);
         setFollower(data?.user?.followers?.length || 0);
+        setFollowingList(data?.user?.following);
+        setFollowerList(data?.user?.followers);
 
         const joiningDate = formatJoiningDate(data.user.createdAt);
         setJoiningDateMessage(joiningDate);
@@ -121,11 +139,12 @@ const MainSection = ({ username }) => {
       }
     };
 
-    fetchMe();
+    fetchUser();
   }, [username]);
 
   useEffect(() => {
     const fetchData = async () => {
+      await fetchMe();
       await fetchUsers();
       await fetchPosts();
     };
@@ -147,7 +166,10 @@ const MainSection = ({ username }) => {
             joiningDateMessage={joiningDateMessage}
             following={following}
             follower={follower}
+            followingList={followingList}
+            followerList={followerList}
             userId={userId}
+            loggedInUserId={loggedInUserId}
             setFullName={setFullName}
             setUserImage={setUserImage}
             setUserCoverImage={setUserCoverImage}
@@ -171,14 +193,16 @@ const MainSection = ({ username }) => {
           >
             Replies
           </div>
-          <div
-            className={`${styles.pageItem} ${
-              pathname === `/${userName}/likes` ? styles.active : ""
-            }`}
-            onClick={() => justChangeURL("likes")}
-          >
-            Likes
-          </div>
+          {userId === loggedInUserId && (
+            <div
+              className={`${styles.pageItem} ${
+                pathname === `/${userName}/likes` ? styles.active : ""
+              }`}
+              onClick={() => justChangeURL("likes")}
+            >
+              Likes
+            </div>
+          )}
           <div className={styles.pageItem}>Highlights</div>
           <div className={styles.pageItem}>Media</div>
         </div>

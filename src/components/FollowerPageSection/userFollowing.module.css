@@ -1,0 +1,88 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.userRow {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #161616;
+}
+
+.column1 {
+  margin-right: 15px;
+}
+
+.profileImage {
+  border-radius: 50%;
+}
+
+.column2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.fullName {
+  font-weight: bold;
+  cursor: pointer;
+}
+.fullName:hover {
+  text-decoration: underline;
+}
+
+.userName {
+  color: gray;
+  font-size: 14px;
+}
+
+.noFollowing {
+  text-align: center;
+  color: gray;
+}
+
+.followButtonDiv {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 1;
+  font-weight: bold;
+}
+
+.followButton {
+  padding: 7px 15px;
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.followButton:hover {
+  background-color: rgb(223, 222, 222);
+}
+
+.following {
+  background-color: black;
+  color: white;
+}
+
+.unfollow {
+  color: red;
+}
+.unfollow:hover {
+  background-color: rgb(44, 23, 23);
+  border: 1px solid red;
+}

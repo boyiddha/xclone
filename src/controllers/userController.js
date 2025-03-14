@@ -27,6 +27,7 @@ import {
   findUserByUsername,
   findAllUsers,
   updateUserProfileService,
+  followUserService,
 } from "@/services/userService";
 import { getAuthToken } from "@/utils/auth";
 
@@ -277,6 +278,32 @@ export async function updateUserProfile(req, params) {
     return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
     });
+  }
+}
+
+export async function followUserController(req) {
+  try {
+    const { loggedInUserId, userId } = await req.json();
+
+    if (!loggedInUserId || !userId) {
+      return NextResponse.json({ message: "Invalid request" }, { status: 400 });
+    }
+
+    const result = await followUserService(loggedInUserId, userId);
+
+    if (!result) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { success: true, isFollowing: result.isFollowing },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Server error", error: error.message },
+      { status: 500 }
+    );
   }
 }
 

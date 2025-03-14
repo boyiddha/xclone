@@ -2,10 +2,14 @@ import Image from "next/image";
 import { IoIosMore } from "react-icons/io";
 import styles from "./commentSection.module.css";
 import UserPostFooter from "../MainSection/UserPostFooter";
+import { useRouter } from "next/navigation";
 
 const CommentSection = ({ comments, level = 0 }) => {
+  const router = useRouter();
   return (
-    <div style={{ marginLeft: `${level * 20}px` }}> {/* Indentation for nested comments */}
+    <div style={{ marginLeft: `${level * 20}px` }}>
+      {" "}
+      {/* Indentation for nested comments */}
       {comments.map((comment) => (
         <div key={comment._id} className={styles.mainContainer}>
           <div className={styles.commentContainer}>
@@ -24,7 +28,10 @@ const CommentSection = ({ comments, level = 0 }) => {
             <div className={styles.column2}>
               <div className={styles.header}>
                 <div className={styles.profileName}>
-                  <span className={styles.fullname}>
+                  <span
+                    className={styles.fullname}
+                    onClick={() => router.push(`/${comment?.userId?.userName}`)}
+                  >
                     {comment?.userId?.fullName}
                   </span>
                   <span className={styles.username}>
@@ -89,12 +96,11 @@ const CommentSection = ({ comments, level = 0 }) => {
           {comment.comments && comment.comments.length > 0 && (
             <CommentSection comments={comment.comments} level={level + 1} />
           )}
-           {level===0 && (
-             <div className={styles.row2}>
-             <hr className={styles.lineBreak} />
-           </div>
-           )} 
-         
+          {level === 0 && (
+            <div className={styles.row2}>
+              <hr className={styles.lineBreak} />
+            </div>
+          )}
         </div>
       ))}
     </div>

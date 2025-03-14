@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { IoIosMore } from "react-icons/io";
 import styles from "./newsFeedHeader.module.css";
+import { useRouter } from "next/navigation";
 
 const NewsFeedHeader = ({ fullName, userName, postId, onDeletePost }) => {
   const [isOpenMore, setIsOpenMore] = useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const boxMoreRef = useRef(null);
+  const router = useRouter();
 
   // Toggle function
   const toggleMore = () => {
@@ -49,7 +51,12 @@ const NewsFeedHeader = ({ fullName, userName, postId, onDeletePost }) => {
   return (
     <>
       <div>
-        <span className={styles.fullname}>{fullName}</span>
+        <span
+          className={styles.fullname}
+          onClick={() => router.push(`/${userName}`)}
+        >
+          {fullName}
+        </span>
         <span className={styles.username}>@{userName}</span>
       </div>
       <div className={styles.containerMore}>

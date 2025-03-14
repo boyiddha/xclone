@@ -89,7 +89,12 @@ const MainSectionUserPost = () => {
               <div className={styles.column2}>
                 <div className={styles.profileName}>
                   <div>
-                    <span className={styles.fullName}>
+                    <span
+                      className={styles.fullName}
+                      onClick={() =>
+                        router.push(`/${parentPost?.userId?.userName}`)
+                      }
+                    >
                       {parentPost?.userId?.fullName}
                     </span>
                     <span className={styles.userName}>

@@ -1,8 +1,10 @@
 import { IoIosMore } from "react-icons/io";
 import styles from "./userPostHeader.module.css";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const UserPostHeader = ({ fullName, userName, ownerImage, postId }) => {
+  const router = useRouter();
   return (
     <>
       <div className={styles.header}>
@@ -19,7 +21,12 @@ const UserPostHeader = ({ fullName, userName, ownerImage, postId }) => {
             )}
           </div>
           <div className={styles.profileName}>
-            <div className={styles.fullname}>{fullName}</div>
+            <div
+              className={styles.fullname}
+              onClick={() => router.push(`/${userName}`)}
+            >
+              {fullName}
+            </div>
             <div className={styles.username}>@{userName}</div>
           </div>
         </div>

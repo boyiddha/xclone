@@ -24,6 +24,7 @@ import {
   getUserByIdFromDB,
   getUserByUserNameFromDB,
   getAllUsersFromDB,
+  updateUserFollowers,
 } from "@/repositories/userRepository";
 import { createHashPassword } from "@/helpers/passwordHelper";
 
@@ -122,3 +123,29 @@ export const saveUsernameService = async (email, username) => {
 
   return { message: "Username updated successfully", status: 200 };
 };
+
+export async function followUserService(loggedInUserId, userId) {
+  const loggedInUser = await getUserByIdFromDB(loggedInUserId);
+  const targetUser = await getUserByIdFromDB(userId);
+
+  if (!loggedInUser || !targetUser) {
+    return null;
+  }
+
+  const isFollowing = loggedInUser.following.includes(userId);
+
+  if (isFollowing) {
+    // Unfollow logic
+    loggedInUser.following.pull(userId);
+    targetUser.followers.pull(loggedInUserId);
+  } else {
+    // follow logic
+    loggedInUser.following.push(userId);
+    targetUser.followers.push(loggedInUserId);
+  }
+
+  await updateUserFollowers(loggedInUser);
+  await updateUserFollowers(targetUser);
+
+  return { isFollowing: !isFollowing };
+}

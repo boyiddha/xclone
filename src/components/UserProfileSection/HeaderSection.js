@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import EditProfileOverlay from "./EditProfileOverlay";
 import { useState } from "react";
+import FollowButton from "./FollowButton";
 
 const HeaderSection = ({
   totalPost,
@@ -20,7 +21,10 @@ const HeaderSection = ({
   joiningDateMessage,
   following,
   follower,
+  followingList,
+  followerList,
   userId,
+  loggedInUserId,
   setFullName,
   setUserImage,
   setUserCoverImage,
@@ -103,14 +107,24 @@ const HeaderSection = ({
                         />
                       )}
                     </div>
-                    <div className={styles.editButton}>
-                      <div
-                        className={styles.button}
-                        onClick={() => setIsEditing(true)}
-                      >
-                        Edit profile
+                    {userId === loggedInUserId && (
+                      <div className={styles.editButton}>
+                        <div
+                          className={styles.button}
+                          onClick={() => setIsEditing(true)}
+                        >
+                          Edit profile
+                        </div>
                       </div>
-                    </div>
+                    )}
+                    {userId !== loggedInUserId && (
+                      <FollowButton
+                        loggedInUserId={loggedInUserId}
+                        userId={userId}
+                        initialFollowers={followerList}
+                        initialFollowing={followingList}
+                      />
+                    )}
                   </div>
 
                   {isEditing && (

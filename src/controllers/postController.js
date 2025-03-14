@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { findUserByEmail } from "@/services/userService";
+import { findUserByEmail, findUserByUsername } from "@/services/userService";
 import {
   createPostService,
   getAllPostsService,
@@ -59,6 +59,7 @@ export const createPost = async (request) => {
   }
 };
 
+// get logged in user posts
 export const getUserPosts = async (req) => {
   try {
     // Get user session
@@ -90,6 +91,27 @@ export const getUserPosts = async (req) => {
     });
   }
 };
+
+export async function getUserPostsByUserName(req, { params }) {
+  try {
+    const { userName } = await params;
+    const user = await findUserByUsername(userName);
+    if (!user) {
+      return NextResponse.json({ success: false, message: "User not found" });
+    }
+
+    // Fetch posts from the service
+    const posts = await getUserPostsService(user._id);
+
+    return NextResponse.json({ success: true, posts });
+  } catch (error) {
+    console.error("Fetch Error:", error);
+    return NextResponse.json({
+      success: false,
+      message: "Failed to retrieve posts",
+    });
+  }
+}
 
 export const returnAllPosts = async (req) => {
   try {

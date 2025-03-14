@@ -162,6 +162,10 @@
 
 .fullName {
   font-weight: bold;
+  cursor: pointer;
+}
+.fullName:hover {
+  text-decoration: underline;
 }
 .userName {
   margin-left: 5px;
