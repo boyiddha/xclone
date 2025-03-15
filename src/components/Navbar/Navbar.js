@@ -177,7 +177,7 @@ const Navbar = ({ fromNotificationPage = false }) => {
                   data-tooltip="Notifications"
                   onClick={() => handleNotificationClick()}
                 >
-                  <div className={styles.icon}>
+                  <div className={styles.notificationIcon}>
                     {" "}
                     <GrNotification
                       className={

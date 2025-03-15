@@ -19,14 +19,20 @@
   color: rgb(218, 213, 213);
 }
 
+.notificationIcon {
+  font-size: 27px;
+  margin-right: 6px;
+  padding-left: 10px;
+  position: relative;
+}
 .unreadIcon {
   color: blue;
 }
 
 .unreadDot {
   position: absolute;
-  top: -4px;
-  right: 7px;
+  top: -15px;
+  right: 5px;
   width: 18px;
   height: 18px;
   background-color: rgb(51, 114, 238);

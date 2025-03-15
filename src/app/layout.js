@@ -4,6 +4,9 @@ import "./globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import connectDB from "@/lib/mongodb";
 
 const lato = Lato({
@@ -25,6 +28,7 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className={lato.className}>
         <AuthProvider session={session}>{children}</AuthProvider>
+        <ToastContainer />
       </body>
     </html>
   );

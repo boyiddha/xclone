@@ -77,8 +77,9 @@ const MainSection = () => {
 
     // Check if the current user is the owner of the post
     if (!postToDelete || postToDelete.userId !== currentUserId) {
-      alert("You are not OWNER of this post.");
-      return;
+      //alert("You are not OWNER of this post.");
+
+      return false;
     }
     try {
       const response = await fetch(`/api/tweet/posts/${postId}`, {
@@ -87,15 +88,20 @@ const MainSection = () => {
 
       const result = await response.json();
       if (response.ok) {
+        // Show a success toast if the post is deleted
+
         // Remove deleted post from the state
         setPosts((prevPosts) =>
           prevPosts.filter((post) => post._id !== postId)
         );
+        return true;
       } else {
         console.error(result.message || "Failed to delete post");
+        return false;
       }
     } catch (error) {
       console.error("Error deleting post:", error);
+      return false;
     }
   };
 

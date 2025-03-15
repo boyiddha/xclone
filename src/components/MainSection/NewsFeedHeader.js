@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { IoIosMore } from "react-icons/io";
 import styles from "./newsFeedHeader.module.css";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { Bounce } from "react-toastify";
 
 const NewsFeedHeader = ({ fullName, userName, postId, onDeletePost }) => {
   const [isOpenMore, setIsOpenMore] = useState(false);
@@ -43,9 +45,37 @@ const NewsFeedHeader = ({ fullName, userName, postId, onDeletePost }) => {
   };
 
   // Handle Delete Post
-  const handleDelete = () => {
-    onDeletePost(postId); // Call the passed delete function
+  const handleDelete = async () => {
+    const success = await onDeletePost(postId); // Call the passed delete function
     setIsDeletePopupOpen(false); // Close the popup
+    if (success) {
+      // Show success toast if post is deleted successfully
+
+      toast.success("✅ Successfully Deleted", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+    } else {
+      // Show error toast if user is not the owner
+      toast.error("❌ You are not the owner of this Post!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+    }
   };
 
   return (

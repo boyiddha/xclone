@@ -7,6 +7,9 @@ import NewsFeedFooter from "./NewsFeedFooter";
 import { BiRepost } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const NewsFeed = ({
   posts,
   originalPosts, // Contains all posts to find original post if needed
@@ -162,7 +165,7 @@ const NewsFeed = ({
                                 {originalPost?.media.contentType.startsWith(
                                   "image/"
                                 ) ? (
-                                  <img
+                                  <Image
                                     src={`data:${originalPost?.media.contentType};base64,${originalPost.media.data}`}
                                     alt={
                                       originalPost?.media.name ||
