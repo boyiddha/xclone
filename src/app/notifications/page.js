@@ -21,7 +21,7 @@ const HomePage = async () => {
       {" "}
       <div className={styles.container}>
         <div className={`${styles.column} ${styles.navbar}`}>
-          <Navbar />
+          <Navbar fromNotificationPage={true} />
         </div>
         <div className={styles.mainSidebarContainer}>
           <div className={`${styles.column} ${styles.main}`}>

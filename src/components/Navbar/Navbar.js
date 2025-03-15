@@ -13,21 +13,25 @@ import { HiOutlineUser } from "react-icons/hi2";
 import { CiCircleMore } from "react-icons/ci";
 import { IoIosMore } from "react-icons/io";
 import { SiAppwrite } from "react-icons/si";
+import { BsThreeDots } from "react-icons/bs";
 
 import xLogo from "./../../../public/images/x_profile.png";
 import LogOut from "@/components/LogOut/LogOut";
 import styles from "./navbar.module.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import MoreOptions from "./MoreOptions";
 import AccountOptions from "./AccountOptions";
 import { useRouter } from "next/navigation";
 
-const Navbar = () => {
+const Navbar = ({ fromNotificationPage = false }) => {
   const [isOpenMore, setIsOpenMore] = useState(false);
   const [isOpenAccount, setIsOpenAccount] = useState(false);
   const [fullName, setFullName] = useState("");
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState("");
+  const [userId, setUserId] = useState("");
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+
   const boxMoreRef = useRef(null);
   const boxAccountRef = useRef(null);
   const accountItemRef = useRef(null);
@@ -40,6 +44,11 @@ const Navbar = () => {
   // Toggle menu when clicking the account item
   const toggleAccount = () => {
     setIsOpenAccount((prev) => !prev);
+  };
+
+  const handleNotificationClick = async () => {
+    // Navigate to the notifications page
+    router.push("/notifications");
   };
 
   // Close MoreOptions when clicking outside
@@ -81,22 +90,49 @@ const Navbar = () => {
     };
   }, [isOpenAccount]);
 
+  const fetchMe = async () => {
+    const resMe = await fetch("/api/me", {
+      method: "GET",
+    });
+    if (resMe.ok) {
+      const dataMe = await resMe.json();
+      setFullName(dataMe.fullName);
+      setUserName(dataMe.userName);
+      setUserImage(dataMe.image);
+      setUserId(dataMe._id);
+    } else {
+      console.error("Failed to fetch Me");
+    }
+  };
+
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/notification?userId=${userId}`);
+
+      const dataNotifications = await res.json();
+      // Check if there are any unread notifications
+      const hasUnread = dataNotifications?.some(
+        (notification) => !notification.isRead
+      );
+      setHasUnreadNotifications(hasUnread);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  }, [userId]); // `userId` is a dependency
+
   useEffect(() => {
-    const fetchMe = async () => {
-      const res = await fetch("/api/me", {
-        method: "GET",
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setFullName(data.fullName);
-        setUserName(data.userName);
-        setUserImage(data.image);
-      } else {
-        console.error("Failed to fetch Me");
+    const fetchData = async () => {
+      await fetchMe(); // Ensure fetchMe completes before proceeding
+      if (userId) {
+        await fetchNotifications(); // Now fetchNotifications will run after userId is set
       }
+      // remove notification sign
+      if (fromNotificationPage) setHasUnreadNotifications(false);
     };
-    fetchMe();
-  }, []);
+
+    fetchData();
+  }, [fetchNotifications, userId, fromNotificationPage]);
+
   return (
     <>
       <div className={styles.mainContainer}>
@@ -139,11 +175,18 @@ const Navbar = () => {
                 <div
                   className={`${styles.item} ${styles.menuContainer4}`}
                   data-tooltip="Notifications"
-                  onClick={() => router.push("/notifications")}
+                  onClick={() => handleNotificationClick()}
                 >
                   <div className={styles.icon}>
                     {" "}
-                    <GrNotification />{" "}
+                    <GrNotification
+                      className={
+                        hasUnreadNotifications ? styles.unreadIcon : ""
+                      }
+                    />
+                    {hasUnreadNotifications && (
+                      <span className={styles.unreadDot}></span> // Blue dot indicator
+                    )}
                   </div>
                   <div className={styles.content}>Notifications</div>
                 </div>

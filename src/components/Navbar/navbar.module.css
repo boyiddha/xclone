@@ -19,6 +19,20 @@
   color: rgb(218, 213, 213);
 }
 
+.unreadIcon {
+  color: blue;
+}
+
+.unreadDot {
+  position: absolute;
+  top: -4px;
+  right: 7px;
+  width: 18px;
+  height: 18px;
+  background-color: rgb(51, 114, 238);
+  border-radius: 50%;
+}
+
 .content {
   font-size: 22px;
   margin-left: 7px;
