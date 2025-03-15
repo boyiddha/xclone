@@ -7,14 +7,18 @@ const FollowButton = ({
   initialFollowers,
   initialFollowing,
 }) => {
-  const [isFollowing, setIsFollowing] = useState(false);
+  // initialFollowers and initialFollowing is the follower and following list of the searched user
+  // not the logged in user.
+  const [isFollowing, setIsFollowing] = useState(
+    initialFollowers.includes(loggedInUserId)
+  );
   const [isFollowBack, setIsFollowBack] = useState(false);
   const [hover, setHover] = useState(false);
 
   useEffect(() => {
     setIsFollowBack(
-      initialFollowing.includes(loggedInUserId) &&
-        !initialFollowers.includes(loggedInUserId)
+      !initialFollowers.includes(loggedInUserId) &&
+        initialFollowing.includes(loggedInUserId)
     );
   }, [initialFollowers, initialFollowing, loggedInUserId, userId]);
 

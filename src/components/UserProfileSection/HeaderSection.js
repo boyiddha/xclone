@@ -32,6 +32,9 @@ const HeaderSection = ({
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
+  const followerIds = followerList?.map((user) => user._id) || [];
+  const followingIds = followingList?.map((user) => user._id) || [];
+
   const handleClose = () => {
     setIsEditing(false);
   };
@@ -121,8 +124,8 @@ const HeaderSection = ({
                       <FollowButton
                         loggedInUserId={loggedInUserId}
                         userId={userId}
-                        initialFollowers={followerList}
-                        initialFollowing={followingList}
+                        initialFollowers={followerIds}
+                        initialFollowing={followingIds}
                       />
                     )}
                   </div>
