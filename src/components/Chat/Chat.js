@@ -7,8 +7,7 @@ import Conversation from "./Conversation";
 import SearchOverlay from "../Messages/SearchOverlay";
 
 const Chat = ({ user }) => {
-  const [selectedUsers, setSelectedUsers] = useState([]);
-  const [currentSelectedUser, setCurrentSelectedUser] = useState(null);
+  const [selectedUsers, setSelectedUsers] = useState([user]);
 
   const [showPopup, setShowPopup] = useState(false);
 
@@ -26,23 +25,23 @@ const Chat = ({ user }) => {
   return (
     <>
       <div className={styles.container}>
-        {/* <div className={`${styles.column} ${styles.messageList}`}>
+        <div className={`${styles.column} ${styles.messageList}`}>
           <MessageListSection
             selectedUsers={selectedUsers}
             setShowPopup={setShowPopup}
           />
-        </div> */}
+        </div>
 
         <div className={`${styles.column} ${styles.chatBox}`}>
           <Conversation selectedUsers={user} />
         </div>
       </div>
-      {/* {showPopup && (
+      {showPopup && (
         <SearchOverlay
           setShowPopup={setShowPopup}
           onUserSelect={handleUserSelect}
         />
-      )} */}
+      )}
     </>
   );
 };

@@ -60,7 +60,7 @@ const SearchOverlay = ({ setShowPopup, onUserSelect }) => {
                 className={`${styles.next} ${
                   activeNext ? styles.nextActive : ""
                 }`}
-                onClick={activeNext ? handleNext : ""}
+                onClick={activeNext ? handleNext : undefined}
               >
                 Next
               </span>

@@ -131,4 +131,5 @@
 }
 .userItem:hover {
   background: rgb(27, 27, 27);
+  border-right: 3px solid rgb(46, 75, 220);
 }

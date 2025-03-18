@@ -54,7 +54,7 @@ export async function generateMetadata({ params }) {
 }
 
 const ChatPage = async ({ params }) => {
-  const { userId } = params;
+  const { userId } = await params;
 
   // Fetch user data on the server
   const res = await fetch(
@@ -71,7 +71,6 @@ const ChatPage = async ({ params }) => {
         </div>
 
         <div className={styles.message}>
-          {/* Pass user data to Chat component */}
           <Chat user={user} />
         </div>
       </div>
