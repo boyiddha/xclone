@@ -31,10 +31,10 @@
 
 .unreadDot {
   position: absolute;
-  top: -15px;
-  right: 5px;
-  width: 18px;
-  height: 18px;
+  top: -7px;
+  right: 7px;
+  width: 12px;
+  height: 12px;
   background-color: rgb(51, 114, 238);
   border-radius: 50%;
 }

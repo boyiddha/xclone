@@ -195,6 +195,7 @@ const Navbar = ({ fromNotificationPage = false }) => {
                 <div
                   className={`${styles.item} ${styles.menuContainer5}`}
                   data-tooltip="Messages"
+                  onClick={() => router.push("/messages")}
                 >
                   <div className={styles.icon}>
                     {" "}

@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.smallText {
+  font-size: 16px;
+  color: rgb(95, 95, 95);
+  margin-top: 10px;
+  margin-bottom: 19px;
+}
+
+.button {
+  font-weight: bold;
+  width: 170px;
+  padding: 20px;
+  background-color: rgb(57, 113, 233);
+  color: white;
+  border-radius: 30px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.8s ease-in-out;
+}
+.button:hover {
+  background-color: rgb(45, 85, 170);
+}
