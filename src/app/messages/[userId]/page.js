@@ -1,31 +1,3 @@
-// import Navbar from "@/components/Navbar/Navbar";
-// import styles from "./chat.module.css";
-// import Chat from "@/components/Chat/Chat";
-
-// export const metadata = {
-//   title: "Messages / X",
-// };
-
-// const ChatPage = async ({ params }) => {
-//   const { userId } = await params;
-
-//   return (
-//     <>
-//       <div className={styles.container}>
-//         <div className={`$styles.column} ${styles.navbar}`}>
-//           <Navbar />
-//         </div>
-
-//         <div className={styles.message}>
-//           <Chat userId={userId} />
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default ChatPage;
-
 import Navbar from "@/components/Navbar/Navbar";
 import styles from "./chat.module.css";
 import Chat from "@/components/Chat/Chat";

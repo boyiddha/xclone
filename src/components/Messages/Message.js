@@ -7,11 +7,11 @@ import ChatSection from "./ChatSection";
 import SearchOverlay from "./SearchOverlay";
 
 const Message = () => {
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [chatUsers, setChatUsers] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
 
   const handleUserSelect = (user) => {
-    setSelectedUsers((prev) => {
+    setChatUsers((prev) => {
       // Check if the user is already in the selectedUsers array based on userName or any unique identifier
       if (!prev.some((selectedUser) => selectedUser._id === user._id)) {
         return [...prev, user]; // If user is not in the array, add them
@@ -25,10 +25,7 @@ const Message = () => {
     <>
       <div className={styles.container}>
         <div className={`${styles.column} ${styles.messageList}`}>
-          <MessageListSection
-            selectedUsers={selectedUsers}
-            setShowPopup={setShowPopup}
-          />
+          <MessageListSection users={chatUsers} setShowPopup={setShowPopup} />
         </div>
 
         <div className={`${styles.column} ${styles.chatBox}`}>

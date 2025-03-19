@@ -128,6 +128,7 @@
 }
 .userName {
   color: gray;
+  margin-left: 5px;
 }
 .userItem:hover {
   background: rgb(27, 27, 27);

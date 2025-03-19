@@ -9,7 +9,7 @@ import { FaTimesCircle } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import Image from "next/image";
 
-const MessageListSection = ({ selectedUsers, setShowPopup }) => {
+const MessageListSection = ({ users, setShowPopup }) => {
   const [search, setSearch] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
@@ -58,7 +58,7 @@ const MessageListSection = ({ selectedUsers, setShowPopup }) => {
           </div>
         </div>
         <div className={styles.chatUser}>
-          {selectedUsers.map((user) => (
+          {users.map((user) => (
             <div key={user._id} className={styles.userItem} onClick={() => {}}>
               <div>
                 {user.image && (
