@@ -60,6 +60,10 @@ const Conversation = ({ selectedUsers, loggedInUser }) => {
           setTransport(transport.name);
         });
         console.log("✅ from front end: Connected to Socket.io");
+        // Listen for messages from the server
+        socketRef.current.on("receiveMessage", (data) => {
+          console.log(" ::: receive message from server: ", data);
+        });
         // Send a test message after connecting
         socketRef.current.emit("testMessage", {
           sender: "User1",

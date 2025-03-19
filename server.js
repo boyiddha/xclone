@@ -18,6 +18,8 @@ app.prepare().then(() => {
     console.log(" ✅  User connected:", socket.id);
     socket.on("testMessage", (data) => {
       console.log("📩 Received test message:", data);
+      // Broadcast the message to all clients, including the sender
+      io.emit("receiveMessage", data);
     });
 
     // Handle disconnect event
