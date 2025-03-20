@@ -74,3 +74,58 @@ export async function POST(req) {
     );
   }
 }
+
+export async function GET(req) {
+  const loggedInUserId = req.nextUrl.searchParams.get("loggedInUserId");
+  if (!loggedInUserId) {
+    return NextResponse.json(
+      { message: "loggedInUserId are required." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    // Fetch conversations where the logged-in user is a participant
+    const conversations = await Conversation.find({
+      participants: loggedInUserId,
+    })
+      .populate({
+        path: "participants",
+        select: "fullName userName image", // Select only required fields
+      })
+      .populate({
+        path: "lastMessage",
+        select: "content sender createdAt",
+      })
+      .sort({ lastMessageAt: -1 }); // Sort by last message time
+
+    // Format response: Exclude logged-in user from participant list
+    const chatUsers = conversations.map((conversation) => {
+      const otherUser = conversation.participants.find(
+        (user) => user._id.toString() !== loggedInUserId
+      );
+
+      return {
+        _id: otherUser._id,
+        fullName: otherUser.fullName,
+        userName: otherUser.userName,
+        image: otherUser.image,
+        lastMessage: conversation.lastMessage
+          ? {
+              content: conversation.lastMessage.content,
+              sender: conversation.lastMessage.sender,
+              createdAt: conversation.lastMessage.createdAt,
+            }
+          : null,
+      };
+    });
+
+    return NextResponse.json(chatUsers);
+  } catch (error) {
+    console.error("Error fetching conversations:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}

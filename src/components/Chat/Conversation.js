@@ -21,6 +21,14 @@ const Conversation = ({ selectedUsers, loggedInUser, conversationId }) => {
 
   const activeSend = content?.length > 0 ? true : false;
 
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   const handleChange = (e) => {
     setContent(e.target.value);
     handleTyping();
@@ -80,7 +88,7 @@ const Conversation = ({ selectedUsers, loggedInUser, conversationId }) => {
     };
 
     fetchMessages();
-  }, [conversationId]);
+  }, [conversationId, loggedInUser._id]);
 
   //   ✅ Display messages in real-time.
   // ✅ Show a typing indicator.
@@ -173,7 +181,7 @@ const Conversation = ({ selectedUsers, loggedInUser, conversationId }) => {
             <IoMdInformationCircleOutline />
           </div>
         </div>
-        <div className={styles.row2}>
+        <div className={styles.row2} ref={messagesEndRef}>
           <div
             className={styles.profile}
             onClick={() => {

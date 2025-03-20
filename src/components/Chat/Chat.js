@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import styles from "./chat.module.css";
 import MessageListSection from "../Messages/MessageListSection";
 import Conversation from "./Conversation";
@@ -35,8 +35,25 @@ const Chat = ({ user }) => {
     }
   };
 
+  // Fetch Chat Users
+  const fetchChatUsers = useCallback(async () => {
+    try {
+      const res = await fetch(
+        `/api/conversations?loggedInUserId=${loggedInUser._id}`
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setChatUsers(data);
+      } else {
+        console.error("Failed to fetch chat users");
+      }
+    } catch (error) {
+      console.error("Error fetching chat users:", error);
+    }
+  }, [loggedInUser?._id]);
+
   // Fetch or create conversation ID
-  const fetchOrCreateConversation = async () => {
+  const fetchOrCreateConversation = useCallback(async () => {
     if (!loggedInUser || !user) return;
 
     const receiver = user; // Assuming one-on-one chat
@@ -50,7 +67,6 @@ const Chat = ({ user }) => {
           receiverId: receiver._id,
         }),
       });
-
       if (res.ok) {
         const data = await res.json();
         setConversationId(data.conversationId);
@@ -60,7 +76,7 @@ const Chat = ({ user }) => {
     } catch (error) {
       console.error("❌ Error fetching conversation:", error);
     }
-  };
+  }, [loggedInUser, user]);
 
   // Fetch posts on component mount
   useEffect(() => {
@@ -69,15 +85,22 @@ const Chat = ({ user }) => {
 
   useEffect(() => {
     if (loggedInUser) {
-      fetchOrCreateConversation();
+      (async () => {
+        await fetchChatUsers(); // Wait for chat users to load
+        fetchOrCreateConversation(); // Then fetch or create conversation
+      })();
     }
-  }, [loggedInUser, user]);
+  }, [loggedInUser, fetchChatUsers, fetchOrCreateConversation]);
 
   return (
     <>
       <div className={styles.container}>
         <div className={`${styles.column} ${styles.messageList}`}>
-          <MessageListSection users={chatUsers} setShowPopup={setShowPopup} />
+          <MessageListSection
+            users={chatUsers}
+            setShowPopup={setShowPopup}
+            selectedUser={user}
+          />
         </div>
 
         <div className={`${styles.column} ${styles.chatBox}`}>

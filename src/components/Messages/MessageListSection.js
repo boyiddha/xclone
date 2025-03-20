@@ -8,10 +8,12 @@ import { FaTimesCircle } from "react-icons/fa";
 
 import { IoIosSearch } from "react-icons/io";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-const MessageListSection = ({ users, setShowPopup }) => {
+const MessageListSection = ({ users, setShowPopup, selectedUser = null }) => {
   const [search, setSearch] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -59,7 +61,15 @@ const MessageListSection = ({ users, setShowPopup }) => {
         </div>
         <div className={styles.chatUser}>
           {users.map((user) => (
-            <div key={user._id} className={styles.userItem} onClick={() => {}}>
+            <div
+              key={user._id}
+              className={`${styles.userItem} ${
+                user?._id === selectedUser?._id ? styles.userItemSelected : ""
+              }`}
+              onClick={() => {
+                router.push(`/messages/${user._id}`);
+              }}
+            >
               <div>
                 {user.image && (
                   <Image
@@ -71,9 +81,14 @@ const MessageListSection = ({ users, setShowPopup }) => {
                   />
                 )}
               </div>
-              <div className={styles.name}>
-                <div>{user.fullName}</div>
-                <div className={styles.userName}>@{user.userName}</div>
+              <div className={styles.chatProfile}>
+                <div className={styles.name}>
+                  <div>{user.fullName}</div>
+                  <div className={styles.userName}>@{user.userName}</div>
+                </div>
+                <div className={styles.content}>
+                  {user?.lastMessage?.content}
+                </div>
               </div>
             </div>
           ))}
