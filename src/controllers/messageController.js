@@ -1,27 +1,29 @@
-import Message from "@/models/chat/messageModel";
-import Conversation from "@/models/chat/conversationModel";
+import Message from "../models/chat/messageModel.js";
+import Conversation from "../models/chat/conversationModel.js";
 
-export const saveMessage = async ({ sender, receiver, content }) => {
-  let conversation = await Conversation.findOne({
-    participants: { $all: [sender, receiver] },
-  });
+export const saveMessageAndUpdateConversation = async ({
+  sender,
+  receiver,
+  content,
+  conversationId,
+}) => {
+  try {
+    // Create and save message
+    const message = await Message.create({
+      sender,
+      receiver,
+      content,
+      conversationId,
+    });
 
-  if (!conversation) {
-    conversation = new Conversation({ participants: [sender, receiver] });
-    await conversation.save();
+    // Update conversation's last message
+    await Conversation.findByIdAndUpdate(conversationId, {
+      lastMessage: message._id,
+    });
+
+    return message;
+  } catch (error) {
+    console.error("❌ Error saving message:", error);
+    throw new Error("Internal Server Error");
   }
-
-  const newMessage = new Message({
-    conversationId: conversation._id,
-    sender,
-    receiver,
-    content,
-  });
-
-  await newMessage.save();
-
-  conversation.lastMessage = newMessage._id;
-  await conversation.save();
-
-  return newMessage;
 };

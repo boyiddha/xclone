@@ -33,6 +33,29 @@
   border-right: 1px solid rgb(56, 56, 56);
 }
 
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 7px solid rgba(0, 0, 0, 0.1);
+  border-top: 3px solid #007bff; /* Change color as needed */
+  border-left: 1px solid #407bb9;
+
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+
+  margin-top: 50%;
+  margin-left: 50%;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* When screen is below 1280px, Navbar shrinks down to 100px */
 @media (max-width: 1280px) {
   .navbar {

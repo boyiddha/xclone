@@ -9,6 +9,7 @@ import SearchOverlay from "../Messages/SearchOverlay";
 const Chat = ({ user }) => {
   const [chatUsers, setChatUsers] = useState([user]);
   const [loggedInUser, setLoggedInUser] = useState("");
+  const [conversationId, setConversationId] = useState(null);
 
   const [showPopup, setShowPopup] = useState(false);
 
@@ -33,10 +34,44 @@ const Chat = ({ user }) => {
       console.error("Failed to fetch Me");
     }
   };
+
+  // Fetch or create conversation ID
+  const fetchOrCreateConversation = async () => {
+    if (!loggedInUser || !user) return;
+
+    const receiver = user; // Assuming one-on-one chat
+
+    try {
+      const res = await fetch("/api/conversations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          senderId: loggedInUser._id,
+          receiverId: receiver._id,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setConversationId(data.conversationId);
+      } else {
+        console.error("❌ Failed to fetch or create conversation.");
+      }
+    } catch (error) {
+      console.error("❌ Error fetching conversation:", error);
+    }
+  };
+
   // Fetch posts on component mount
   useEffect(() => {
     fetchMe();
   }, []);
+
+  useEffect(() => {
+    if (loggedInUser) {
+      fetchOrCreateConversation();
+    }
+  }, [loggedInUser, user]);
 
   return (
     <>
@@ -46,7 +81,15 @@ const Chat = ({ user }) => {
         </div>
 
         <div className={`${styles.column} ${styles.chatBox}`}>
-          <Conversation selectedUsers={user} loggedInUser={loggedInUser} />
+          {conversationId ? (
+            <Conversation
+              selectedUsers={chatUsers[0]}
+              loggedInUser={loggedInUser}
+              conversationId={conversationId}
+            />
+          ) : (
+            <div className={styles.spinner}></div>
+          )}
         </div>
       </div>
       {showPopup && (

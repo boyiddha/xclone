@@ -9,23 +9,21 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { io } from "socket.io-client";
 
-const Conversation = ({ selectedUsers, loggedInUser }) => {
+const Conversation = ({ selectedUsers, loggedInUser, conversationId }) => {
   const [joiningDateMessage, setJoiningDateMessage] = useState("");
   const router = useRouter();
   const textAreaRef = useRef(null);
 
   const [content, setContent] = useState("");
   const [messages, setMessages] = useState([]);
+  const [typing, setTyping] = useState(false);
   const socketRef = useRef(null); // To prevent multiple instances
-  const socket = io();
-  const [isConnected, setIsConnected] = useState(false);
-  const [transport, setTransport] = useState("N/A");
 
   const activeSend = content?.length > 0 ? true : false;
 
   const handleChange = (e) => {
     setContent(e.target.value);
-
+    handleTyping();
     // Reset height to auto first to get correct scroll height
     e.target.style.height = "auto";
 
@@ -46,71 +44,122 @@ const Conversation = ({ selectedUsers, loggedInUser }) => {
     }
   }, [selectedUsers]);
 
+  // fetch older message
   useEffect(() => {
-    if (!socketRef.current) {
-      socketRef.current = io("http://localhost:3000", {
-        withCredentials: true,
-      });
+    if (!conversationId) return;
 
-      socketRef.current.on("connect", () => {
-        setIsConnected(true);
-        setTransport(socketRef.current.io.engine.transport.name);
+    const fetchMessages = async () => {
+      try {
+        const res = await fetch(
+          `/api/messages?conversationId=${conversationId}&loggedInUserId=${loggedInUser._id}`,
+          {
+            method: "GET",
+          }
+        );
 
-        socketRef.current.io.engine.on("upgrade", (transport) => {
-          setTransport(transport.name);
-        });
-        console.log("✅ from front end: Connected to Socket.io");
-        // Listen for messages from the server
-        socketRef.current.on("receiveMessage", (data) => {
-          console.log(" ::: receive message from server: ", data);
-        });
-        // Send a test message after connecting
-        socketRef.current.emit("testMessage", {
-          sender: "User1",
-          content: "Hello from client!",
-        });
-      });
+        if (res.ok) {
+          const data = await res.json();
+          setMessages(data.messages);
+          // Notify sender about seen messages
+          const unseenMessages = data.messages.filter(
+            (msg) => msg.receiver === loggedInUser._id && !msg.seen
+          );
 
-      socketRef.current.on("disconnect", () => {
-        setIsConnected(false);
-        setTransport("N/A");
-        console.log("❌ from front end: Disconnected from Socket.io");
-      });
-    }
-
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
+          if (unseenMessages.length > 0) {
+            socketRef.current.emit("markAsSeenBulk", {
+              messageIds: unseenMessages.map((msg) => msg._id),
+              senderId: unseenMessages[0]?.sender, // Notify the sender
+            });
+          }
+        } else {
+          console.error("Failed to fetch messages");
+        }
+      } catch (error) {
+        console.error("Error fetching messages:", error);
       }
     };
-  }, []);
+
+    fetchMessages();
+  }, [conversationId]);
+
+  //   ✅ Display messages in real-time.
+  // ✅ Show a typing indicator.
+  // ✅ Mark messages as seen.
+  // ✅ Fetch older messages from MongoDB.
+
+  // Real Time update
+  useEffect(() => {
+    socketRef.current = io("http://localhost:3000", {
+      withCredentials: true,
+    });
+
+    socketRef.current.emit("userConnected", loggedInUser._id);
+
+    socketRef.current.on("receiveMessage", (newMessage) => {
+      if (newMessage.sender !== newMessage.receiver) {
+        // fot self chat not update UI instantly
+        setMessages((prev) => [...prev, newMessage]);
+      }
+      // If message was sent to logged-in user, mark it as seen
+      socketRef.current.emit("markAsSeen", {
+        messageId: newMessage._id,
+        receiverId: newMessage.sender,
+      });
+    });
+    // ✅ Real-time update for "seen" status
+    socketRef.current.on("messageSeen", (seenMessage) => {
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg._id === seenMessage._id ? { ...msg, seen: true } : msg
+        )
+      );
+    });
+
+    socketRef.current.on("messageSeenBulk", ({ messageIds }) => {
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          messageIds.includes(msg._id) ? { ...msg, seen: true } : msg
+        )
+      );
+    });
+
+    socketRef.current.on("typing", ({ sender }) => {
+      if (sender === selectedUsers._id) {
+        setTyping(true);
+        setTimeout(() => setTyping(false), 2000);
+      }
+    });
+
+    return () => {
+      socketRef.current.disconnect();
+    };
+  }, [loggedInUser, selectedUsers]);
 
   const handleSend = async () => {
-    if (!activeSend) return;
+    if (!content.trim()) return;
 
     const newMessage = {
       sender: loggedInUser._id,
       receiver: selectedUsers._id,
       content: content.trim(),
+      conversationId: conversationId,
+      seen: false, // Initially unseen
     };
 
-    try {
-      const res = await fetch("/api/messages", {
-        method: "POST",
-        body: JSON.stringify(newMessage),
-        headers: { "Content-Type": "application/json" },
-      });
+    setContent("");
 
-      if (res.ok) {
-        // Send message to server via WebSocket
-        socketRef.current?.emit("sendMessage", newMessage);
-        setMessages((prev) => [...prev, newMessage]);
-        setContent("");
-      }
-    } catch (error) {
-      console.error("❌ Error sending message:", error);
-    }
+    // Send message to server and wait for the response
+    socketRef.current.emit("sendMessage", newMessage, (savedMessage) => {
+      // ✅ Use the server-saved message with _id
+      setMessages((prev) => [...prev, savedMessage]);
+    });
+  };
+
+  const handleTyping = () => {
+    socketRef.current.emit("userTyping", {
+      sender: loggedInUser._id,
+      receiver: selectedUsers._id,
+    });
   };
 
   return (
@@ -154,21 +203,30 @@ const Conversation = ({ selectedUsers, loggedInUser }) => {
               {selectedUsers?.followers?.length} Followers
             </div>
           </div>
-          <div>
-            <p>Status: {isConnected ? "connected" : "disconnected"}</p>
-            <p>Transport: {transport}</p>
-          </div>
-          <div>
+          <div className={styles.message}>
             {messages.map((msg) => (
-              <div
-                key={msg._id}
-                style={{
-                  textAlign: msg.sender === loggedInUser._id ? "right" : "left",
-                }}
-              >
-                {msg.content}
+              <div key={msg._id} className={styles.msg}>
+                <div
+                  className={
+                    msg.sender === loggedInUser._id
+                      ? styles.sentText
+                      : styles.receivedText
+                  }
+                >
+                  {msg.content}
+                </div>
+                {msg.sender === loggedInUser._id && (
+                  <div
+                    className={
+                      msg.seen ? styles.seenStatus : styles.unseenStatus
+                    }
+                  >
+                    {msg.seen ? "Seen" : "Unseen"}
+                  </div>
+                )}
               </div>
             ))}
+            {typing && <div className={styles.typing}>Typing...</div>}
           </div>
         </div>
         <div className={styles.row3}>
