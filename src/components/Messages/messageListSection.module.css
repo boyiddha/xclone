@@ -126,8 +126,15 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  flex: 1;
 }
 
+.nameHead {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+}
 .name {
   margin-left: 15px;
   display: flex;
@@ -137,8 +144,28 @@
   color: gray;
   margin-left: 5px;
 }
+.unreadIcon {
+  display: flex;
+  flex: 1;
+  width: 100%;
+}
+.unreadDot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 12px;
+  height: 12px;
+  background-color: rgb(51, 114, 238);
+  border-radius: 50%;
+}
 .content {
   color: gray;
+  margin-left: 15px;
+  margin-top: 3px;
+  overflow: hidden;
+}
+.unreadContent {
+  color: white;
   margin-left: 15px;
   margin-top: 3px;
   overflow: hidden;

@@ -258,6 +258,8 @@ export async function updateUserProfile(req, params) {
   try {
     const { userId } = await params;
 
+    console.log("❗ user id: ", userId);
+
     const { fullName, coverImage, profileImage } = await req.json();
 
     const updatedUser = await updateUserProfileService(userId, {
@@ -265,7 +267,6 @@ export async function updateUserProfile(req, params) {
       coverImage,
       image: profileImage,
     });
-
     if (!updatedUser) {
       return new Response(JSON.stringify({ error: "User not found" }), {
         status: 404,

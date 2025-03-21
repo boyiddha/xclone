@@ -21,7 +21,8 @@ import styles from "./navbar.module.css";
 import { useEffect, useRef, useState, useCallback } from "react";
 import MoreOptions from "./MoreOptions";
 import AccountOptions from "./AccountOptions";
-import { useRouter } from "next/navigation";
+import { io } from "socket.io-client";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 const Navbar = ({ fromNotificationPage = false }) => {
   const [isOpenMore, setIsOpenMore] = useState(false);
@@ -31,11 +32,15 @@ const Navbar = ({ fromNotificationPage = false }) => {
   const [userImage, setUserImage] = useState("");
   const [userId, setUserId] = useState("");
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+  const [hasUnseenMessage, setUnseenMessage] = useState();
+  const socketRef = useRef(null);
 
   const boxMoreRef = useRef(null);
   const boxAccountRef = useRef(null);
   const accountItemRef = useRef(null);
   const router = useRouter();
+  const pathname = usePathname(); // Get current route
+  const params = useParams(); // Get dynamic params (userId from URL)
 
   // Toggle function
   const toggleMore = () => {
@@ -133,6 +138,65 @@ const Navbar = ({ fromNotificationPage = false }) => {
     fetchData();
   }, [fetchNotifications, userId, fromNotificationPage]);
 
+  useEffect(() => {
+    if (!userId) return; // Ensure userId is set before running the effect
+    if (pathname?.startsWith("/messages/") && params?.userId) return;
+
+    const checkUnseenMessages = async () => {
+      try {
+        const response = await fetch(
+          `/api/messages/has-unseen?userId=${userId}`
+        );
+        if (!response.ok) throw new Error("Failed to fetch");
+
+        const data = await response.json();
+        if (data.success) {
+          setUnseenMessage(data.hasUnseenMessages);
+          localStorage.setItem(
+            "unreadNotification",
+            JSON.stringify(data.hasUnseenMessages)
+          );
+        }
+      } catch (error) {
+        console.error("Failed to fetch unseen messages:", error);
+      }
+    };
+
+    checkUnseenMessages();
+  }, [userId]);
+
+  // Real Time update
+  useEffect(() => {
+    socketRef.current = io("http://localhost:3000", {
+      withCredentials: true,
+    });
+
+    socketRef.current.emit("userConnected", userId);
+
+    // Listen for new message notifications
+    socketRef.current.on("newMessageNotification", (data) => {
+      localStorage.setItem("unreadNotification", JSON.stringify(data));
+      setUnseenMessage(true);
+    });
+
+    // Check if there is a stored notification when the navbar is loaded
+    const storedNotification = localStorage.getItem("unreadNotification");
+    if (storedNotification) {
+      setUnseenMessage(true); // Show notification if present
+    }
+
+    return () => {
+      socketRef.current.disconnect();
+    };
+  }, [userId]);
+
+  useEffect(() => {
+    if (pathname?.startsWith("/messages/") && params?.userId) {
+      localStorage.removeItem("unreadNotification");
+      setUnseenMessage(false); // unset chat notification when at messages/[userId]
+    }
+  }, [pathname, params?.userId]);
+
   return (
     <>
       <div className={styles.mainContainer}>
@@ -197,9 +261,12 @@ const Navbar = ({ fromNotificationPage = false }) => {
                   data-tooltip="Messages"
                   onClick={() => router.push("/messages")}
                 >
-                  <div className={styles.icon}>
+                  <div className={styles.messagesIcon}>
                     {" "}
-                    <MdOutlineMailOutline />{" "}
+                    <MdOutlineMailOutline />
+                    {hasUnseenMessage && (
+                      <span className={styles.unreadMessageDot}></span> // Blue dot indicator
+                    )}
                   </div>
                   <div className={styles.content}>Messages</div>
                 </div>

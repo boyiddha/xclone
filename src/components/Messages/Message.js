@@ -45,6 +45,7 @@ const Message = () => {
       );
       if (res.ok) {
         const data = await res.json();
+        console.log("✅  chat users: ", data);
         setChatUsers(data);
       } else {
         console.error("Failed to fetch chat users");
@@ -68,7 +69,11 @@ const Message = () => {
     <>
       <div className={styles.container}>
         <div className={`${styles.column} ${styles.messageList}`}>
-          <MessageListSection users={chatUsers} setShowPopup={setShowPopup} />
+          <MessageListSection
+            users={chatUsers}
+            setShowPopup={setShowPopup}
+            loggedInId={loggedInUser?._id}
+          />
         </div>
 
         <div className={`${styles.column} ${styles.chatBox}`}>

@@ -91,11 +91,11 @@ export async function GET(req) {
     })
       .populate({
         path: "participants",
-        select: "fullName userName image", // Select only required fields
+        select: "fullName userName image followers createdAt", // Select only required fields
       })
       .populate({
         path: "lastMessage",
-        select: "content sender createdAt",
+        select: "content sender receiver seen createdAt",
       })
       .sort({ lastMessageAt: -1 }); // Sort by last message time
 
@@ -110,10 +110,14 @@ export async function GET(req) {
         fullName: otherUser.fullName,
         userName: otherUser.userName,
         image: otherUser.image,
+        followers: otherUser.followers,
+        createdAt: otherUser.createdAt,
         lastMessage: conversation.lastMessage
           ? {
               content: conversation.lastMessage.content,
               sender: conversation.lastMessage.sender,
+              receiver: conversation.lastMessage.receiver,
+              seen: conversation.lastMessage.seen,
               createdAt: conversation.lastMessage.createdAt,
             }
           : null,

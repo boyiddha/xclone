@@ -101,7 +101,7 @@ const Conversation = ({ selectedUsers, loggedInUser, conversationId }) => {
       withCredentials: true,
     });
 
-    socketRef.current.emit("userConnected", loggedInUser._id);
+    socketRef.current.emit("userConnected", loggedInUser._id, true);
 
     socketRef.current.on("receiveMessage", (newMessage) => {
       if (newMessage.sender !== newMessage.receiver) {

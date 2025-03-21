@@ -23,12 +23,19 @@ app.prepare().then(() => {
   });
 
   let onlineUsers = new Map(); // Store online users (userId -> cocket.id)
-
+  let offlineUsers = new Map();
   io.on("connection", (socket) => {
     //console.log("✅ User connected:", socket.id);
 
-    socket.on("userConnected", (userId) => {
-      onlineUsers.set(userId, socket.id);
+    // Track user as online only from conversation component
+    socket.on("userConnected", (userId, fromConversation = false) => {
+      if (fromConversation) {
+        onlineUsers.set(userId, socket.id);
+        //console.log("✅  online user....... connected ", userId);
+      } else {
+        offlineUsers.set(userId, socket.id);
+        //console.log(" ✅  offline user connected: ", userId);
+      }
     });
 
     // Handle message sending
@@ -38,14 +45,22 @@ app.prepare().then(() => {
           messageData
         );
 
-        // Emit message to recipient if online
+        // Emit message to recipient ui if the receiver at online means currently he at conversation ui
         if (onlineUsers.has(messageData.receiver)) {
           io.to(onlineUsers.get(messageData.receiver)).emit(
             "receiveMessage",
             savedMessage
           );
+        } else {
+          // if the receiver not in online then send new message notification into navbar ui
+          io.to(offlineUsers.get(messageData.receiver)).emit(
+            "newMessageNotification",
+            {
+              senderId: messageData.sender,
+              message: savedMessage.content,
+            }
+          );
         }
-
         // ✅ Send the saved message back to the sender and dispaly in UI
         callback(savedMessage);
       } catch (error) {
@@ -98,10 +113,20 @@ app.prepare().then(() => {
     });
 
     socket.on("disconnect", () => {
-      onlineUsers.forEach((socketId, userId) => {
-        if (socketId === socket.id) onlineUsers.delete(userId);
-      });
-      //console.log("❌ User disconnected:", socket.id);
+      for (let [userId, socketId] of onlineUsers.entries()) {
+        if (socketId === socket.id) {
+          //console.log(`❌ online User ${userId} disconnected`);
+          onlineUsers.delete(userId); // Remove user from online users
+          break;
+        }
+      }
+      for (let [userId, socketId] of offlineUsers.entries()) {
+        if (socketId === socket.id) {
+          //console.log(`❌ Offline user ${userId} disconnected`);
+          offlineUsers.delete(userId); // Remove user from offline users
+          break;
+        }
+      }
     });
   });
 

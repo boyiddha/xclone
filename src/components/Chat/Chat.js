@@ -86,8 +86,8 @@ const Chat = ({ user }) => {
   useEffect(() => {
     if (loggedInUser) {
       (async () => {
+        await fetchOrCreateConversation(); // Then fetch or create conversation
         await fetchChatUsers(); // Wait for chat users to load
-        fetchOrCreateConversation(); // Then fetch or create conversation
       })();
     }
   }, [loggedInUser, fetchChatUsers, fetchOrCreateConversation]);
@@ -99,6 +99,7 @@ const Chat = ({ user }) => {
           <MessageListSection
             users={chatUsers}
             setShowPopup={setShowPopup}
+            loggedInId={loggedInUser?._id}
             selectedUser={user}
           />
         </div>

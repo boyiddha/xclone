@@ -67,8 +67,7 @@ export const authOptions = {
             id: userInfo?.id.toString(), // Convert to string
             name: userInfo?.name,
             username: userInfo?.username,
-           // image: userInfo?.image || null, // Default to null if no image => do it when i set user image in db
-            
+            // image: userInfo?.image || null, // Default to null if no image => do it when i set user image in db
           };
         } catch (e) {
           console.error(e);
@@ -160,8 +159,8 @@ export const authOptions = {
         token.isNewUser = false;
       }
 
-      if(user){
-        token.id=user.id;
+      if (user) {
+        token.id = user.id;
       }
 
       if (account && user) {
@@ -248,7 +247,6 @@ export const authOptions = {
 
       // console.log(" ❌ after setting session is: ", session);
       // console.log(" ❌ after setting token is: ", token);
-
 
       //session.error = token?.error ?? null; // Ensure session.error is always present
 

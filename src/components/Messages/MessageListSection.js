@@ -10,7 +10,12 @@ import { IoIosSearch } from "react-icons/io";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const MessageListSection = ({ users, setShowPopup, selectedUser = null }) => {
+const MessageListSection = ({
+  users,
+  setShowPopup,
+  loggedInId,
+  selectedUser = null,
+}) => {
   const [search, setSearch] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
@@ -82,11 +87,26 @@ const MessageListSection = ({ users, setShowPopup, selectedUser = null }) => {
                 )}
               </div>
               <div className={styles.chatProfile}>
-                <div className={styles.name}>
-                  <div>{user.fullName}</div>
-                  <div className={styles.userName}>@{user.userName}</div>
+                <div className={styles.nameHead}>
+                  <div className={styles.name}>
+                    <div>{user.fullName}</div>
+                    <div className={styles.userName}>@{user.userName}</div>
+                  </div>
+                  <div className={styles.unreadIcon}>
+                    {!user?.lastMessage?.seen &&
+                      user?.lastMessage?.sender !== loggedInId && (
+                        <span className={styles.unreadDot}></span>
+                      )}
+                  </div>
                 </div>
-                <div className={styles.content}>
+                <div
+                  className={
+                    !user?.lastMessage?.seen &&
+                    user?.lastMessage?.sender !== loggedInId
+                      ? styles.unreadContent
+                      : styles.content
+                  }
+                >
                   {user?.lastMessage?.content}
                 </div>
               </div>

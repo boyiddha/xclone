@@ -25,6 +25,12 @@
   padding-left: 10px;
   position: relative;
 }
+.messagesIcon {
+  font-size: 27px;
+  margin-right: 6px;
+  padding-left: 10px;
+  position: relative;
+}
 .unreadIcon {
   color: blue;
 }
@@ -35,6 +41,16 @@
   right: 7px;
   width: 12px;
   height: 12px;
+  background-color: rgb(51, 114, 238);
+  border-radius: 50%;
+}
+
+.unreadMessageDot {
+  position: absolute;
+  top: -6px;
+  right: 7px;
+  width: 10px;
+  height: 10px;
   background-color: rgb(51, 114, 238);
   border-radius: 50%;
 }
