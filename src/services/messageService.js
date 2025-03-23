@@ -20,7 +20,8 @@ export const saveMessageAndUpdateConversation = async ({
       content,
       conversationId,
     });
-    await updateLastMessage(conversationId, message._id);
+
+    await updateLastMessage(conversationId, message._id, message.createdAt);
     return message;
   } catch (error) {
     console.error("❌ Error saving message:", error);

@@ -107,7 +107,7 @@ const Chat = ({ user }) => {
         <div className={`${styles.column} ${styles.chatBox}`}>
           {conversationId ? (
             <Conversation
-              selectedUsers={chatUsers[0]}
+              selectedUsers={user}
               loggedInUser={loggedInUser}
               conversationId={conversationId}
             />

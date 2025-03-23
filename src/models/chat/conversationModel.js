@@ -9,6 +9,10 @@ const ConversationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Message",
     },
+    lastMessageAt: {
+      type: Date,
+      default: null, // Stores the last message timestamp
+    },
   },
   { timestamps: true }
 );
