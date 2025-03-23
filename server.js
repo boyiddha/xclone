@@ -7,7 +7,7 @@
 import { createServer } from "node:http";
 import next from "next";
 import { Server } from "socket.io";
-import { saveMessageAndUpdateConversation } from "./src/controllers/messageController.js";
+import { handleNewMessage } from "./src/controllers/messageController.js";
 import Message from "./src/models/chat/messageModel.js";
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -41,9 +41,13 @@ app.prepare().then(() => {
     // Handle message sending
     socket.on("sendMessage", async (messageData, callback) => {
       try {
-        const savedMessage = await saveMessageAndUpdateConversation(
-          messageData
-        );
+        const { status, data } = await handleNewMessage(messageData);
+
+        if (status !== 201) {
+          return callback({ error: "Failed to save message" });
+        }
+
+        const savedMessage = data.savedMessage;
 
         // Emit message to recipient ui if the receiver at online means currently he at conversation ui
         if (onlineUsers.has(messageData.receiver)) {

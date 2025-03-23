@@ -74,11 +74,6 @@ export const updateUser = async (email, dob, hashedPassword, username) => {
 };
 
 export const updateUserById = async (userId, newData) => {
-  const user = await User.findById(userId);
-  console.log("Found user:", user); // Check if user exists before updating
-  if (!user) {
-    return null; // Handle if user is not found
-  }
   return await User.findByIdAndUpdate(userId, newData, { new: true });
 };
 

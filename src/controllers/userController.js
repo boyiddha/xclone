@@ -256,13 +256,11 @@ export const saveUsername = async (req) => {
 
 export async function updateUserProfile(req, params) {
   try {
-    const { userId } = await params;
-
-    console.log("❗ user id: ", userId);
+    const { identifier } = await params;
 
     const { fullName, coverImage, profileImage } = await req.json();
 
-    const updatedUser = await updateUserProfileService(userId, {
+    const updatedUser = await updateUserProfileService(identifier, {
       fullName,
       coverImage,
       image: profileImage,
