@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { io } from "socket.io-client";
+import { fetchChatMessages } from "@/app/actions/chatActions";
 
 const Conversation = ({ selectedUsers, loggedInUser, conversationId }) => {
   const [joiningDateMessage, setJoiningDateMessage] = useState("");
@@ -66,38 +67,27 @@ const Conversation = ({ selectedUsers, loggedInUser, conversationId }) => {
   useEffect(() => {
     if (!conversationId) return;
 
-    const fetchMessages = async () => {
-      try {
-        const res = await fetch(
-          `/api/messages?conversationId=${conversationId}&loggedInUserId=${loggedInUser._id}`,
-          {
-            method: "GET",
-          }
-        );
+    const getMessages = async () => {
+      const messages = await fetchChatMessages(
+        conversationId,
+        loggedInUser._id
+      );
+      setMessages(messages);
 
-        if (res.ok) {
-          const data = await res.json();
-          setMessages(data.messages);
-          // Notify sender about seen messages
-          const unseenMessages = data.messages.filter(
-            (msg) => msg.receiver === loggedInUser._id && !msg.seen
-          );
+      // Notify sender about seen messages
+      const unseenMessages = messages.filter(
+        (msg) => msg.receiver === loggedInUser._id && !msg.seen
+      );
 
-          if (unseenMessages.length > 0) {
-            socketRef.current.emit("markAsSeenBulk", {
-              messageIds: unseenMessages.map((msg) => msg._id),
-              senderId: unseenMessages[0]?.sender, // Notify the sender
-            });
-          }
-        } else {
-          console.error("Failed to fetch messages");
-        }
-      } catch (error) {
-        console.error("Error fetching messages:", error);
+      if (unseenMessages.length > 0) {
+        socketRef.current.emit("markAsSeenBulk", {
+          messageIds: unseenMessages.map((msg) => msg._id),
+          senderId: unseenMessages[0]?.sender, // Notify the sender
+        });
       }
     };
 
-    fetchMessages();
+    getMessages();
   }, [conversationId, loggedInUser._id]);
 
   //   ✅ Display messages in real-time.

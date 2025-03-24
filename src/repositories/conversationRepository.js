@@ -12,6 +12,12 @@ export const updateLastMessage = async (conversationId, messageId, at) => {
 };
 
 export async function findConversation(participants) {
+  if (participants[0] === participants[1]) {
+    // Special case for self-chat
+    return await Conversation.findOne({
+      participants: participants,
+    });
+  }
   return await Conversation.findOne({
     participants: { $all: participants, $size: 2 },
   });

@@ -2,6 +2,8 @@
 
 import { useRef, useState, useEffect } from "react";
 import styles from "./composeReply.module.css";
+import { postReply, fetchRepliedPost } from "@/app/actions/tweetActions";
+import { createCommentNotification } from "@/app/actions/notificationActions";
 
 import { RxCross2 } from "react-icons/rx";
 import Image from "next/image";
@@ -23,27 +25,15 @@ const ComposeReply = ({
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    const fetchRepliedPost = async () => {
-      try {
-        const res = await fetch(`/api/tweet/posts/${repliedPostId}`);
-        if (res.ok) {
-          const data = await res.json();
-          setPost(data.post);
-          // console.log("✅  data: ", data.post);
-        } else {
-          console.error("Failed to fetch reposted post");
-        }
-      } catch (error) {
-        console.error("Error fetching reposted post:", error);
-      } finally {
-        setLoading(false);
-      }
+    const getRepliedPost = async () => {
+      if (!repliedPostId) return;
+      const post = await fetchRepliedPost(repliedPostId);
+      setPost(post);
+      setLoading(false);
     };
 
-    if (repliedPostId) {
-      fetchRepliedPost(); // Fetch reposted post first
-    }
-  }, [repliedPostId]); // Depend only on repostedId to fetch the reposted post
+    getRepliedPost();
+  }, [repliedPostId]);
 
   const handleChange = (e) => {
     setContent(e.target.value);
@@ -56,17 +46,12 @@ const ComposeReply = ({
     if (!content.trim()) return;
 
     try {
-      const res = await fetch("/api/tweet/reply", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          postId: repliedPostId,
-          currentUserId,
-          content,
-        }),
+      // Post the reply
+      const { result, res } = await postReply({
+        repliedPostId,
+        currentUserId,
+        content,
       });
-
-      const result = await res.json();
 
       if (!res.ok) {
         console.error("Reply failed:", result.message);
@@ -78,14 +63,10 @@ const ComposeReply = ({
       setFile(null); // Reset file
 
       // if the user commented on the post create a notification
-      await fetch("/api/notification", {
-        method: "POST",
-        body: JSON.stringify({
-          recipient: ownerId, // post owner Id
-          sender: currentUserId,
-          postId: repliedPostId, // main post id
-          type: "comment",
-        }),
+      await createCommentNotification({
+        ownerId, // post owner Id
+        currentUserId,
+        repliedPostId,
       });
 
       setRepliedCount(result.commentCount || 0); // Ensure fallback if undefined
@@ -140,10 +121,14 @@ const ComposeReply = ({
                 {post?.media?.data && (
                   <div>
                     {post?.media.contentType.startsWith("image/") ? (
-                      <img
+                      <Image
                         src={`data:${post?.media.contentType};base64,${post.media.data}`}
                         alt={post?.media.name || "Uploaded Image"}
                         className={styles.media}
+                        loader={base64Loader}
+                        width={500}
+                        height={300}
+                        unoptimized
                       />
                     ) : post?.media.contentType.startsWith("audio/") ? (
                       <audio controls className={styles.media}>

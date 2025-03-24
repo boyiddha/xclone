@@ -53,10 +53,14 @@ const CommentSection = ({ comments, level = 0 }) => {
                 {comment?.media?.data && (
                   <div className={styles.commentMedia}>
                     {comment.media.contentType.startsWith("image/") ? (
-                      <img
+                      <Image
                         src={`data:${comment.media.contentType};base64,${comment.media.data}`}
                         alt="Comment Image"
                         className={styles.media}
+                        loader={base64Loader}
+                        width={500}
+                        height={300}
+                        unoptimized // Allows using Base64 images without Next.js optimization
                       />
                     ) : comment.media.contentType.startsWith("audio/") ? (
                       <audio controls className={styles.media}>

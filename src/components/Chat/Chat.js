@@ -6,6 +6,10 @@ import MessageListSection from "../Messages/MessageListSection";
 import Conversation from "./Conversation";
 import SearchOverlay from "../Messages/SearchOverlay";
 import { getLoggedInUser } from "@/app/actions/userActions";
+import {
+  fetchChatUsers,
+  fetchOrCreateConversation,
+} from "@/app/actions/chatActions";
 
 const Chat = ({ user }) => {
   const [chatUsers, setChatUsers] = useState([user]);
@@ -26,45 +30,24 @@ const Chat = ({ user }) => {
   };
 
   // Fetch Chat Users
-  const fetchChatUsers = useCallback(async () => {
+  const loadChatUsers = useCallback(async () => {
+    if (!loggedInUser?._id) return;
     try {
-      const res = await fetch(
-        `/api/conversations?loggedInUserId=${loggedInUser._id}`
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setChatUsers(data);
-      } else {
-        console.error("Failed to fetch chat users");
-      }
+      const data = await fetchChatUsers(loggedInUser._id);
+      setChatUsers(data);
     } catch (error) {
-      console.error("Error fetching chat users:", error);
+      console.error(error);
     }
   }, [loggedInUser?._id]);
 
   // Fetch or create conversation ID
-  const fetchOrCreateConversation = useCallback(async () => {
+  const loadConversation = useCallback(async () => {
     if (!loggedInUser || !user) return;
-
-    const receiver = user; // Assuming one-on-one chat
-
     try {
-      const res = await fetch("/api/conversations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          senderId: loggedInUser._id,
-          receiverId: receiver._id,
-        }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setConversationId(data.conversationId);
-      } else {
-        console.error("❌ Failed to fetch or create conversation.");
-      }
+      const data = await fetchOrCreateConversation(loggedInUser._id, user._id);
+      setConversationId(data.conversationId);
     } catch (error) {
-      console.error("❌ Error fetching conversation:", error);
+      console.error(error);
     }
   }, [loggedInUser, user]);
 
@@ -82,11 +65,11 @@ const Chat = ({ user }) => {
   useEffect(() => {
     if (loggedInUser) {
       (async () => {
-        await fetchOrCreateConversation(); // Then fetch or create conversation
-        await fetchChatUsers(); // Wait for chat users to load
+        await loadConversation();
+        await loadChatUsers();
       })();
     }
-  }, [loggedInUser, fetchChatUsers, fetchOrCreateConversation]);
+  }, [loggedInUser, loadConversation, loadChatUsers]);
 
   return (
     <>
