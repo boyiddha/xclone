@@ -31,3 +31,28 @@ export const markMessagesAsSeen = async (messageIds) => {
 export const checkUnseenMessagesInDB = async (userId) => {
   return await Message.exists({ receiver: userId, seen: false });
 };
+
+export const findAndUpdateMessage = async (messageId) => {
+  try {
+    return await Message.findByIdAndUpdate(
+      messageId,
+      { seen: true },
+      { new: true }
+    );
+  } catch (error) {
+    console.error("❌ Error updating message as seen:", error);
+    throw new Error("Database error while marking message as seen");
+  }
+};
+
+export const updateManyMessagesAsSeen = async (messageIds) => {
+  try {
+    return await Message.updateMany(
+      { _id: { $in: messageIds } },
+      { $set: { seen: true } }
+    );
+  } catch (error) {
+    console.error("❌ Error updating messages as seen:", error);
+    throw new Error("Database error while marking messages as seen");
+  }
+};

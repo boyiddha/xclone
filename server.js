@@ -7,9 +7,14 @@
 import { createServer } from "node:http";
 import next from "next";
 import { Server } from "socket.io";
-import { handleNewMessage } from "./src/controllers/messageController.js";
+import {
+  saveMessageAndUpdateConversation,
+  markMessageAsSeenService,
+  markMessagesAsSeenBulkService,
+} from "./src/services/messageService.js";
 import Message from "./src/models/chat/messageModel.js";
-const dev = process.env.NODE_ENV !== "production";
+const dev = process.env.NODE_ENV?.trim().toLowerCase() !== "production";
+
 const hostname = "localhost";
 const port = 3000;
 
@@ -25,8 +30,6 @@ app.prepare().then(() => {
   let onlineUsers = new Map(); // Store online users (userId -> cocket.id)
   let offlineUsers = new Map();
   io.on("connection", (socket) => {
-    //console.log("✅ User connected:", socket.id);
-
     // Track user as online only from conversation component
     socket.on("userConnected", (userId, fromConversation = false) => {
       if (fromConversation) {
@@ -41,13 +44,9 @@ app.prepare().then(() => {
     // Handle message sending
     socket.on("sendMessage", async (messageData, callback) => {
       try {
-        const { status, data } = await handleNewMessage(messageData);
-
-        if (status !== 201) {
-          return callback({ error: "Failed to save message" });
-        }
-
-        const savedMessage = data.savedMessage;
+        const savedMessage = await saveMessageAndUpdateConversation(
+          messageData
+        );
 
         // Emit message to recipient ui if the receiver at online means currently he at conversation ui
         if (onlineUsers.has(messageData.receiver)) {
@@ -65,6 +64,7 @@ app.prepare().then(() => {
             }
           );
         }
+
         // ✅ Send the saved message back to the sender and dispaly in UI
         callback(savedMessage);
       } catch (error) {
@@ -82,15 +82,9 @@ app.prepare().then(() => {
     // Mark message as seen
     socket.on("markAsSeen", async ({ messageId, receiverId }) => {
       try {
-        // ✅ Get the updated message after setting seen: true
-        const message = await Message.findByIdAndUpdate(
-          messageId,
-          { seen: true },
-          { new: true } // ✅ Ensures updated data is returned
-        );
-
-        // Emit a seen status update back to the sender
+        const message = await markMessageAsSeenService(messageId);
         if (onlineUsers.has(receiverId)) {
+          //  Emit a seen status update back to the sender
           io.to(onlineUsers.get(receiverId)).emit("messageSeen", message);
         }
       } catch (error) {
@@ -100,12 +94,7 @@ app.prepare().then(() => {
 
     socket.on("markAsSeenBulk", async ({ messageIds, senderId }) => {
       try {
-        await Message.updateMany(
-          { _id: { $in: messageIds } },
-          { $set: { seen: true } }
-        );
-
-        // ✅ Broadcast "messageSeen" to the sender in real time
+        await markMessagesAsSeenBulkService(messageIds);
         if (onlineUsers.has(senderId)) {
           io.to(onlineUsers.get(senderId)).emit("messageSeenBulk", {
             messageIds,

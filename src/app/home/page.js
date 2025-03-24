@@ -1,7 +1,5 @@
 import Image from "next/image";
 import styles from "./home.module.css";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Navbar from "@/components/Navbar/Navbar";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import MainSection from "@/components/MainSection/MainSection";
@@ -11,9 +9,6 @@ export const metadata = {
 };
 
 const HomePage = async () => {
-  //Get session using getServerSession() and your authOptions
-  // const session = await getServerSession(authOptions);
-  // console.log("✅  session home page : , ", session);
   return (
     <>
       {" "}

@@ -4,6 +4,8 @@ import {
   getUnseenMessages,
   markMessagesAsSeen,
   checkUnseenMessagesInDB,
+  findAndUpdateMessage,
+  updateManyMessagesAsSeen,
 } from "../repositories/messageRepository.js";
 import { updateLastMessage } from "../repositories/conversationRepository.js";
 
@@ -55,4 +57,19 @@ export const fetchMessagesAndMarkSeen = async (
 
 export const checkUnseenMessages = async (userId) => {
   return await checkUnseenMessagesInDB(userId);
+};
+
+export const markMessageAsSeenService = async (messageId) => {
+  if (!messageId) throw new Error("Message ID is required");
+
+  return await findAndUpdateMessage(messageId);
+};
+
+export const markMessagesAsSeenBulkService = async (messageIds) => {
+  if (!Array.isArray(messageIds) || messageIds.length === 0) {
+    throw new Error("Invalid message IDs");
+  }
+
+  await updateManyMessagesAsSeen(messageIds);
+  return messageIds;
 };

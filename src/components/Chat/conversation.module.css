@@ -18,6 +18,19 @@
   cursor: pointer;
 }
 
+.backButton {
+  background-color: black;
+  color: white;
+  border: none;
+  font-size: 17px;
+  cursor: pointer;
+  padding: 5px;
+}
+.backButton:hover {
+  background-color: rgb(53, 52, 52);
+  border-radius: 50%;
+}
+
 .row2 {
   flex: 1;
   min-height: 70vh;

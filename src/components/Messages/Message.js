@@ -45,7 +45,7 @@ const Message = () => {
       );
       if (res.ok) {
         const data = await res.json();
-        console.log("✅  chat users: ", data);
+
         setChatUsers(data);
       } else {
         console.error("Failed to fetch chat users");

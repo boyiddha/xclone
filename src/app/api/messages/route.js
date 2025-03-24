@@ -4,16 +4,7 @@ import { handleNewMessage, getMessages } from "@/controllers/messageController";
 
 export async function POST(req) {
   const body = await req.json();
-
-  if (!body.sender || !body.receiver || !body.content || !body.conversationId) {
-    return NextResponse.json(
-      { message: "All fields are required." },
-      { status: 400 }
-    );
-  }
-
-  const { status, data } = await handleNewMessage(body);
-  return NextResponse.json(data, { status });
+  return handleNewMessage(body);
 }
 
 export async function GET(req) {

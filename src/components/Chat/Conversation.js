@@ -3,6 +3,7 @@
 import styles from "./conversation.module.css";
 import { AiOutlineSend } from "react-icons/ai";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { FaArrowLeft } from "react-icons/fa";
 import { formatJoiningDate } from "@/utils/calendarUtils";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -22,12 +23,21 @@ const Conversation = ({ selectedUsers, loggedInUser, conversationId }) => {
   const activeSend = content?.length > 0 ? true : false;
 
   const messagesEndRef = useRef(null);
+  const [isBack, setIsBack] = useState(window.innerWidth <= 1090);
 
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
     }
   }, [messages]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsBack(window.innerWidth <= 1090);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleChange = (e) => {
     setContent(e.target.value);
@@ -155,6 +165,7 @@ const Conversation = ({ selectedUsers, loggedInUser, conversationId }) => {
     };
 
     setContent("");
+    textAreaRef.current.style.height = "auto";
 
     // Send message to server and wait for the response
     socketRef.current.emit("sendMessage", newMessage, (savedMessage) => {
@@ -174,6 +185,14 @@ const Conversation = ({ selectedUsers, loggedInUser, conversationId }) => {
     <>
       <div className={styles.container}>
         <div className={styles.row1}>
+          {isBack && (
+            <button
+              className={styles.backButton}
+              onClick={() => router.push("/messages")}
+            >
+              <FaArrowLeft />
+            </button>
+          )}
           <div>
             <span>{selectedUsers.fullName}</span>
           </div>

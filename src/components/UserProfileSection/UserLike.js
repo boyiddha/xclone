@@ -46,7 +46,7 @@ const UserLike = ({
                   {author.image && (
                     <Image
                       className={styles.img}
-                      src={userImage}
+                      src={author?.image}
                       alt="user profile"
                       width="35"
                       height="35"

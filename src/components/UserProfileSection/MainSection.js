@@ -17,6 +17,8 @@ const MainSection = ({ username }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [posts, setPosts] = useState([]);
+  const [allPosts, setAllPosts] = useState([]);
+
   const [userId, setCurrentUserId] = useState("");
   const [loggedInUserId, setLoggedInUserId] = useState("");
 
@@ -62,6 +64,7 @@ const MainSection = ({ username }) => {
     }
   };
 
+  // fetch user posts
   const fetchPosts = async () => {
     try {
       const res = await fetch(`/api/posts/${username}`);
@@ -73,6 +76,24 @@ const MainSection = ({ username }) => {
       }
     } catch (error) {
       console.error("Error fetching user post:", error);
+    }
+  };
+
+  // Fetch all posts
+  const fetchAllPosts = async () => {
+    try {
+      const response = await fetch("/api/posts", {
+        method: "GET",
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setAllPosts(result.posts);
+      } else {
+        console.error("Failed to fetch posts");
+      }
+    } catch (error) {
+      setError("Failed to fetch posts " + error.message);
     } finally {
       setLoading(false);
     }
@@ -147,6 +168,7 @@ const MainSection = ({ username }) => {
       await fetchMe();
       await fetchUsers();
       await fetchPosts();
+      await fetchAllPosts();
     };
 
     fetchData();
@@ -211,7 +233,7 @@ const MainSection = ({ username }) => {
           {pathname === `/${userName}` && (
             <UserPost
               posts={posts}
-              originalPosts={posts} // pass same posts to find originals
+              originalPosts={allPosts} // pass same posts to find originals
               fullName={fullName}
               userName={userName}
               userImage={userImage}
@@ -225,7 +247,7 @@ const MainSection = ({ username }) => {
           {pathname === `/${userName}/with_replies` && (
             <UserReply
               posts={posts}
-              originalPosts={posts} // Contains all posts to find original post if needed
+              originalPosts={allPosts} // Contains all posts to find original post if needed
               users={users}
               fullName={fullName}
               userName={userName}
@@ -237,7 +259,7 @@ const MainSection = ({ username }) => {
           )}
           {pathname === `/${userName}/likes` && (
             <UserLike
-              posts={posts}
+              posts={allPosts}
               userId={userId}
               users={users}
               fullName={fullName}

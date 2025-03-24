@@ -9,20 +9,6 @@
 .column {
   padding: 10px;
 }
-/* first column */
-.navbar {
-  width: 31%;
-  max-width: 31%; /* Start at 31% width */
-  min-width: 100px; /* Allows it to shrink */
-  flex-shrink: 1; /* Allows it to shrink */
-  height: 100vh;
-  text-align: right;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  overflow-x: hidden;
-  border-right: 1px solid rgb(56, 56, 56);
-}
-
 .messageList {
   width: 410px;
   border-right: 1px solid rgb(56, 56, 56);
@@ -33,29 +19,18 @@
   border-right: 1px solid rgb(56, 56, 56);
 }
 
-/* When screen is below 1280px, Navbar shrinks down to 100px */
-@media (max-width: 1280px) {
-  .navbar {
-    max-width: 250px;
-    min-width: 100px;
-    width: 100px; /* Fix it to 100px when it reaches the limit */
+@media (max-width: 1090px) {
+  .chatBox {
+    display: none;
+  }
+  .messageList {
+    width: 600px;
   }
 }
-
-/* When screen is below 1020px, Sidebar disappears */
-@media (max-width: 1020px) {
-  .navbar {
-    width: 100px; /* Fix Navbar to 100px */
-    min-width: 100px;
-    max-width: 100px; /* Prevent it from shrinking further */
-  }
-}
-
-/* When screen is less than 720px, only the mainSidebarContainer shrinks */
-@media (max-width: 720px) {
-  .navbar {
-    width: 57px; /* Keep navbar fixed at 100px */
-    min-width: 57px;
-    max-width: 57px;
+@media (max-width: 700px) {
+  .messageList {
+    width: 90vw;
+    max-width: 600px;
+    min-width: 250px;
   }
 }

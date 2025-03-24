@@ -1,18 +1,14 @@
 import Navbar from "@/components/Navbar/Navbar";
 import styles from "./chat.module.css";
 import Chat from "@/components/Chat/Chat";
+import { getUserByIdentifier } from "../../actions/userActions";
 
 export async function generateMetadata({ params }) {
-  const { userId } = await params;
+  const { userId } = params;
 
   try {
-    const res = await fetch(
-      `${process.env.API_SERVER_BASE_URL}/api/users/${userId}`
-    );
-    if (!res.ok) throw new Error("Failed to fetch user data");
-
-    const data = await res.json();
-    const user = data.user;
+    const user = await getUserByIdentifier(userId);
+    if (!user) throw new Error("User not found");
 
     return {
       title: `${user.fullName} / X`,
@@ -28,12 +24,11 @@ export async function generateMetadata({ params }) {
 const ChatPage = async ({ params }) => {
   const { userId } = await params;
 
-  // Fetch user data on the server
-  const res = await fetch(
-    `${process.env.API_SERVER_BASE_URL}/api/users/${userId}`
-  );
-  const data = await res.json();
-  const user = data.user;
+  const user = await getUserByIdentifier(userId);
+
+  if (!user) {
+    return <div>Error loading user data</div>;
+  }
 
   return (
     <>

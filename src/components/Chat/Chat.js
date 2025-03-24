@@ -5,6 +5,7 @@ import styles from "./chat.module.css";
 import MessageListSection from "../Messages/MessageListSection";
 import Conversation from "./Conversation";
 import SearchOverlay from "../Messages/SearchOverlay";
+import { getLoggedInUser } from "@/app/actions/userActions";
 
 const Chat = ({ user }) => {
   const [chatUsers, setChatUsers] = useState([user]);
@@ -22,17 +23,6 @@ const Chat = ({ user }) => {
       // If user is already selected, do nothing
       return prev;
     });
-  };
-  const fetchMe = async () => {
-    const res = await fetch("/api/me", {
-      method: "GET",
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setLoggedInUser(data);
-    } else {
-      console.error("Failed to fetch Me");
-    }
   };
 
   // Fetch Chat Users
@@ -78,9 +68,15 @@ const Chat = ({ user }) => {
     }
   }, [loggedInUser, user]);
 
-  // Fetch posts on component mount
   useEffect(() => {
-    fetchMe();
+    const fetchUser = async () => {
+      const user = await getLoggedInUser();
+      if (user) {
+        setLoggedInUser(user);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   useEffect(() => {
