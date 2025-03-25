@@ -13,8 +13,6 @@ export const checkAlreadyUseThisEmail = async (email) => {
   }
 };
 
-// app/actions/authActions.js
-
 export const generateOTP = async (email) => {
   try {
     const res = await fetch("/api/auth/createOTP", {
@@ -132,8 +130,6 @@ export const verifyResetCode = async ({ email, code }) => {
   }
 };
 
-// app/actions/authActions.js
-
 export const updatePasswordAPI = async ({ email, newPassword }) => {
   try {
     const res = await fetch("/api/auth/forgot-password/update", {
@@ -155,8 +151,6 @@ export const updatePasswordAPI = async ({ email, newPassword }) => {
   }
 };
 
-// app/actions/authActions.js
-
 export const savePasswordAPI = async ({ email, password }) => {
   try {
     const saveResponse = await fetch("/api/auth/savePassword", {
@@ -177,8 +171,6 @@ export const savePasswordAPI = async ({ email, password }) => {
     throw e; // Rethrow error to be handled in frontend
   }
 };
-
-// app/actions/authActions.js
 
 export const saveUserNameAPI = async ({ email, username }) => {
   try {
