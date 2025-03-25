@@ -6,8 +6,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { GoArrowLeft } from "react-icons/go";
 import { useEffect, useState, useRef } from "react";
-import { generateEmailData } from "@/utils/emailTemplates";
-import { sendEmail } from "@/utils/emailSender";
+
+import {
+  generateOTP,
+  sendEmail,
+  verifyOTP,
+  registerUser,
+} from "@/app/actions/authActions";
 
 const VerificationOverlay = ({ step, email, name, dob }) => {
   const router = useRouter();
@@ -27,33 +32,16 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
     hasSent.current = true; // Mark as sent
     const handleEmailSend = async () => {
       try {
-        //Step 1: Generate OTP
-        const otpResponse = await fetch("/api/auth/createOTP", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }), // Pass the user email
+        // Step 1: Generate OTP
+        const { otp } = await generateOTP(email); // Pass the user email
+
+        // Step 2: Send the OTP via email
+        const { message } = await sendEmail(email, "emailVerification", {
+          otp,
         });
-        if (!otpResponse.ok) throw new Error("Failed to generate OTP");
-        const { otp } = await otpResponse.json(); // Extract OTP from response
 
-      //Step 2: Send the OTP via email
-        
-      const emailResponse = await fetch("/api/auth/nodemailer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email, 
-          type: "emailVerification", 
-          data: { otp } 
-        }),
-      });
-
-      if (!emailResponse.ok) throw new Error("Failed to send email");
-      const { message } = await emailResponse.json(); // Extract success message
-
-      // Step 3: Set response message (success or failure)
-      setMessage(message);
-        
+        // Step 3: Set response message (success or failure)
+        setMessage(message);
       } catch (error) {
         console.error("✅ Error:", error);
         setMessage("Failed to send email");
@@ -62,32 +50,17 @@ const VerificationOverlay = ({ step, email, name, dob }) => {
       }
     };
     handleEmailSend();
-  }, [email]); // run when email props change
+  }, [email]);
 
   const handleVerification = async () => {
     try {
-      const response = await fetch("/api/auth/verifyOTP", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, verificationCode }),
-      });
+      const data = await verifyOTP(email, verificationCode);
 
-      const data = await response.json();
-
-      if (response.status === 200) {
+      if (data && data.status === 200) {
         // Verified User, Now complete registration
         try {
-          const registerResponse = await fetch("/api/auth/register", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify({
-              name,
-              email,
-              dob,
-            }),
-          });
+          const registerResponse = await registerUser({ name, email, dob });
+
           registerResponse.status === 201 && router.push("/?step=setPassword");
         } catch (e) {
           setMessage(e.message);

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PasswordForgetOverlay2 from "@/components/PasswordForget/PasswordForgetOverlay2";
+import { requestPasswordReset } from "@/app/actions/authActions";
 
 const PasswordForgetOverlay = ({ email, setPassword, setIsFinalOverlay }) => {
   const router = useRouter();
@@ -23,16 +24,7 @@ const PasswordForgetOverlay = ({ email, setPassword, setIsFinalOverlay }) => {
     setLoading(true);
     try {
       setError("");
-      const response = await fetch("/api/auth/forgot-password/request", {
-        method: "POST",
-        body: JSON.stringify({ email }),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to send reset code");
-      }
+      const data = await requestPasswordReset(email); // Use the refactored function here
       // If API call is successful, show the overlay
       setIsOverlayVisible(true);
       setLoading(false);

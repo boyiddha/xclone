@@ -2,6 +2,8 @@
 
 import { useRef, useState, useEffect } from "react";
 import styles from "./composeRepost.module.css";
+import { fetchPost, repostTweet } from "@/app/actions/tweetActions";
+import { createNotification } from "@/app/actions/notificationActions";
 
 import { RxCross2 } from "react-icons/rx";
 import Image from "next/image";
@@ -24,24 +26,15 @@ const ComposeRepost = ({
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    const fetchRepostedPost = async () => {
-      try {
-        const res = await fetch(`/api/tweet/posts/${repostedId}`);
-        if (res.ok) {
-          const data = await res.json();
-          setPost(data.post);
-        } else {
-          console.error("Failed to fetch reposted post");
-        }
-      } catch (error) {
-        console.error("Error fetching reposted post:", error);
-      } finally {
-        setLoading(false);
-      }
+    const getRepostedPost = async () => {
+      if (!repostedId) return;
+      const post = await fetchPost(repostedId);
+      setPost(post);
+      setLoading(false);
     };
 
     if (repostedId) {
-      fetchRepostedPost(); // Fetch reposted post first
+      getRepostedPost(); // Fetch reposted post first
     }
   }, [repostedId]); // Depend only on repostedId to fetch the reposted post
 
@@ -56,50 +49,33 @@ const ComposeRepost = ({
     if (!content.trim()) return;
 
     try {
-      let postId = repostedId;
-      const res = await fetch("/api/tweet/repost", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ postId, currentUserId, content }),
-      });
-      if (res.ok) {
-        const result = await res.json();
+      const result = await repostTweet({ repostedId, currentUserId, content });
 
-        setContent(""); // Clear content
-        setFile(null); // Reset file
+      setContent(""); // Clear content
+      setFile(null); // Reset file
 
-        setReposted(result.reposted);
-        setRepostedCount(result.reposts);
-        if (result.reposted) {
-          // do an repost
+      setReposted(result.reposted);
+      setRepostedCount(result.reposts);
 
-          // if the user reposted the post create a notification
-          await fetch("/api/notification", {
-            method: "POST",
-            body: JSON.stringify({
-              recipient: ownerId, // post owner Id
-              sender: currentUserId,
-              postId: postId,
-              type: "repostWithQuote",
-            }),
-          });
+      if (result.reposted) {
+        // If the user reposted the post, create a notification
+        await createNotification({
+          recipient: ownerId, // post owner Id
+          sender: currentUserId,
+          postId: repostedId,
+          type: "repostWithQuote",
+        });
 
-          // update the posts in <MainSection/> to get the updated result in NewsFeed
-
-          onPostReposted(result.newPost);
-        } else {
-          // remove repost
-          // update the posts in parent
-          //console.log("removed reposted id : ", data.removedRepostedId);
-          onPostRemove(result.removedRepostedId);
-        }
-
-        handleCloseRepost();
+        // Update posts in <MainSection/> to reflect the repost
+        onPostReposted(result.newPost);
       } else {
-        alert("Repost failed");
+        // Remove repost
+        onPostRemove(result.removedRepostedId);
       }
+
+      handleCloseRepost();
     } catch (error) {
-      console.error("Error posting:", error);
+      console.error("Repost failed:", error);
     }
   };
 

@@ -2,7 +2,7 @@ import Image from "next/image";
 import styles from "./accountOptions.module.css";
 import { CiCircleCheck } from "react-icons/ci";
 import { IoIosCheckmarkCircle } from "react-icons/io";
-import { doLogout } from "@/app/actions";
+import { doLogout } from "@/app/actions/logInOutActions";
 
 const AccountOptions = ({ fullName, userName, userImage }) => {
   const handleLogOut = async () => {

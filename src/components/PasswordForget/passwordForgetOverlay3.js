@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import styles from "./passwordForgetOverlay3.module.css";
 import { IoEye } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
+import { updatePasswordAPI } from "@/app/actions/authActions";
 
 const PasswordForgetOverlay3 = ({ email, setPassword, setIsFinalOverlay }) => {
   const [newPassword, setNewPassword] = useState("");
@@ -22,25 +23,12 @@ const PasswordForgetOverlay3 = ({ email, setPassword, setIsFinalOverlay }) => {
     }
 
     try {
-      const res = await fetch("/api/auth/forgot-password/update", {
-        method: "POST",
-        body: JSON.stringify({ email, newPassword }),
-        headers: { "Content-Type": "application/json" },
-      });
+      const data = await updatePasswordAPI({ email, newPassword }); // Use the refactored API function
 
-      const data = await res.json();
-
-      if (res.ok) {
-        //setIsOverlayOpened(true);
-        //console.log("final overlay call ****************");
-        setPassword(newPassword);
-        setIsFinalOverlay(true);
-      } else {
-        setError(data.message); // Show error message
-      }
+      setPassword(newPassword); // If successful, update password state
+      setIsFinalOverlay(true); // Show overlay
     } catch (error) {
       setError("Something went wrong. Please try again.");
-      console.error("Error updating password:", error);
     }
   };
 

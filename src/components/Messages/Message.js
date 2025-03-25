@@ -5,6 +5,8 @@ import styles from "./message.module.css";
 import MessageListSection from "./MessageListSection";
 import ChatSection from "./ChatSection";
 import SearchOverlay from "./SearchOverlay";
+import { getLoggedInUser } from "@/app/actions/userActions";
+import { fetchChatUsers } from "@/app/actions/chatActions";
 
 const Message = () => {
   const [chatUsers, setChatUsers] = useState([]);
@@ -24,34 +26,17 @@ const Message = () => {
 
   // Fetch Logged-in User
   const fetchMe = async () => {
-    try {
-      const res = await fetch("/api/me");
-      if (res.ok) {
-        const data = await res.json();
-        setLoggedInUser(data);
-      } else {
-        console.error("Failed to fetch Me");
-      }
-    } catch (error) {
-      console.error("Error fetching logged-in user:", error);
-    }
+    const data = await getLoggedInUser();
+    setLoggedInUser(data);
   };
 
   // Fetch Chat Users
-  const fetchChatUsers = useCallback(async () => {
-    try {
-      const res = await fetch(
-        `/api/conversations?loggedInUserId=${loggedInUser._id}`
-      );
-      if (res.ok) {
-        const data = await res.json();
-
-        setChatUsers(data);
-      } else {
-        console.error("Failed to fetch chat users");
-      }
-    } catch (error) {
-      console.error("Error fetching chat users:", error);
+  const fetchUsers = useCallback(async () => {
+    const data = await fetchChatUsers(loggedInUser._id);
+    if (data) {
+      setChatUsers(data);
+    } else {
+      console.error("Failed to fetch chat users");
     }
   }, [loggedInUser?._id]);
 
@@ -61,9 +46,9 @@ const Message = () => {
 
   useEffect(() => {
     if (loggedInUser) {
-      fetchChatUsers();
+      fetchUsers();
     }
-  }, [loggedInUser, fetchChatUsers]);
+  }, [loggedInUser, fetchUsers]);
 
   return (
     <>

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { IoEye } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
 
-import { doCredentialLogin } from "@/app/actions";
+import { doCredentialLogin } from "@/app/actions/logInOutActions";
 
 const InputPasswordOverlay = ({ loginEmail }) => {
   const [password, setPassword] = useState("");

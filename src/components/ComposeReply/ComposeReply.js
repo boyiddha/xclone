@@ -2,8 +2,8 @@
 
 import { useRef, useState, useEffect } from "react";
 import styles from "./composeReply.module.css";
-import { postReply, fetchRepliedPost } from "@/app/actions/tweetActions";
-import { createCommentNotification } from "@/app/actions/notificationActions";
+import { postReply, fetchPost } from "@/app/actions/tweetActions";
+import { createNotification } from "@/app/actions/notificationActions";
 
 import { RxCross2 } from "react-icons/rx";
 import Image from "next/image";
@@ -27,7 +27,7 @@ const ComposeReply = ({
   useEffect(() => {
     const getRepliedPost = async () => {
       if (!repliedPostId) return;
-      const post = await fetchRepliedPost(repliedPostId);
+      const post = await fetchPost(repliedPostId);
       setPost(post);
       setLoading(false);
     };
@@ -63,10 +63,11 @@ const ComposeReply = ({
       setFile(null); // Reset file
 
       // if the user commented on the post create a notification
-      await createCommentNotification({
-        ownerId, // post owner Id
-        currentUserId,
-        repliedPostId,
+      await createNotification({
+        recipient: ownerId, // post owner Id
+        sender: currentUserId,
+        postId: repliedPostId,
+        type: "comment",
       });
 
       setRepliedCount(result.commentCount || 0); // Ensure fallback if undefined

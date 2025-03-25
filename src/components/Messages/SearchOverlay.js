@@ -6,6 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 import { IoIosSearch } from "react-icons/io";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { searchUsers } from "@/app/actions/searchActions";
 
 const SearchOverlay = ({ setShowPopup, onUserSelect }) => {
   const [search, setSearch] = useState("");
@@ -24,9 +25,9 @@ const SearchOverlay = ({ setShowPopup, onUserSelect }) => {
 
     if (value.length > 0) {
       try {
-        const res = await fetch(`/api/searchUsers?query=${value}`);
-        const data = await res.json();
-        setResults(data.users);
+        // Call the searchUsers function from actions to handle the API request
+        const users = await searchUsers(value);
+        setResults(users); // Set the results with the fetched users
       } catch (error) {
         console.error("Error fetching users:", error);
       }

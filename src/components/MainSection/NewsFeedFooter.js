@@ -8,13 +8,16 @@ import { RiBarChartGroupedLine } from "react-icons/ri";
 import { CiBookmark } from "react-icons/ci";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { LuPenLine } from "react-icons/lu";
+import { useState, useEffect, useRef } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import styles from "./newsFeedFooter.module.css";
 import ComposeRepost from "@/components/ComposeRepost/ComposeRepost";
 import ComposeReply from "@/components/ComposeReply/ComposeReply";
-import { useState, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { getLoggedInUser } from "@/app/actions/userActions";
+import { postLike, repostTweet } from "@/app/actions/tweetActions";
+import { createNotification } from "@/app/actions/notificationActions";
 
 const NewsFeedFooter = ({
   postId,
@@ -77,12 +80,9 @@ const NewsFeedFooter = ({
       if (!session?.user?.email) return;
 
       try {
-        const res = await fetch(`${window.location.origin}/api/me`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-        if (res.ok) {
-          const data = await res.json();
+        const data = await getLoggedInUser();
+
+        if (data) {
           const userId = data._id.toString();
           setCurrentUserId(userId);
           setLiked(likes.includes(userId));
@@ -115,40 +115,39 @@ const NewsFeedFooter = ({
   };
 
   const handleLike = async () => {
-    const res = await fetch("/api/tweet/like", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ postId, currentUserId }),
-    });
+    try {
+      const { liked, likeCount } = await postLike({
+        postId,
+        currentUserId,
+      });
 
-    if (res.ok) {
-      const data = await res.json();
-      setLiked(data.liked);
-      setLikeCount(data.likes);
-      if (data.liked) {
-        // if the user liked the post create a notification
-        await fetch("/api/notification", {
-          method: "POST",
-          body: JSON.stringify({
-            recipient: ownerId, // post owner Id
-            sender: currentUserId,
-            postId: postId,
-            type: "like",
-          }),
+      setLiked(liked);
+      setLikeCount(likeCount);
+
+      if (liked) {
+        // If the user liked the post, create a notification
+        await createNotification({
+          recipient: ownerId, // post owner Id
+          sender: currentUserId,
+          postId: postId,
+          type: "like",
         });
       }
+    } catch (error) {
+      console.error("Error handling like:", error);
     }
   };
 
   const handleRepost = async () => {
-    let content = "";
-    const res = await fetch("/api/tweet/repost", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ postId, currentUserId, content }),
-    });
-    if (res.ok) {
-      const data = await res.json();
+    let content = ""; // Set the content to an empty string
+
+    try {
+      // Call repostTweet function from actions to handle the API request
+      const data = await repostTweet({
+        repostedId: postId,
+        currentUserId: currentUserId,
+        content: content,
+      });
 
       setReposted(data.reposted);
       setRepostedCount(data.reposts);
@@ -157,14 +156,11 @@ const NewsFeedFooter = ({
         // do an repost
 
         // if the user reposted the post create a notification
-        await fetch("/api/notification", {
-          method: "POST",
-          body: JSON.stringify({
-            recipient: ownerId, // post owner Id
-            sender: currentUserId,
-            postId: postId,
-            type: "repost",
-          }),
+        await createNotification({
+          recipient: ownerId, // post owner Id
+          sender: currentUserId,
+          postId: postId,
+          type: "repost",
         });
 
         // update the posts in <MainSection/> to get the updated result in NewsFeed
@@ -176,6 +172,8 @@ const NewsFeedFooter = ({
         //console.log("removed reposted id : ", data.removedRepostedId);
         onPostRemove(data.removedRepostedId);
       }
+    } catch (error) {
+      console.error("Error handling repost:", error);
     }
   };
 

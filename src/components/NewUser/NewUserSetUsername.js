@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import styles from "./newUserSetUsername.module.css";
 import { useRouter } from "next/navigation";
-import { saveNewOauthUser } from "@/app/actions/updateUser";
+import { saveNewOauthUser } from "@/app/actions/authActions";
 
 const NewUserSetUsername = ({ dob, password }) => {
   const [username, setUsername] = useState("");
@@ -11,7 +11,7 @@ const NewUserSetUsername = ({ dob, password }) => {
   const handleClick = async () => {
     try {
       console.log("chandle clock");
-      const saveResponse = await saveNewOauthUser({ dob,password,username,});
+      const saveResponse = await saveNewOauthUser({ dob, password, username });
       //console.log("===================",saveResponse.status);
       saveResponse.status === 200 && router.push("/home");
     } catch (e) {
@@ -45,7 +45,6 @@ const NewUserSetUsername = ({ dob, password }) => {
             username ? styles.active : ""
           }`}
           onClick={username ? handleClick : undefined}
-
         >
           <span className={styles.nextButton}>Next</span>
         </div>

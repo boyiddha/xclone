@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import styles from "./userFollowing.module.css"; // Ensure styles are correctly imported
+import styles from "./userFollowing.module.css";
+import { toggleFollow } from "@/app/actions/followActions";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -12,16 +14,8 @@ const UserFollowing = ({ followingList, loggedInUserId }) => {
 
   const handleFollowToggle = async (userId) => {
     try {
-      const response = await fetch("/api/follow", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ loggedInUserId, userId }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setIsFollowing(data.isFollowing);
-      }
+      const data = await toggleFollow(loggedInUserId, userId);
+      setIsFollowing(data.isFollowing);
     } catch (error) {
       console.error("Error following/unfollowing:", error);
     }

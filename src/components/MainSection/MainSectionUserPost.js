@@ -11,6 +11,7 @@ import UserPostHeader from "./UserPostHeader";
 import { RiBarChartGroupedLine } from "react-icons/ri";
 import { BiRepost } from "react-icons/bi";
 import CommentSection from "../CommentSection/CommentSection";
+import { fetchPost } from "@/app/actions/tweetActions";
 import Image from "next/image";
 
 const MainSectionUserPost = () => {
@@ -22,27 +23,16 @@ const MainSectionUserPost = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const response = await fetch(`/api/tweet/posts/${postId}`, {
-          method: "GET",
-        });
-        const result = await response.json();
-
-        if (response.ok) {
-          setPost(result.post); // Stores the full post object (includes userId & comments)
-        } else {
-          setError("Post not found");
-        }
-      } catch (err) {
-        console.error("Error fetching post:", err);
-        setError("Error fetching post");
-      } finally {
-        setLoading(false);
-      }
+    const getPost = async () => {
+      if (!postId) return;
+      const post = await fetchPost(postId);
+      setPost(post);
+      setLoading(false);
     };
 
-    fetchPost();
+    if (postId) {
+      getPost(); // Fetch reposted post first
+    }
   }, [postId]);
 
   // Determine actual post content and user info if reposted

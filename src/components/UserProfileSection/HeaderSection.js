@@ -10,6 +10,7 @@ import Image from "next/image";
 import EditProfileOverlay from "./EditProfileOverlay";
 import { useState } from "react";
 import FollowButton from "./FollowButton";
+import { updateUserAPI } from "@/app/actions/userActions";
 
 const HeaderSection = ({
   totalPost,
@@ -41,18 +42,8 @@ const HeaderSection = ({
 
   const handleSave = async (updatedData) => {
     try {
-      const response = await fetch(`/api/users/${userId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedData),
-      });
-      if (!response.ok) {
-        throw new Error(data.error || "Something went wrong");
-      }
+      const updatedUser = await updateUserAPI(userId, updatedData);
 
-      //console.log("✅  User updated successfully:");
-      const updatedUser = await response.json();
-      // Update UI with new data
       setFullName(updatedUser.fullName);
       setUserImage(updatedUser.image);
       setUserCoverImage(updatedUser.coverImage);

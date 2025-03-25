@@ -6,6 +6,11 @@ import { useEffect, useState, useCallback } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiRepost } from "react-icons/bi";
 import { AiFillHeart } from "react-icons/ai";
+import { getLoggedInUser } from "@/app/actions/userActions";
+import {
+  fetchNotificationsData,
+  markNotificationAsRead,
+} from "@/app/actions/notificationActions";
 
 const MainSection = () => {
   const [loading, setLoading] = useState(true);
@@ -16,38 +21,32 @@ const MainSection = () => {
   // Fetch user data
   const fetchMe = async () => {
     setLoading(true);
-    try {
-      const res = await fetch("/api/me");
-      if (res.ok) {
-        const data = await res.json();
-        setUserName(data.userName);
-        setCurrentUserId(data._id);
-      } else {
-        console.error("Failed to fetch user data");
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
+
+    const data = await getLoggedInUser();
+    if (data) {
+      setUserName(data.userName);
+      setCurrentUserId(data._id);
+    } else {
+      console.error("Failed to fetch user data");
     }
   };
 
   // Fetch notifications
   const fetchNotifications = useCallback(async () => {
     if (!userId) return;
-    try {
-      const res = await fetch(`/api/notification?userId=${userId}`);
-      const data = await res.json();
-      setNotifications(data);
 
-      // Check if there are any unread notifications
-      const hasUnread = data?.some((notif) => !notif.isRead);
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
-    }
+    const { dataNotifications, hasUnread } = await fetchNotificationsData(
+      userId
+    );
+    setNotifications(dataNotifications);
+
     setLoading(false);
   }, [userId]);
 
   // Mark notification as read when hovered
+
   const markAsRead = async (notifId) => {
+    // Update local state to mark the notification as read
     setNotifications((prev) =>
       prev.map((notif) =>
         notif._id === notifId ? { ...notif, isRead: true } : notif
@@ -55,11 +54,7 @@ const MainSection = () => {
     );
 
     try {
-      await fetch(`/api/notification?notifId=${notifId}`, {
-        method: "PATCH",
-        body: JSON.stringify({ isRead: true }),
-        headers: { "Content-Type": "application/json" },
-      });
+      await markNotificationAsRead(notifId);
     } catch (error) {
       console.error("Error updating notification:", error);
     }

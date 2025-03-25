@@ -12,6 +12,7 @@ import {
   getCurrentYear,
   getYearArray,
 } from "@/utils/calendarUtils";
+import { checkAlreadyUseThisEmail } from "@/app/actions/authActions";
 
 export default function CreateAccountOverlay({
   step,
@@ -87,15 +88,12 @@ export default function CreateAccountOverlay({
     isSetDob(formattedDate);
 
     try {
-      const res = await fetch(
-        `/api/auth/users?email=${encodeURIComponent(email)}`
-      );
-      //When using fetch() with a GET request, you don't need to specify method: "GET" because GET is the default method for fetch()
+      const data = await checkAlreadyUseThisEmail(email);
+
+      // When using fetch() with a GET request, you don't need to specify method: "GET" because GET is the default method for fetch()
       // However, for GET requests, the body is not used, so the "Content-Type" header is unnecessary for GET requests.
 
-      const data = await res.json();
-
-      if (res.status === 200) {
+      if (data) {
         setError(" This Email already exist! Try with another");
       } else {
         router.push("?step=verification", { scroll: false });

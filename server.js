@@ -12,7 +12,6 @@ import {
   markMessageAsSeenService,
   markMessagesAsSeenBulkService,
 } from "./src/services/messageService.js";
-import Message from "./src/models/chat/messageModel.js";
 const dev = process.env.NODE_ENV?.trim().toLowerCase() !== "production";
 
 const hostname = "localhost";

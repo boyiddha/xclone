@@ -11,6 +11,16 @@ import HeaderSection from "./HeaderSection";
 import UserPost from "./UserPost";
 import UserReply from "./UserReply";
 import UserLike from "./UserLike";
+import {
+  fetchUserData,
+  fetchUsersData,
+  getLoggedInUser,
+} from "@/app/actions/userActions";
+import {
+  deletePost,
+  fetchAllPostsData,
+  fetchUserPosts,
+} from "@/app/actions/tweetActions";
 
 const MainSection = ({ username }) => {
   const [loading, setLoading] = useState(true);
@@ -40,40 +50,22 @@ const MainSection = ({ username }) => {
   };
 
   const fetchMe = async () => {
-    try {
-      const res = await fetch(`/api/me`);
-      if (!res.ok) throw new Error("Failed to fetch user");
+    const data = await getLoggedInUser();
 
-      const data = await res.json();
-
-      setLoggedInUserId(data._id);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-    }
+    setLoggedInUserId(data._id);
   };
 
   // fetch all users (fullName, userName)
   const fetchUsers = async () => {
-    try {
-      const res = await fetch("/api/users");
-      if (!res.ok) throw new Error("Failed to fetch users");
-      const data = await res.json();
-      setUsers(data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
+    const data = await fetchUsersData();
+    setUsers(data);
   };
 
   // fetch user posts
   const fetchPosts = async () => {
     try {
-      const res = await fetch(`/api/posts/${username}`);
-      const data = await res.json();
-      if (data.success) {
-        setPosts(data.posts);
-      } else {
-        console.error("Failed to fetch posts");
-      }
+      const fetchedPosts = await fetchUserPosts(username);
+      setPosts(fetchedPosts); // Update the posts state with the fetched data
     } catch (error) {
       console.error("Error fetching user post:", error);
     }
@@ -81,21 +73,14 @@ const MainSection = ({ username }) => {
 
   // Fetch all posts
   const fetchAllPosts = async () => {
+    setLoading(true); // Start loading
     try {
-      const response = await fetch("/api/posts", {
-        method: "GET",
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        setAllPosts(result.posts);
-      } else {
-        console.error("Failed to fetch posts");
-      }
+      const fetchedPosts = await fetchAllPostsData(); // Call the refactored API function
+      setAllPosts(fetchedPosts); // Update the allPosts state with the fetched data
     } catch (error) {
-      setError("Failed to fetch posts " + error.message);
+      setError("Failed to fetch posts " + error.message); // Handle error if needed
     } finally {
-      setLoading(false);
+      setLoading(false); // End loading
     }
   };
 
@@ -114,50 +99,39 @@ const MainSection = ({ username }) => {
 
     // Check if the current user is the owner of the post
     if (!postToDelete || postToDelete.userId !== loggedInUserId) {
-      alert("You are not OWNER of this post.");
+      alert("You are not the OWNER of this post.");
       return;
     }
-    try {
-      const response = await fetch(`/api/tweet/posts/${postId}`, {
-        method: "DELETE",
-      });
 
-      const result = await response.json();
-      if (response.ok) {
+    try {
+      const result = await deletePost(postId); // Call the refactored API function
+
+      if (result) {
         // Remove deleted post from the state
         setPosts((prevPosts) =>
           prevPosts.filter((post) => post._id !== postId)
         );
-      } else {
-        console.error(result.message || "Failed to delete post");
       }
     } catch (error) {
-      console.error("Error deleting post:", error);
+      console.error("Error deleting post:", error); // Handle error
     }
   };
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const res = await fetch(`/api/users/${username}`);
-        if (!res.ok) throw new Error("Failed to fetch user");
+      const data = await fetchUserData(username);
+      setFullName(data.user.fullName);
+      setUserName(data.user.userName);
+      setUserImage(data.user.image || null);
+      setUserCoverImage(data.user.coverImage || null);
+      setCurrentUserId(data.user._id);
+      setFollowing(data?.user?.following?.length || 0);
+      setFollower(data?.user?.followers?.length || 0);
+      setFollowingList(data?.user?.following);
+      setFollowerList(data?.user?.followers);
 
-        const data = await res.json();
-        setFullName(data.user.fullName);
-        setUserName(data.user.userName);
-        setUserImage(data.user.image || null);
-        setUserCoverImage(data.user.coverImage || null);
-        setCurrentUserId(data.user._id);
-        setFollowing(data?.user?.following?.length || 0);
-        setFollower(data?.user?.followers?.length || 0);
-        setFollowingList(data?.user?.following);
-        setFollowerList(data?.user?.followers);
-
-        const joiningDate = formatJoiningDate(data.user.createdAt);
-        setJoiningDateMessage(joiningDate);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
+      const joiningDate = formatJoiningDate(data.user.createdAt);
+      setJoiningDateMessage(joiningDate);
     };
 
     fetchUser();

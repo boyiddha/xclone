@@ -5,33 +5,20 @@ import xLogo from "./../../../public/images/x_profile.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { doCredentialLogin } from "@/app/actions";
+import { saveUserNameAPI } from "@/app/actions/authActions";
+import { doCredentialLogin } from "@/app/actions/logInOutActions";
 
 const SetUserNameOverlay = ({ email, password, setIsOverlayOpen }) => {
   const [username, setUserName] = useState("");
   const [isNext, setIsNext] = useState(false);
   const router = useRouter();
-
   const handleNext = async () => {
-    //console.log("Finally =======> ; ");
-    //console.log(email, password);
     try {
-      const saveResponse = await fetch("/api/auth/saveUserName", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          username,
-        }),
-      });
-
-      //saveResponse.status === 200 && router.push("/home");
+      const saveResponse = await saveUserNameAPI({ email, username }); // Call the refactored API function
 
       const response = await doCredentialLogin(email, password);
 
-      if (!!response.error) {
+      if (response.error) {
         console.error(response.error);
         setError(response.error.message);
       } else {
@@ -39,7 +26,8 @@ const SetUserNameOverlay = ({ email, password, setIsOverlayOpen }) => {
         router.push("/home");
       }
     } catch (e) {
-      console.error(e.message);
+      console.error("Error during handleNext:", e.message);
+      setError(e.message); // Handle error if needed
     }
   };
 

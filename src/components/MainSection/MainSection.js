@@ -3,6 +3,8 @@
 import ComposePost from "./ComposePost";
 import styles from "./mainSection.module.css";
 import NewsFeed from "./NewsFeed";
+import { deletePost, fetchAllPostsData } from "@/app/actions/tweetActions";
+import { fetchUsersData, getLoggedInUser } from "@/app/actions/userActions";
 
 import { useState, useEffect } from "react";
 
@@ -19,47 +21,38 @@ const MainSection = () => {
   // fetch all users (fullName, userName)
   const fetchUsers = async () => {
     try {
-      const res = await fetch("/api/users");
-      if (!res.ok) throw new Error("Failed to fetch users");
-      const data = await res.json();
-      setUsers(data);
+      const data = await fetchUsersData(); // Get users from the API
+      setUsers(data); // Set users if successfully fetched
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error fetching users:", error); // Handle error
     }
   };
 
   // Fetch posts from the API
+
   const fetchAllPosts = async () => {
     try {
-      const response = await fetch("/api/posts", {
-        method: "GET",
-      });
+      const posts = await fetchAllPostsData(); // Get posts from the API
 
-      const result = await response.json();
-      if (result.success) {
-        setPosts(result.posts);
+      if (posts.length) {
+        setPosts(posts); // Set posts if successfully fetched
       } else {
         console.error("Failed to fetch posts");
       }
     } catch (error) {
-      setError("Failed to fetch posts " + error.message);
+      setError("Failed to fetch posts " + error.message); // Handle error
     } finally {
-      setLoading(false);
+      setLoading(false); // End loading state
     }
   };
 
   const fetchMe = async () => {
-    const res = await fetch("/api/me", {
-      method: "GET",
-    });
-    if (res.ok) {
-      const data = await res.json();
+    const data = await getLoggedInUser();
+    if (data) {
       setFullName(data.fullName);
       setUserName(data.userName);
       setUserImage(data.image || null);
       setCurrentUserId(data._id);
-    } else {
-      console.error("Failed to fetch Me");
     }
   };
   // Handle new post submission and add it to the posts list
@@ -78,16 +71,13 @@ const MainSection = () => {
     // Check if the current user is the owner of the post
     if (!postToDelete || postToDelete.userId !== currentUserId) {
       //alert("You are not OWNER of this post.");
-
       return false;
     }
-    try {
-      const response = await fetch(`/api/tweet/posts/${postId}`, {
-        method: "DELETE",
-      });
 
-      const result = await response.json();
-      if (response.ok) {
+    try {
+      const success = await deletePost(postId);
+
+      if (success) {
         // Show a success toast if the post is deleted
 
         // Remove deleted post from the state
@@ -96,7 +86,6 @@ const MainSection = () => {
         );
         return true;
       } else {
-        console.error(result.message || "Failed to delete post");
         return false;
       }
     } catch (error) {

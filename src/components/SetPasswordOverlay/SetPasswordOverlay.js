@@ -9,6 +9,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { IoEye } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
+import { savePasswordAPI } from "@/app/actions/authActions";
 
 const SetPasswordOverlay = ({ email, isSetPassword }) => {
   const [password, setPassword] = useState("");
@@ -18,20 +19,14 @@ const SetPasswordOverlay = ({ email, isSetPassword }) => {
 
   const handleSignup = async () => {
     try {
-      const saveResponse = await fetch("/api/auth/savePassword", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-      isSetPassword(password);
-      saveResponse.status === 200 && router.push("/?step=setUserName");
+      const saveResponse = await savePasswordAPI({ email, password }); // Call the refactored API function
+      setIsSetPassword(password);
+      if (saveResponse.status === 200) {
+        router.push("/?step=setUserName");
+      }
     } catch (e) {
-      console.error(e.message);
+      console.error("Error during signup:", e.message);
+      setError(e.message); // Handle error if needed
     }
   };
 

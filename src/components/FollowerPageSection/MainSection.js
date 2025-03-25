@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import styles from "./mainSection.module.css";
+import { getLoggedInUser, fetchUserData } from "@/app/actions/userActions";
 
 import { usePathname, useRouter } from "next/navigation";
 
@@ -30,27 +31,20 @@ const MainSection = () => {
   const username = pathname.split("/")[1];
 
   const fetchMe = async () => {
-    const res = await fetch("/api/me", {
-      method: "GET",
-    });
-    if (res.ok) {
-      const data = await res.json();
+    const data = await getLoggedInUser();
+    if (data) {
       setLoggedInFullName(data.fullName);
       setLoggedInUserName(data.userName);
       setLoggedInUserImage(data.image || null);
       setLoggedInUserId(data._id);
-    } else {
-      console.error("Failed to fetch Me");
     }
   };
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(`/api/users/${username}`);
-        if (!res.ok) throw new Error("Failed to fetch user");
+        const data = await fetchUserData(username);
 
-        const data = await res.json();
         setUserFullName(data.user.fullName);
         setUserUserName(data.user.userName);
         setUserImage(data.user.image || null);
@@ -58,7 +52,7 @@ const MainSection = () => {
         setUserFollowing(data?.user?.following);
         setUserFollower(data?.user?.followers);
       } catch (error) {
-        console.error("Error fetching user:", error);
+        console.error("Error:", error);
       }
     };
 

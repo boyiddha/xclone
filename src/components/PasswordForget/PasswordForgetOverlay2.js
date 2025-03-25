@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./passwordForgetOverlay2.module.css";
 import PasswordForgetOverlay3 from "./PasswordForgetOverlay3";
+import { verifyResetCode } from "@/app/actions/authActions";
 
 const PasswordForgetOverlay2 = ({ email, setPassword, setIsFinalOverlay }) => {
   const [code, setCode] = useState("");
@@ -9,18 +10,12 @@ const PasswordForgetOverlay2 = ({ email, setPassword, setIsFinalOverlay }) => {
 
   const isTakeCode = code.trim().length > 0;
   const verifyCode = async () => {
-    const res = await fetch("/api/auth/forgot-password/verify", {
-      method: "POST",
-      body: JSON.stringify({ email, code }),
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      setIsOverlayOpened(true);
-    } else {
-      alert(data.message);
-      setError(data.message);
+    try {
+      const data = await verifyResetCode({ email, code }); // Use the refactored function here
+      setIsOverlayOpened(true); // If successful, open overlay
+    } catch (error) {
+      alert(error.message);
+      setError(error.message);
     }
   };
 

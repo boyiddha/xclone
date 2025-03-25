@@ -1,6 +1,6 @@
 "use client";
 
-import { doLogout } from "@/app/actions";
+import { doLogout } from "@/app/actions/logInOutActions";
 
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -23,20 +23,6 @@ const LogOut = () => {
 
   return (
     <>
-      {/* <div style={{ color: "white" }}>
-        <h1>
-          Welcome, {session.user.name}, {session.user.email}!
-        </h1>
-        {session.user.image && (
-          <Image
-            src={session.user.image}
-            alt={session.user.name || "User"}
-            width={72}
-            height={72}
-            style={{ borderRadius: "50%" }}
-          />
-        )}
-      </div> */}
       <button
         onClick={handleLogout}
         style={{

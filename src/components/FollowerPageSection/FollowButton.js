@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./followButton.module.css";
+import { toggleFollow } from "@/app/actions/followActions";
 
 const FollowButton = ({
   loggedInUserId,
@@ -21,19 +22,11 @@ const FollowButton = ({
 
   const handleFollowToggle = async () => {
     try {
-      const response = await fetch("/api/follow", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ loggedInUserId, userId }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setIsFollowing(data.isFollowing);
-        setIsFollowBack(false);
-      }
+      const data = await toggleFollow(loggedInUserId, userId);
+      setIsFollowing(data.isFollowing);
+      setIsFollowBack(false);
     } catch (error) {
-      console.error("Error following/unfollowing:", error);
+      console.error("Error:", error);
     }
   };
 

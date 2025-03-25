@@ -2,7 +2,7 @@
 
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { doSocialLogin } from "@/app/actions";
+import { doSocialLogin } from "@/app/actions/logInOutActions";
 
 import styles from "./socialSignin.module.css";
 

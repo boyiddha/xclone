@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import styles from "./composePost.module.css";
 import { BsImage } from "react-icons/bs";
 import Image from "next/image";
 import { ImCross } from "react-icons/im";
@@ -9,6 +8,9 @@ import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { MdEmojiEmotions } from "react-icons/md";
 import { RiCalendarScheduleLine } from "react-icons/ri";
 import { CiLocationOn } from "react-icons/ci";
+
+import styles from "./composePost.module.css";
+import { createPost } from "@/app/actions/tweetActions";
 
 const ComposePost = ({ onPostCreated, userImage }) => {
   const [content, setContent] = useState("");
@@ -49,21 +51,10 @@ const ComposePost = ({ onPostCreated, userImage }) => {
   const handleSubmit = async () => {
     if (!content.trim() && !file) return; // Ensure at least content or image is provided
 
-    const data = new FormData();
-    data.append("file", file);
-    data.append("content", content);
-
     try {
-      const res = await fetch("/api/tweet/posts", {
-        method: "POST",
-        body: data,
-      });
-
-      const result = await res.json();
+      const result = await createPost(file, content);
 
       if (result.success) {
-        //alert("File Uploaded Successfully");
-        console.log("resultpost :  ", result.post);
         onPostCreated(result.post);
         // Reset form
         setFile(null);
@@ -78,7 +69,6 @@ const ComposePost = ({ onPostCreated, userImage }) => {
       console.error("Upload Error:", error);
     }
   };
-
   return (
     <>
       <div className={styles.postContainer}>

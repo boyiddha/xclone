@@ -23,6 +23,11 @@ import MoreOptions from "./MoreOptions";
 import AccountOptions from "./AccountOptions";
 import { io } from "socket.io-client";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { getLoggedInUser } from "@/app/actions/userActions";
+import {
+  fetchNotificationsData,
+  fetchUnseenMessagesNotifications,
+} from "@/app/actions/notificationActions";
 
 const Navbar = ({ fromNotificationPage = false }) => {
   const [isOpenMore, setIsOpenMore] = useState(false);
@@ -96,11 +101,8 @@ const Navbar = ({ fromNotificationPage = false }) => {
   }, [isOpenAccount]);
 
   const fetchMe = async () => {
-    const resMe = await fetch("/api/me", {
-      method: "GET",
-    });
-    if (resMe.ok) {
-      const dataMe = await resMe.json();
+    const dataMe = await getLoggedInUser();
+    if (dataMe) {
       setFullName(dataMe.fullName);
       setUserName(dataMe.userName);
       setUserImage(dataMe.image);
@@ -112,14 +114,12 @@ const Navbar = ({ fromNotificationPage = false }) => {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const res = await fetch(`/api/notification?userId=${userId}`);
-
-      const dataNotifications = await res.json();
-      // Check if there are any unread notifications
-      const hasUnread = dataNotifications?.some(
-        (notification) => !notification.isRead
+      // Call the fetchNotificationsData function from actions to handle the API request
+      const { dataNotifications, hasUnread } = await fetchNotificationsData(
+        userId
       );
-      setHasUnreadNotifications(hasUnread);
+
+      setHasUnreadNotifications(hasUnread); // Set the unread notifications state
     } catch (error) {
       console.error("Error fetching notifications:", error);
     }
@@ -144,12 +144,8 @@ const Navbar = ({ fromNotificationPage = false }) => {
 
     const checkUnseenMessages = async () => {
       try {
-        const response = await fetch(
-          `/api/messages/has-unseen?userId=${userId}`
-        );
-        if (!response.ok) throw new Error("Failed to fetch");
-
-        const data = await response.json();
+        // Call the fetchUnseenMessages function from actions to handle the API request
+        const data = await fetchUnseenMessagesNotifications(userId);
         if (data.success) {
           setUnseenMessage(data.hasUnseenMessages);
           localStorage.setItem(
@@ -163,7 +159,7 @@ const Navbar = ({ fromNotificationPage = false }) => {
     };
 
     checkUnseenMessages();
-  }, [userId]);
+  }, [userId, pathname, params]);
 
   // Real Time update
   useEffect(() => {

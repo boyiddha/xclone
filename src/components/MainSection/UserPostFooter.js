@@ -13,6 +13,8 @@ import styles from "./newsFeedFooter.module.css";
 import styles2 from "./userPostFooter.module.css";
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
+import { getLoggedInUser } from "@/app/actions/userActions";
+import { postLike, repostTweet } from "@/app/actions/tweetActions";
 
 const UserPostFooter = ({ post, postId, replyCount }) => {
   const [likeCount, setLikeCount] = useState(post.likes?.length || 0);
@@ -54,12 +56,9 @@ const UserPostFooter = ({ post, postId, replyCount }) => {
       if (!session?.user?.email) return;
 
       try {
-        const res = await fetch("/api/me", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-        if (res.ok) {
-          const data = await res.json();
+        const data = await getLoggedInUser();
+
+        if (data) {
           const userId = data._id.toString();
           setCurrentUserId(userId);
           setLiked(post?.likes?.includes(userId));
@@ -74,32 +73,23 @@ const UserPostFooter = ({ post, postId, replyCount }) => {
   }, [session?.user?.email]);
 
   const handleLike = async () => {
-    const res = await fetch("/api/tweet/like", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ postId, currentUserId }),
+    const { liked, likeCount } = await postLike({
+      postId,
+      currentUserId,
     });
-
-    if (res.ok) {
-      const data = await res.json();
-      setLiked(data.liked);
-      setLikeCount(data.likes);
-    }
+    setLiked(liked);
+    setLikeCount(likeCount);
   };
 
   const handleRepost = async () => {
-    const res = await fetch("/api/tweet/repost", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ postId, currentUserId }),
+    const data = await repostTweet({
+      repostedId: postId,
+      currentUserId: currentUserId,
+      content: "",
     });
-    if (res.ok) {
-      const data = await res.json();
-
-      setReposted(data.reposted);
-      setRepostedCount(data.reposts);
-      setIsOpenMore(false);
-    }
+    setReposted(data.reposted);
+    setRepostedCount(data.reposts);
+    setIsOpenMore(false);
   };
 
   return (
