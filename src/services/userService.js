@@ -25,6 +25,7 @@ import {
   getUserByUserNameFromDB,
   getAllUsersFromDB,
   updateUserFollowers,
+  getUsersBySearchQuery,
 } from "@/repositories/userRepository";
 import { createHashPassword } from "@/helpers/passwordHelper";
 
@@ -148,4 +149,20 @@ export async function followUserService(loggedInUserId, userId) {
   await updateUserFollowers(targetUser);
 
   return { isFollowing: !isFollowing };
+}
+
+export async function findUsersByQuery(query) {
+  try {
+    if (!query) {
+      throw { message: "Query parameter is required", status: 400 };
+    }
+
+    // Fetch users from the repository
+    const users = await getUsersBySearchQuery(query);
+
+    return users;
+  } catch (error) {
+    console.error("Service Error:", error);
+    throw error;
+  }
 }

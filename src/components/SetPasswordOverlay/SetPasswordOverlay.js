@@ -20,7 +20,7 @@ const SetPasswordOverlay = ({ email, isSetPassword }) => {
   const handleSignup = async () => {
     try {
       const saveResponse = await savePasswordAPI({ email, password }); // Call the refactored API function
-      setIsSetPassword(password);
+      isSetPassword(password);
       if (saveResponse.status === 200) {
         router.push("/?step=setUserName");
       }

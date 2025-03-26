@@ -28,6 +28,7 @@ import {
   findAllUsers,
   updateUserProfileService,
   followUserService,
+  findUsersByQuery,
 } from "@/services/userService";
 import { getAuthToken } from "@/utils/auth";
 
@@ -302,6 +303,30 @@ export async function followUserController(req) {
     return NextResponse.json(
       { message: "Server error", error: error.message },
       { status: 500 }
+    );
+  }
+}
+
+export async function searchUsers(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const query = searchParams.get("query");
+
+    if (!query) {
+      return NextResponse.json(
+        { error: "Query parameter is required" },
+        { status: 400 }
+      );
+    }
+
+    // Call the service layer
+    const users = await findUsersByQuery(query);
+
+    return NextResponse.json({ users }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error.message || "Internal Server Error" },
+      { status: error.status || 500 }
     );
   }
 }

@@ -62,14 +62,16 @@ export async function createOauthUser(userData) {
 
 export const updateUser = async (email, dob, hashedPassword, username) => {
   try {
-    return await User.findOneAndUpdate(
+    const updatedUser = await User.findOneAndUpdate(
       { email },
       { dob, password: hashedPassword, userName: username },
       { new: true, runValidators: true }
-    );
+    ).select("_id userName fullName email"); // Only return specified fields
+
+    return updatedUser;
   } catch (error) {
-    console.error("Error in update user in DB :", error);
-    throw new Error("Database error while update user " + error.message);
+    console.error("Error in update user in DB:", error);
+    throw new Error("Database error while updating user: " + error.message);
   }
 };
 
@@ -132,4 +134,21 @@ export const saveUsername = async (email, username) => {
 
 export async function updateUserFollowers(user) {
   return await user.save();
+}
+
+export async function getUsersBySearchQuery(query) {
+  try {
+    return await User.find(
+      {
+        $or: [
+          { fullName: { $regex: query, $options: "i" } },
+          { userName: { $regex: query, $options: "i" } },
+        ],
+      },
+      "fullName userName image createdAt" // ✅ Fetch only necessary fields
+    ).limit(5);
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Database query failed");
+  }
 }
