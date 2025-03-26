@@ -192,3 +192,46 @@ export const saveUserNameAPI = async ({ email, username }) => {
     throw e; // Rethrow error to be handled in frontend
   }
 };
+
+export const fetchNewAccessToken = async (refreshToken) => {
+  try {
+    //console.log("📤 received refresh token:", refreshToken); // Debugging
+    // Debuggin: Ensure refreshToken is available before API Call
+    if (!refreshToken) {
+      //console.error("❌ refreshToken is missing before making API call!");
+      return { error: "Missing refresh token" };
+    }
+
+    const response = await fetch(
+      `${process.env.API_SERVER_BASE_URL}/api/auth/refresh`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${refreshToken}`,
+        },
+        body: JSON.stringify({ refreshToken }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("❌ Server Error response:", errorText);
+      return { error: "RefreshTokenExpired" };
+    }
+
+    const text = await response.text();
+    // If the response is empty, log a warning
+
+    if (!text) {
+      console.warn("⚠️ Empty response received from the server.");
+      return { error: "Empty response received" };
+    }
+    // Parse the response as JSON
+
+    return JSON.parse(text);
+  } catch (error) {
+    console.error("❌ Refresh token error:", error);
+    return { error: "RefreshTokenExpired" };
+  }
+};
