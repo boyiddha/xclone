@@ -41,7 +41,7 @@ export const fetchPost = async (PostId) => {
 export const postLike = async ({ postId, currentUserId }) => {
   try {
     const res = await fetch("/api/tweet/like", {
-      method: "POST",
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ postId, currentUserId }),
     });

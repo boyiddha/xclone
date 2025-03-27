@@ -1,6 +1,5 @@
-
 import { sendResetCode } from "@/controllers/forgotPasswordController";
 
-export async function POST(req) {
+export async function PATCH(req) {
   return sendResetCode(req);
 }

@@ -79,7 +79,7 @@ export const registerUser = async ({ name, email, dob }) => {
 
 export const saveNewOauthUser = async ({ dob, password, username }) => {
   const response = await fetch("/api/auth/saveOauthNewUser", {
-    method: "POST",
+    method: "PATCH",
     headers: {
       "content-type": "application/json",
     },
@@ -92,7 +92,7 @@ export const saveNewOauthUser = async ({ dob, password, username }) => {
 export const requestPasswordReset = async (email) => {
   try {
     const response = await fetch("/api/auth/forgot-password/request", {
-      method: "POST",
+      method: "PATCH",
       body: JSON.stringify({ email }),
       headers: { "Content-Type": "application/json" },
     });
@@ -133,7 +133,7 @@ export const verifyResetCode = async ({ email, code }) => {
 export const updatePasswordAPI = async ({ email, newPassword }) => {
   try {
     const res = await fetch("/api/auth/forgot-password/update", {
-      method: "POST",
+      method: "PATCH",
       body: JSON.stringify({ email, newPassword }),
       headers: { "Content-Type": "application/json" },
     });
@@ -154,7 +154,7 @@ export const updatePasswordAPI = async ({ email, newPassword }) => {
 export const savePasswordAPI = async ({ email, password }) => {
   try {
     const saveResponse = await fetch("/api/auth/savePassword", {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -175,7 +175,7 @@ export const savePasswordAPI = async ({ email, password }) => {
 export const saveUserNameAPI = async ({ email, username }) => {
   try {
     const saveResponse = await fetch("/api/auth/saveUserName", {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },

@@ -1,7 +1,5 @@
-
-
 import { updateUserPassword } from "@/controllers/forgotPasswordController";
 
-export async function POST(req, res) {
+export async function PATCH(req, res) {
   return await updateUserPassword(req, res);
 }

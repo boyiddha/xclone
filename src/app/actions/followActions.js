@@ -1,7 +1,7 @@
 export const toggleFollow = async (loggedInUserId, userId) => {
   try {
     const response = await fetch("/api/follow", {
-      method: "POST",
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ loggedInUserId, userId }),
     });
