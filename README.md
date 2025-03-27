@@ -29,6 +29,6 @@ This is a Twitter Clone project.
 
 ## API Documentation
 
-web: <a href="https://documenter.getpostman.com/view/41082469/2sAYkLkGcX" target="_blank">Postman API Documentation</a>
+web: [Postman API Documentation](https://documenter.getpostman.com/view/41082469/2sAYkLkGcX "Click to view Postman API documentation")
 
 </ul>
