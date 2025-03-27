@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Twitter Clone
 
-## Getting Started
+<hr>
 
-First, run the development server:
+This is a Twitter Clone project.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<ul>
+<li>Oauth Sign-in/ Sign-up</li>
+<li>New user register through Email verification</li>
+<li>Post Tweets</li>
+<li>Like-Unlike Post</li>
+<li>Follow-Unfollow</li>
+<li>Repost Tweets</li>
+<li>Comments/ Reply</li>
+<li>Real Time Chat</li>
+<li>Real Time Notification</li>
+<li>Update User Profile</li>
+</ul>
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+<ul>
+<li> Frontend: HTML, CSS, JavaScript, React.js, Next.js, Redux
+<li>Backend: Next.js, WebSockets, Custom Server
+<li>Database: MongoDB
+<li>Authentication: OAuth, JWT
 
-## Learn More
+## API Documentation
 
-To learn more about Next.js, take a look at the following resources:
+web: <a href="https://documenter.getpostman.com/view/41082469/2sAYkLkGcX" target="_blank">Postman API Documentation</a>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+</ul>
